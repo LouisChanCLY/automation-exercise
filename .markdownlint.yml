@@ -1,0 +1,64 @@
+# Markdownlint configuration
+# Documentation: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
+# Default state for all rules
+default: true
+
+# Line length
+MD013:
+  line_length: 120  # Increased for URLs and code blocks
+  heading_line_length: 100
+  code_block_line_length: 150
+  tables: false  # Don't check table line length
+
+# Headings
+MD025: true  # Single top-level heading
+MD022: true  # Headings should be surrounded by blank lines
+MD026: true  # No trailing punctuation in headings
+
+# Lists
+MD032: true  # Lists should be surrounded by blank lines
+MD030:
+  ul_single: 1
+  ul_multi: 1
+  ol_single: 1
+  ol_multi: 1
+
+# Code blocks
+MD031: true  # Fenced code blocks should be surrounded by blank lines
+MD040: true  # Fenced code blocks should have a language specified
+MD046:
+  style: fenced  # Use fenced code blocks instead of indented
+
+# Whitespace
+MD009: true  # No trailing spaces
+MD010: true  # No hard tabs
+MD012:
+  maximum: 2  # Maximum number of consecutive blank lines
+
+# Links and images
+MD042: true  # No empty links
+MD045: true  # Images should have alt text
+
+# HTML
+MD033:
+  allowed_elements: [
+    'div', 'span', 'a', 'button', 'form', 'input',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'img', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
+    'footer', 'header', 'nav', 'section', 'article',
+    'details', 'summary'
+  ]
+
+# Files
+MD047: true  # Files should end with a single newline character
+
+# Inline code
+MD038: false  # Spaces inside code span elements (disabled for flexibility)
+
+# Emphasis
+MD036: false  # Emphasis used instead of a heading (disabled for flexibility)
+
+# UK English spelling - These words are correctly spelled
+MD043: false  # Required heading structure (disabled for flexibility)
+MD044: false  # Proper names should have the correct capitalization (disabled)

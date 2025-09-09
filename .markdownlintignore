@@ -1,0 +1,20 @@
+# Ignore patterns for markdownlint
+
+# Generated files
+docs/_site/
+_site/
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build artifacts
+*.min.md
+*.tmp.md
+
+# Third-party content
+licenses/
+CHANGELOG.md
+
+# Templates (if they contain placeholder syntax)
+**/templates/**/*.md

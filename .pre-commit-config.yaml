@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: detect-private-key
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: requirements-txt-fixer
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0  # Latest version as of 2024
+    hooks:
+      - id: markdownlint
+        name: Markdown Lint
+        description: Checks markdown files for style issues
+        args: ['--fix']  # Auto-fix issues where possible
+        files: \.(md|markdown)$
+        exclude: |
+          (?x)^(
+            docs/_site/.*|
+            vendor/.*|
+            node_modules/.*
+          )$
+
+  # Alternative: markdownlint without auto-fix for CI
+  # - id: markdownlint
+  #   args: ['--disable', 'MD013']  # Disable line length rule if needed
