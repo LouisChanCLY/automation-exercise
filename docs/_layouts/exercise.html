@@ -1,0 +1,43 @@
+---
+layout: default
+---
+
+<article class="exercise">
+  <header class="exercise-header">
+    <h1 class="exercise-title">{{ page.title }}</h1>
+
+    <div class="exercise-meta">
+      <span class="difficulty difficulty-{{ page.difficulty }}">{{ page.difficulty | capitalize }}</span>
+      <span class="duration">⏱️ {{ page.time }}</span>
+      <span class="category">📁 {{ page.category | replace: "-", " " | capitalize }}</span>
+    </div>
+
+    {% if page.prerequisites %}
+    <div class="prerequisites">
+      <strong>Prerequisites:</strong> {{ page.prerequisites | join: ", " }}
+    </div>
+    {% endif %}
+
+    {% if page.tools %}
+    <div class="tools">
+      <strong>Tools:</strong> {{ page.tools | join: ", " }}
+    </div>
+    {% endif %}
+  </header>
+
+  <div class="exercise-content">
+    {{ content }}
+  </div>
+
+  <nav class="exercise-navigation">
+    {% if page.previous %}
+    <a href="{{ page.previous.url | relative_url }}" class="nav-prev">← Previous Exercise</a>
+    {% endif %}
+
+    {% if page.next %}
+    <a href="{{ page.next.url | relative_url }}" class="nav-next">Next Exercise →</a>
+    {% endif %}
+  </nav>
+</article>
+
+{% include mermaid.html %}

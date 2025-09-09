@@ -9,11 +9,11 @@ tools: [n8n, Gmail, OpenRouter, Google Sheets]
 next: /exercises/02-social-media-monitor/
 ---
 
-# Exercise 1: Building Your First AI-Powered Email Automation System
-
 ## 🎯 What You'll Build
 
-In this hands-on exercise, you'll create a **smart email classification system** that automatically processes incoming emails, understands their content using AI, and takes intelligent actions based on the message context. By the end of this 45-minute session, you'll have a working automation that can:
+In this hands-on exercise, you'll create a **smart email classification system** that automatically processes
+incoming emails, understands their content using AI, and takes intelligent actions based on the message context.
+By the end of this 45-minute session, you'll have a working automation that can:
 
 - 📧 Monitor your Gmail inbox in real-time
 - 🤖 Use AI to understand email priority, sentiment, and intent
@@ -25,29 +25,35 @@ In this hands-on exercise, you'll create a **smart email classification system**
 
 ### The Problem We're Solving
 
-The average knowledge worker spends **28% of their workweek** managing email (McKinsey Global Institute). For a team of 10 people, that's equivalent to having 3 full-time employees just reading and sorting emails. This exercise teaches you to reclaim that time through intelligent automation.
+The average knowledge worker spends **28% of their workweek** managing email (McKinsey Global Institute).
+For a team of 10 people, that's equivalent to having 3 full-time employees just reading and sorting emails.
+This exercise teaches you to reclaim that time through intelligent automation.
 
 ### Real-World Applications
 
 **Customer Support Teams:**
+
 - Reduce first response time from hours to minutes
 - Automatically escalate angry customers to senior agents
 - Create support tickets without manual intervention
 - Track sentiment trends to identify product issues early
 
 **Sales Organisations:**
+
 - Never miss a hot lead buried in hundreds of emails
 - Automatically route enquiries to the right sales rep
 - Trigger follow-up sequences based on email intent
 - Prioritise high-value opportunities
 
 **HR Departments:**
+
 - Automatically categorise employee queries by urgency
 - Route sensitive matters to appropriate personnel
 - Track common questions to improve documentation
 - Ensure compliance-related emails get immediate attention
 
 **Personal Productivity:**
+
 - Focus on what matters by having AI pre-sort your inbox
 - Never miss important deadlines mentioned in emails
 - Reduce email anxiety with automated acknowledgements
@@ -66,16 +72,19 @@ By completing this exercise, you will:
 ## 📋 Prerequisites
 
 **Required Skills:**
+
 - Basic understanding of email and web applications
 - Ability to follow step-by-step instructions
 - No coding experience required (we'll provide all code snippets)
 
 **Required Accounts (all free):**
+
 - Gmail account with 2FA enabled
 - Computer with modern web browser
 - 45-60 minutes of uninterrupted time
 
 **You DON'T Need:**
+
 - Programming experience
 - Technical background
 - Paid software licenses
@@ -117,24 +126,28 @@ graph TB
 ### Design Decisions Explained
 
 **Why n8n?**
+
 - Visual workflow builder perfect for beginners
 - No code required for complex logic
 - Free tier sufficient for learning
 - Industry-standard tool used by 40,000+ companies
 
 **Why Gmail API instead of IMAP?**
+
 - More reliable and faster than traditional email protocols
 - Rich metadata access (labels, threads, etc.)
 - Better security through OAuth2
 - Real-time webhook capabilities (for production)
 
 **Why OpenRouter for AI?**
+
 - Access to multiple AI models through one API
 - Free tier includes powerful models
 - No credit card required to start
 - Fallback options if one model fails
 
 **Why Google Sheets for logging?**
+
 - Zero setup database
 - Easy to share and visualise
 - Familiar interface for non-technical users
@@ -160,7 +173,8 @@ After implementing this system, you should see:
 
 ---
 
-## Detailed Implementation:
+## Detailed Implementation
+
 ### Phase 1: Core Components Setup
 
 #### Gmail Trigger Configuration
@@ -169,6 +183,7 @@ After implementing this system, you should see:
 A reliable email monitoring system that checks for new messages every minute without overwhelming your Gmail API quota.
 
 **Technical Details:**
+
 - **OAuth2 Authentication**: Secure token-based access (no password storage)
 - **Polling Frequency**: Every 60 seconds (optimal for free tier)
 - **Smart Filtering**: Process only unread messages to avoid duplicates
@@ -195,22 +210,24 @@ An intelligent classification system that understands context, not just keywords
 
 3. **Department Routing** (Sales/Support/Technical/HR/Finance/Other)
    - Sales: Pricing enquiries, demos, purchasing intent
-   - Support: Help requests, bug reports, how-to questions  
+   - Support: Help requests, bug reports, how-to questions
    - Technical: API issues, integration questions, feature requests
    - HR: Employment queries, policy questions, complaints
    - Finance: Invoicing, payments, billing issues
 
 **The AI Prompt Strategy:**
-```
-You are an expert email classifier. Analyse this email and return ONLY valid JSON.
 
-Classification criteria:
-- Priority: Consider deadlines, sender importance, and action requirements
-- Sentiment: Detect emotional tone beyond just positive/negative
-- Department: Match content to most appropriate team
-- Confidence: Rate your certainty (0.0-1.0)
-
-Be consistent and objective. When uncertain, choose the safest option.
+```json
+{
+  "prompt": "You are an expert email classifier. Analyse this email and return ONLY valid JSON.",
+  "criteria": {
+    "priority": "Consider deadlines, sender importance, and action requirements",
+    "sentiment": "Detect emotional tone beyond just positive/negative",
+    "department": "Match content to most appropriate team",
+    "confidence": "Rate your certainty (0.0-1.0)"
+  },
+  "instruction": "Be consistent and objective. When uncertain, choose the safest option."
+}
 ```
 
 #### Intelligent Routing Logic
@@ -230,6 +247,7 @@ A decision tree that takes different actions based on email characteristics.
 | Low + Any | Batch processing | Weekly digest | 1 week |
 
 **Why This Routing Strategy:**
+
 - Prevents important emails from being buried
 - Ensures angry customers get immediate attention
 - Optimises team workload distribution
@@ -262,40 +280,41 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
    - Confidence scores tracked for model improvement
    - Response time metrics calculated automatically
    - Weekly reports on classification accuracy
-Complete Walkthrough
 
-Part A: Environment Setup (15 minutes)
-Step 1: n8n Account Setup
+---
 
-Navigate to n8n.io here
-Click "Get started for free"
+## Complete Walkthrough
 
-Create account with email verification
+### Part A: Environment Setup (15 minutes)
 
-Choose workspace name (e.g., "ai-automation-course")
-Select the "Starter" plan for this exercise
+#### Step 1: n8n Account Setup
 
-✓ Checkpoint: You should see the n8n workflow canvas
+1. Navigate to [n8n.io](https://n8n.io)
+2. Click "Get started for free"
+3. Create account with email verification
+4. Choose workspace name (e.g., "ai-automation-course")
+5. Select the "Starter" plan for this exercise
 
-Step 2: OpenRouter API Setup
+> ✅ **Checkpoint**: You should see the n8n workflow canvas
 
-Open new tab: openrouter.ai
-Sign up using Google/GitHub authentication
-Navigate to "API Keys" in dashboard
-Click "Create New Key"
-Name it: "n8n-email-classifier"
-Important: Copy and save the API key immediately (shown only once)
+#### Step 2: OpenRouter API Setup
 
-✓ Checkpoint: API key saved securely
+1. Open new tab: [openrouter.ai](https://openrouter.ai)
+2. Sign up using Google/GitHub authentication
+3. Navigate to "API Keys" in dashboard
+4. Click "Create New Key"
+5. Name it: "n8n-email-classifier"
+6. **Important**: Copy and save the API key immediately (shown only once)
 
-Step 3: Gmail API Configuration
+> ✅ **Checkpoint**: API key saved securely
 
-Go to Google Cloud Console <https://console.cloud.google.com/>
-Create new project: "n8n-email-automation"
-Enable Gmail API:
+#### Step 3: Gmail API Configuration
 
-Search "Gmail API" in library
-Click "Enable"
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create new project: "n8n-email-automation"
+3. Enable Gmail API:
+   - Search "Gmail API" in library
+   - Click "Enable"
 
 Step 4: Connect n8n with Gmail API:
 Create a new Credential in n8n

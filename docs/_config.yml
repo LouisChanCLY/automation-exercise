@@ -39,6 +39,11 @@ plugins:
   - jekyll-sitemap
   - jemoji
 
+# Mermaid diagram support
+mermaid:
+  enable: true
+  version: "10.6.1"
+
 # Collections for exercises
 collections:
   exercises:
@@ -78,7 +83,7 @@ exercise_categories:
   - title: "Foundation"
     description: "Core automation concepts"
     exercises: [1, 2, 3, 4, 5]
-  - title: "AI Integration" 
+  - title: "AI Integration"
     description: "Working with LLMs and AI APIs"
     exercises: [6, 7, 8, 9, 10]
   - title: "Advanced Workflows"
