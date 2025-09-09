@@ -282,7 +282,13 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 
 1. Navigate to [n8n.io](https://n8n.partnerlinks.io/gsl7xpbjua51)
 2. Click "Get started for free"
+
+   ![n8n Homepage](./images/setup/01-n8n-homepage.png)
+
 3. Create account with email verification
+
+   ![n8n Signup Form](./images/setup/02-n8n-signup-form.png)
+
 4. Choose workspace name (e.g., "ai-automation-course")
 5. Select the "Starter" plan for this exercise
 
@@ -292,6 +298,9 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 #### Step 2: OpenRouter API Setup
 
 1. Open new tab: [openrouter.ai](https://openrouter.ai)
+
+   ![OpenRouter Homepage](./images/setup/03-openrouter-homepage.png)
+
 2. Sign up using Google/GitHub authentication
 3. Navigate to "API Keys" in dashboard
 4. Click "Create New Key"
@@ -308,6 +317,8 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 3. Enable Gmail API:
    - Search "Gmail API" in library
    - Click "Enable"
+
+![Gmail API Enable Screen](./images/setup/04-gmail-api-enable.png)
 
 Step 4: Connect n8n with Gmail API:
 Create a new Credential in n8n

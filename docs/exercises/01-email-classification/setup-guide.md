@@ -9,15 +9,15 @@ nav_order: 2
 This guide provides detailed, screenshot-based instructions for setting up Gmail API access for the email
 classification exercise.
 
-## Prerequisites Checklist
+## Prerequisites
 
 Before starting, ensure you have:
 
-- [ ] Gmail account with 2-factor authentication enabled
-- [ ] Access to Google Cloud Console
-- [ ] n8n account (free tier is sufficient)
-- [ ] OpenRouter account for AI processing
-- [ ] 30-45 minutes for complete setup
+1. Gmail account with 2-factor authentication enabled
+2. Access to Google Cloud Console
+3. n8n account (free tier is sufficient)
+4. OpenRouter account for AI processing
+5. 30-45 minutes for complete setup
 
 ## Part 1: Google Cloud Console Setup
 
