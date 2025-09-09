@@ -9,12 +9,12 @@ repos:
       - id: check-symlinks
       - id: requirements-txt-fixer
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.41.0  # Latest version as of 2024
+    rev: v0.41.0
     hooks:
       - id: markdownlint
         name: Markdown Lint
         description: Checks markdown files for style issues
-        args: ['--fix']  # Auto-fix issues where possible
+        args: ['--fix']
         files: \.(md|markdown)$
         exclude: |
           (?x)^(
@@ -22,7 +22,7 @@ repos:
             vendor/.*|
             node_modules/.*
           )$
-
-  # Alternative: markdownlint without auto-fix for CI
-  # - id: markdownlint
-  #   args: ['--disable', 'MD013']  # Disable line length rule if needed
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.1
+    hooks:
+      - id: actionlint
