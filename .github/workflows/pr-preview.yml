@@ -51,7 +51,7 @@ jobs:
           script: |
             const issue_number = context.issue.number;
             const preview_url = `https://${context.repo.owner}.github.io/automation-exercises/pr-${issue_number}/`;
-            
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,

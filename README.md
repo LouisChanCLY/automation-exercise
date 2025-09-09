@@ -11,7 +11,7 @@ To provide detailed, Coursera-quality hands-on exercises that enable students wi
 The course consists of 30+ progressive exercises covering:
 
 - **Foundation (Exercises 1-10)**: Core automation concepts with n8n, APIs, and basic AI
-- **AI Integration (Exercises 11-20)**: Advanced LLM usage, prompt engineering, and intelligent workflows  
+- **AI Integration (Exercises 11-20)**: Advanced LLM usage, prompt engineering, and intelligent workflows
 - **Advanced Workflows (Exercises 21-30)**: Complex multi-step automations solving real business problems
 
 ## 🌐 Live Course Website

@@ -19,24 +19,28 @@ The average knowledge worker spends **28% of their workweek** managing email (Mc
 ### Real-World Applications
 
 **Customer Support Teams:**
+
 - Reduce first response time from hours to minutes
 - Automatically escalate angry customers to senior agents
 - Create support tickets without manual intervention
 - Track sentiment trends to identify product issues early
 
 **Sales Organisations:**
+
 - Never miss a hot lead buried in hundreds of emails
 - Automatically route enquiries to the right sales rep
 - Trigger follow-up sequences based on email intent
 - Prioritise high-value opportunities
 
 **HR Departments:**
+
 - Automatically categorise employee queries by urgency
 - Route sensitive matters to appropriate personnel
 - Track common questions to improve documentation
 - Ensure compliance-related emails get immediate attention
 
 **Personal Productivity:**
+
 - Focus on what matters by having AI pre-sort your inbox
 - Never miss important deadlines mentioned in emails
 - Reduce email anxiety with automated acknowledgements
@@ -55,16 +59,19 @@ By completing this exercise, you will:
 ## 📋 Prerequisites
 
 **Required Skills:**
+
 - Basic understanding of email and web applications
 - Ability to follow step-by-step instructions
 - No coding experience required (we'll provide all code snippets)
 
 **Required Accounts (all free):**
+
 - Gmail account with 2FA enabled
 - Computer with modern web browser
 - 45-60 minutes of uninterrupted time
 
 **You DON'T Need:**
+
 - Programming experience
 - Technical background
 - Paid software licenses
@@ -106,24 +113,28 @@ graph TB
 ### Design Decisions Explained
 
 **Why n8n?**
+
 - Visual workflow builder perfect for beginners
 - No code required for complex logic
 - Free tier sufficient for learning
 - Industry-standard tool used by 40,000+ companies
 
 **Why Gmail API instead of IMAP?**
+
 - More reliable and faster than traditional email protocols
 - Rich metadata access (labels, threads, etc.)
 - Better security through OAuth2
 - Real-time webhook capabilities (for production)
 
 **Why OpenRouter for AI?**
+
 - Access to multiple AI models through one API
 - Free tier includes powerful models
 - No credit card required to start
 - Fallback options if one model fails
 
 **Why Google Sheets for logging?**
+
 - Zero setup database
 - Easy to share and visualise
 - Familiar interface for non-technical users
@@ -149,7 +160,8 @@ After implementing this system, you should see:
 
 ---
 
-## Detailed Implementation:
+## Detailed Implementation
+
 ### Phase 1: Core Components Setup
 
 #### Gmail Trigger Configuration
@@ -158,6 +170,7 @@ After implementing this system, you should see:
 A reliable email monitoring system that checks for new messages every minute without overwhelming your Gmail API quota.
 
 **Technical Details:**
+
 - **OAuth2 Authentication**: Secure token-based access (no password storage)
 - **Polling Frequency**: Every 60 seconds (optimal for free tier)
 - **Smart Filtering**: Process only unread messages to avoid duplicates
@@ -184,12 +197,13 @@ An intelligent classification system that understands context, not just keywords
 
 3. **Department Routing** (Sales/Support/Technical/HR/Finance/Other)
    - Sales: Pricing enquiries, demos, purchasing intent
-   - Support: Help requests, bug reports, how-to questions  
+   - Support: Help requests, bug reports, how-to questions
    - Technical: API issues, integration questions, feature requests
    - HR: Employment queries, policy questions, complaints
    - Finance: Invoicing, payments, billing issues
 
 **The AI Prompt Strategy:**
+
 ```
 You are an expert email classifier. Analyse this email and return ONLY valid JSON.
 
@@ -219,6 +233,7 @@ A decision tree that takes different actions based on email characteristics.
 | Low + Any | Batch processing | Weekly digest | 1 week |
 
 **Why This Routing Strategy:**
+
 - Prevents important emails from being buried
 - Ensures angry customers get immediate attention
 - Optimises team workload distribution

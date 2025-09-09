@@ -14,25 +14,25 @@ Whether you're a complete beginner or looking to enhance your skills, this compr
 
 - **Career Changers** wanting to break into tech without coding
 - **Business Professionals** looking to automate repetitive tasks
-- **Recent Graduates** seeking competitive job market advantages  
+- **Recent Graduates** seeking competitive job market advantages
 - **Entrepreneurs** wanting to scale operations efficiently
 - **Anyone** curious about AI and automation
 
 ### 💡 What Makes This Course Different
 
-**🔨 Hands-On Learning**  
+**🔨 Hands-On Learning**
 Every concept is immediately applied in practical exercises. No boring theory—just real-world applications.
 
-**🎓 No Prerequisites**  
+**🎓 No Prerequisites**
 Start from absolute zero. We'll guide you through every click, every setting, every decision.
 
-**💼 Industry-Relevant**  
+**💼 Industry-Relevant**
 Learn tools and techniques actually used by Fortune 500 companies. Build a portfolio that gets you hired.
 
-**🏃 Learn at Your Pace**  
+**🏃 Learn at Your Pace**
 Each exercise takes 45-60 minutes. Complete one per day or binge through them—your choice.
 
-**🤝 Community Support**  
+**🤝 Community Support**
 Join thousands of learners on the same journey. Get help when stuck, celebrate wins together.
 
 ### 📚 Course Structure
@@ -40,21 +40,27 @@ Join thousands of learners on the same journey. Get help when stuck, celebrate w
 <div class="course-modules">
 
 #### 🏗️ Foundation (Exercises 1-10)
+
 Master the fundamentals of automation with n8n, API integrations, and basic AI usage.
+
 - Email automation and classification
 - Social media monitoring
 - Data processing pipelines
 - File organisation systems
 
-#### 🤖 AI Integration (Exercises 11-20)  
+#### 🤖 AI Integration (Exercises 11-20)
+
 Harness the power of GPT-4, Claude, and other AI models for intelligent automation.
+
 - Content generation workflows
 - Customer service automation
 - Document analysis systems
 - Multi-language processing
 
 #### ⚡ Advanced Workflows (Exercises 21-30)
+
 Build complex, multi-step automations that solve real business problems.
+
 - Multi-channel marketing campaigns
 - Supply chain automation
 - HR onboarding systems
@@ -66,11 +72,11 @@ Build complex, multi-step automations that solve real business problems.
 
 By completing this course, you will:
 
-✅ **Build 30+ working automations** for your portfolio  
-✅ **Save 10+ hours per week** through personal automation  
-✅ **Understand AI integration** without writing code  
-✅ **Gain in-demand skills** that employers desperately need  
-✅ **Join an elite group** of automation practitioners  
+✅ **Build 30+ working automations** for your portfolio
+✅ **Save 10+ hours per week** through personal automation
+✅ **Understand AI integration** without writing code
+✅ **Gain in-demand skills** that employers desperately need
+✅ **Join an elite group** of automation practitioners
 
 ### 📊 Success Stories
 
@@ -110,19 +116,19 @@ By completing this course, you will:
 
 ### 💬 Frequently Asked Questions
 
-**Do I need programming experience?**  
+**Do I need programming experience?**
 No! This course is designed for complete beginners. We'll teach you everything step-by-step.
 
-**How long does the course take?**  
+**How long does the course take?**
 Each exercise takes 45-60 minutes. At one per day, you'll complete the course in a month.
 
-**What tools do I need?**  
+**What tools do I need?**
 Just a computer with internet access. All tools have free tiers sufficient for learning.
 
-**Is there support if I get stuck?**  
+**Is there support if I get stuck?**
 Yes! Each exercise has troubleshooting guides, and our community forum is always ready to help.
 
-**Will this help me get a job?**  
+**Will this help me get a job?**
 Absolutely. Automation skills are in huge demand. You'll build a portfolio that showcases real, working solutions.
 
 ---

@@ -159,23 +159,23 @@ table {
   color: $text-color;
   border-collapse: collapse;
   border: 1px solid $grey-color-light;
-  
+
   tr {
     &:nth-child(even) {
       background-color: #f7f7f7;
     }
   }
-  
+
   th, td {
     padding: ($spacing-unit / 3) ($spacing-unit / 2);
   }
-  
+
   th {
     background-color: #f0f0f0;
     border: 1px solid #dedede;
     border-bottom-color: #c9c9c9;
   }
-  
+
   td {
     border: 1px solid $grey-color-light;
   }
@@ -283,18 +283,18 @@ table {
   display: flex;
   gap: 10px;
   margin-bottom: $spacing-unit;
-  
+
   button {
     padding: 8px 16px;
     border: 1px solid $grey-color-light;
     background-color: white;
     border-radius: 4px;
     cursor: pointer;
-    
+
     &:hover {
       background-color: $grey-color-light;
     }
-    
+
     &.active {
       background-color: $brand-color;
       color: white;

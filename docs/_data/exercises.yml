@@ -19,7 +19,7 @@ exercises:
       - Workflow Design
       - Error Handling
     status: published
-    
+
   - id: 02-social-media-monitor
     number: 2
     title: "Social Media Monitoring Dashboard"
@@ -37,7 +37,7 @@ exercises:
       - Data Aggregation
       - Dashboard Creation
     status: planned
-    
+
   - id: 03-document-processor
     number: 3
     title: "Intelligent Document Processing"
@@ -63,19 +63,19 @@ categories:
     description: "Core automation concepts and basic integrations"
     color: "#4CAF50"
     icon: "🏗️"
-    
+
   ai-integration:
     name: "AI Integration"
     description: "Working with LLMs and AI APIs"
     color: "#2196F3"
     icon: "🤖"
-    
+
   advanced:
     name: "Advanced Workflows"
     description: "Complex multi-step automations"
     color: "#FF9800"
     icon: "⚡"
-    
+
   industry:
     name: "Industry Applications"
     description: "Real-world business scenarios"
@@ -89,13 +89,13 @@ difficulty_levels:
     description: "No prior experience required"
     color: "#4CAF50"
     max_duration: 60
-    
+
   intermediate:
     name: "Intermediate"
     description: "Some automation experience helpful"
     color: "#FF9800"
     max_duration: 90
-    
+
   advanced:
     name: "Advanced"
     description: "Requires solid automation knowledge"

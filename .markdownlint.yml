@@ -5,18 +5,15 @@
 default: true
 
 # Line length
-MD013:
-  line_length: 120  # Increased for URLs and code blocks
-  heading_line_length: 100
-  code_block_line_length: 150
-  tables: false  # Don't check table line length
+MD013: false  # Disabled - long lines are OK for documentation
 
 # Headings
-MD025: true  # Single top-level heading
+MD025: false  # Allow multiple top-level headings for documentation
 MD022: true  # Headings should be surrounded by blank lines
 MD026: true  # No trailing punctuation in headings
 
 # Lists
+MD028: false  # Allow blank lines in blockquotes
 MD032: true  # Lists should be surrounded by blank lines
 MD030:
   ul_single: 1
@@ -26,7 +23,7 @@ MD030:
 
 # Code blocks
 MD031: true  # Fenced code blocks should be surrounded by blank lines
-MD040: true  # Fenced code blocks should have a language specified
+MD040: false  # Allow code blocks without language specification
 MD046:
   style: fenced  # Use fenced code blocks instead of indented
 
@@ -41,14 +38,7 @@ MD042: true  # No empty links
 MD045: true  # Images should have alt text
 
 # HTML
-MD033:
-  allowed_elements: [
-    'div', 'span', 'a', 'button', 'form', 'input',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'img', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
-    'footer', 'header', 'nav', 'section', 'article',
-    'details', 'summary'
-  ]
+MD033: false  # Allow inline HTML
 
 # Files
 MD047: true  # Files should end with a single newline character

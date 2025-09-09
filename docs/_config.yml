@@ -11,10 +11,8 @@ url: https://louischancly.github.io
 baseurl: /automation-exercises
 
 # Theme configuration
-theme: minima
-minima:
-  skin: auto
-  date_format: "%b %-d, %Y"
+# Using custom theme instead of minima
+# theme: minima (disabled - using custom layouts)
 
 # Custom styles to avoid Sass deprecation warnings
 sass:
@@ -37,7 +35,6 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
-  - jemoji
 
 # Mermaid diagram support
 mermaid:

@@ -285,7 +285,15 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 
 ## Complete Walkthrough
 
+### Quick Links
+
+- 📖 **[Detailed Setup Guide](./setup-guide)** - Complete OAuth2 configuration with troubleshooting
+- 🖼️ **[Visual Setup Guide](./images-guide)** - Screenshot references for each step
+- 🚀 **[Quick Start](#part-a-environment-setup-15-minutes)** - For experienced users
+
 ### Part A: Environment Setup (15 minutes)
+
+> **Note**: For detailed instructions with screenshots, see our **[Complete Setup Guide](./setup-guide)**
 
 #### Step 1: n8n Account Setup
 
