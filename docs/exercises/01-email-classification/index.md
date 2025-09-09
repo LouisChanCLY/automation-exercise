@@ -1,27 +1,38 @@
 ---
-layout: exercise
-title: "Exercise 1: Email Classification"
-description: Build an AI-powered email automation system
-category: foundation
-difficulty: beginner
-time: 45 minutes
-tools: [n8n, Gmail, OpenRouter, Google Sheets]
-next: /exercises/02-social-media-monitor/
+layout: default
+title: Email Classification
+parent: Exercises
+nav_order: 1
+has_children: true
+has_toc: false
 ---
 
-## 🎯 What You'll Build
+# Exercise 1: Email Classification
+
+{: .no_toc }
+
+## Table of contents
+
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## What You'll Build
 
 In this hands-on exercise, you'll create a **smart email classification system** that automatically processes
 incoming emails, understands their content using AI, and takes intelligent actions based on the message context.
 By the end of this 45-minute session, you'll have a working automation that can:
 
-- 📧 Monitor your Gmail inbox in real-time
-- 🤖 Use AI to understand email priority, sentiment, and intent
-- 🏷️ Automatically organise emails with smart labels
-- 📊 Track all classifications for performance insights
-- ⚡ Route urgent matters for immediate attention
+- Monitor your Gmail inbox in real-time
+- Use AI to understand email priority, sentiment, and intent
+- Automatically organise emails with smart labels
+- Track all classifications for performance insights
+- Route urgent matters for immediate attention
 
-## 💡 Why This Exercise Matters
+## Why This Exercise Matters
 
 ### The Problem We're Solving
 
@@ -31,35 +42,14 @@ This exercise teaches you to reclaim that time through intelligent automation.
 
 ### Real-World Applications
 
-**Customer Support Teams:**
+| Department | Key Benefits | Time Saved | ROI |
+|:-----------|:-------------|:-----------|:----|
+| **Customer Support** | • Reduce response time to minutes<br>• Auto-escalate angry customers<br>• Create tickets automatically<br>• Track sentiment trends | 3-4 hours/day | 300% |
+| **Sales Teams** | • Never miss hot leads<br>• Smart enquiry routing<br>• Automated follow-ups<br>• Priority opportunity ranking | 2-3 hours/day | 250% |
+| **HR Departments** | • Categorise by urgency<br>• Route sensitive matters<br>• Track common questions<br>• Ensure compliance | 2 hours/day | 200% |
+| **Personal Use** | • AI-powered inbox sorting<br>• Deadline detection<br>• Automated acknowledgements<br>• Searchable email database | 1-2 hours/day | Priceless |
 
-- Reduce first response time from hours to minutes
-- Automatically escalate angry customers to senior agents
-- Create support tickets without manual intervention
-- Track sentiment trends to identify product issues early
-
-**Sales Organisations:**
-
-- Never miss a hot lead buried in hundreds of emails
-- Automatically route enquiries to the right sales rep
-- Trigger follow-up sequences based on email intent
-- Prioritise high-value opportunities
-
-**HR Departments:**
-
-- Automatically categorise employee queries by urgency
-- Route sensitive matters to appropriate personnel
-- Track common questions to improve documentation
-- Ensure compliance-related emails get immediate attention
-
-**Personal Productivity:**
-
-- Focus on what matters by having AI pre-sort your inbox
-- Never miss important deadlines mentioned in emails
-- Reduce email anxiety with automated acknowledgements
-- Build a searchable database of all email interactions
-
-## 🎓 Learning Outcomes
+## Learning Outcomes
 
 By completing this exercise, you will:
 
@@ -69,28 +59,15 @@ By completing this exercise, you will:
 4. **Implement Error Handling** - Ensure your automation runs reliably 24/7
 5. **Design User Workflows** - Think systematically about process automation
 
-## 📋 Prerequisites
+## Prerequisites
 
-**Required Skills:**
+| Requirement Type | What You Need | What You DON'T Need |
+|:----------------|:--------------|:--------------------|
+| **Skills** | • Basic email understanding<br>• Web browser navigation<br>• Following instructions | • Programming experience<br>• Technical background<br>• Command line knowledge |
+| **Accounts** | • Gmail with 2FA<br>• Modern web browser<br>• 45-60 minutes time | • Paid software<br>• Premium accounts<br>• API experience |
+| **Hardware** | • Any modern computer<br>• Internet connection | • Special equipment<br>• Server access |
 
-- Basic understanding of email and web applications
-- Ability to follow step-by-step instructions
-- No coding experience required (we'll provide all code snippets)
-
-**Required Accounts (all free):**
-
-- Gmail account with 2FA enabled
-- Computer with modern web browser
-- 45-60 minutes of uninterrupted time
-
-**You DON'T Need:**
-
-- Programming experience
-- Technical background
-- Paid software licenses
-- Command line knowledge
-
-## 🏗️ System Architecture
+## System Architecture
 
 ### High-Level Overview
 
@@ -285,15 +262,21 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 
 ## Complete Walkthrough
 
-### Quick Links
+{: .important }
+> **Before you begin**: This exercise requires setting up OAuth2 authentication with Gmail. Allow 15 minutes for initial configuration.
 
-- 📖 **[Detailed Setup Guide](./setup-guide)** - Complete OAuth2 configuration with troubleshooting
-- 🖼️ **[Visual Setup Guide](./images-guide)** - Screenshot references for each step
-- 🚀 **[Quick Start](#part-a-environment-setup-15-minutes)** - For experienced users
+### Quick Navigation
+
+| Guide | Description | Time |
+|:------|:------------|:-----|
+| [Setup Guide](./setup-guide) | Complete OAuth2 configuration with troubleshooting | 15 min |
+| [Visual Guide](./images-guide) | Screenshot references for each setup step | Reference |
+| [Quick Start](#part-a-environment-setup-15-minutes) | Abbreviated instructions for experienced users | 5 min |
 
 ### Part A: Environment Setup (15 minutes)
 
-> **Note**: For detailed instructions with screenshots, see our **[Complete Setup Guide](./setup-guide)**
+{: .note }
+> For detailed instructions with screenshots, see our [Complete Setup Guide](./setup-guide)
 
 #### Step 1: n8n Account Setup
 
@@ -303,7 +286,8 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 4. Choose workspace name (e.g., "ai-automation-course")
 5. Select the "Starter" plan for this exercise
 
-> ✅ **Checkpoint**: You should see the n8n workflow canvas
+{: .highlight }
+> **Checkpoint**: You should see the n8n workflow canvas
 
 #### Step 2: OpenRouter API Setup
 
@@ -314,7 +298,8 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 5. Name it: "n8n-email-classifier"
 6. **Important**: Copy and save the API key immediately (shown only once)
 
-> ✅ **Checkpoint**: API key saved securely
+{: .highlight }
+> **Checkpoint**: API key saved securely
 
 #### Step 3: Gmail API Configuration
 

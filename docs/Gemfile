@@ -3,8 +3,8 @@ source "https://rubygems.org"
 # Jekyll version - using latest stable
 gem "jekyll", "~> 4.3.3"
 
-# Default theme for GitHub Pages
-gem "minima", "~> 2.5"
+# Just the Docs theme
+gem "just-the-docs", "~> 0.7.0"
 
 # Essential Jekyll plugins
 group :jekyll_plugins do

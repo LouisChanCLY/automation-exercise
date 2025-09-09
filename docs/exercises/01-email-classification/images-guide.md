@@ -1,8 +1,9 @@
 ---
-layout: exercise
-title: "Visual Setup Guide - Screenshot References"
-description: Screenshot references for Gmail OAuth setup
-parent: /exercises/01-email-classification/
+layout: default
+title: Visual Guide
+parent: Email Classification
+grand_parent: Exercises
+nav_order: 3
 ---
 
 This guide shows the exact screens you'll see during the Gmail OAuth2 setup process.

@@ -1,8 +1,9 @@
 ---
-layout: exercise
-title: "Gmail API & OAuth2 Setup Guide"
-description: Complete setup instructions with screenshots
-parent: /exercises/01-email-classification/
+layout: default
+title: Setup Guide
+parent: Email Classification
+grand_parent: Exercises
+nav_order: 2
 ---
 
 This guide provides detailed, screenshot-based instructions for setting up Gmail API access for the email

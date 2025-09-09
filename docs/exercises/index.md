@@ -1,7 +1,8 @@
 ---
 layout: default
-title: Exercise Catalogue
-description: Complete catalogue of 30 AI automation exercises
+title: Exercises
+nav_order: 2
+has_children: true
 ---
 
 # Complete Exercise Catalogue

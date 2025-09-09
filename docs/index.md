@@ -1,16 +1,20 @@
 ---
 layout: home
-title: AI Automation Mastery
-description: Transform your career with practical automation skills
+title: Home
+nav_order: 1
+permalink: /
 ---
 
-# Welcome to AI Automation Mastery 🚀
+# AI Automation Mastery
 
-## Your Journey to Automation Excellence Starts Here
+{: .fs-9 }
+
+Transform your career with practical AI automation skills through 30 hands-on exercises.
+{: .fs-6 .fw-300 }
 
 Whether you're a complete beginner or looking to enhance your skills, this comprehensive course will take you from zero to automation hero in just 30 exercises.
 
-### 🎯 Who This Course Is For
+## Who This Course Is For
 
 - **Career Changers** wanting to break into tech without coding
 - **Business Professionals** looking to automate repetitive tasks
@@ -18,7 +22,7 @@ Whether you're a complete beginner or looking to enhance your skills, this compr
 - **Entrepreneurs** wanting to scale operations efficiently
 - **Anyone** curious about AI and automation
 
-### 💡 What Makes This Course Different
+## What Makes This Course Different
 
 **🔨 Hands-On Learning**
 Every concept is immediately applied in practical exercises. No boring theory—just real-world applications.
