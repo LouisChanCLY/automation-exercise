@@ -1,0 +1,103 @@
+# Exercise metadata for navigation and organisation
+
+exercises:
+  - id: 01-email-classification
+    number: 1
+    title: "Smart Email Classification"
+    description: "Build an AI-powered email automation system that classifies and routes messages"
+    category: foundation
+    difficulty: beginner
+    duration: 45
+    tools:
+      - n8n
+      - Gmail API
+      - OpenRouter
+      - Google Sheets
+    skills:
+      - API Integration
+      - AI Prompting
+      - Workflow Design
+      - Error Handling
+    status: published
+    
+  - id: 02-social-media-monitor
+    number: 2
+    title: "Social Media Monitoring Dashboard"
+    description: "Track brand mentions and sentiment across social platforms"
+    category: foundation
+    difficulty: beginner
+    duration: 60
+    tools:
+      - n8n
+      - Twitter API
+      - LinkedIn API
+      - Airtable
+    skills:
+      - Social Media APIs
+      - Data Aggregation
+      - Dashboard Creation
+    status: planned
+    
+  - id: 03-document-processor
+    number: 3
+    title: "Intelligent Document Processing"
+    description: "Extract and process data from PDFs and images using AI"
+    category: foundation
+    difficulty: intermediate
+    duration: 50
+    tools:
+      - n8n
+      - OpenAI Vision
+      - Google Drive
+      - PostgreSQL
+    skills:
+      - OCR Processing
+      - Data Extraction
+      - Database Integration
+    status: planned
+
+# Categories for grouping
+categories:
+  foundation:
+    name: "Foundation"
+    description: "Core automation concepts and basic integrations"
+    color: "#4CAF50"
+    icon: "🏗️"
+    
+  ai-integration:
+    name: "AI Integration"
+    description: "Working with LLMs and AI APIs"
+    color: "#2196F3"
+    icon: "🤖"
+    
+  advanced:
+    name: "Advanced Workflows"
+    description: "Complex multi-step automations"
+    color: "#FF9800"
+    icon: "⚡"
+    
+  industry:
+    name: "Industry Applications"
+    description: "Real-world business scenarios"
+    color: "#9C27B0"
+    icon: "💼"
+
+# Difficulty levels
+difficulty_levels:
+  beginner:
+    name: "Beginner"
+    description: "No prior experience required"
+    color: "#4CAF50"
+    max_duration: 60
+    
+  intermediate:
+    name: "Intermediate"
+    description: "Some automation experience helpful"
+    color: "#FF9800"
+    max_duration: 90
+    
+  advanced:
+    name: "Advanced"
+    description: "Requires solid automation knowledge"
+    color: "#F44336"
+    max_duration: 120

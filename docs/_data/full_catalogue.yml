@@ -1,0 +1,501 @@
+# Complete Exercise Catalogue
+# CLA: Classification | GEN: Generation | SUM: Summarisation | SEA: Search 
+# TRA: Transformation | VIS: Vision | AUD: Audio | STO: Storyboard | VID: Video
+
+exercises:
+  - id: "01-smart-email-classifier"
+    number: 1
+    title: "Smart Email Classifier"
+    description: "Build an autonomous email classification system using AI to categorise and route messages"
+    capabilities: ["CLA"]
+    prerequisites: []
+    ai_models: ["GPT-4o"]
+    n8n_nodes: ["Gmail Trigger", "OpenAI", "Switch", "Gmail"]
+    duration: 45
+    difficulty: "beginner"
+    keywords: ["Agentic Decision Making"]
+    category: "foundation"
+    status: "published"
+
+  - id: "02-customer-support-router"
+    number: 2
+    title: "Customer Support Ticket Router"
+    description: "Create intelligent routing for support tickets with auto-responses and prioritisation"
+    capabilities: ["CLA", "GEN", "SUM"]
+    prerequisites: [1]
+    ai_models: ["GPT-4o"]
+    n8n_nodes: ["Webhook", "OpenAI", "IF", "Notion", "Slack"]
+    duration: 60
+    difficulty: "intermediate"
+    keywords: ["Multi-Agent Workflows"]
+    category: "foundation"
+    status: "planned"
+
+  - id: "03-review-sentiment-pipeline"
+    number: 3
+    title: "Product Review Sentiment Pipeline"
+    description: "Analyse product reviews for sentiment and extract actionable insights"
+    capabilities: ["CLA", "SUM", "SEA"]
+    prerequisites: [1]
+    ai_models: ["GPT-4o", "Text-Embedding-3"]
+    n8n_nodes: ["Schedule Trigger", "Airtable", "OpenAI", "Filter"]
+    duration: 45
+    difficulty: "beginner"
+    keywords: ["AI-Powered Analytics"]
+    category: "foundation"
+    status: "planned"
+
+  - id: "04-reddit-trend-generator"
+    number: 4
+    title: "Reddit Trend Content Generator"
+    description: "Mine Reddit for trending topics and generate relevant content automatically"
+    capabilities: ["CLA", "GEN", "SEA"]
+    prerequisites: [1, 3]
+    ai_models: ["GPT-4o", "Text-Embedding-3"]
+    n8n_nodes: ["Reddit API", "OpenAI", "HTTP Request", "Social APIs"]
+    duration: 50
+    difficulty: "intermediate"
+    keywords: ["Social Media Mining"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "05-personalised-marketing-copy"
+    number: 5
+    title: "Personalised Marketing Copy Creator"
+    description: "Generate hyper-personalised marketing content based on customer profiles"
+    capabilities: ["CLA", "GEN", "SEA"]
+    prerequisites: [2, 4]
+    ai_models: ["GPT-4o", "Claude Sonnet", "Text-Embedding-3"]
+    n8n_nodes: ["CRM Trigger", "Code", "OpenAI", "Email"]
+    duration: 75
+    difficulty: "advanced"
+    keywords: ["Hyper-Personalisation"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "06-multi-platform-scheduler"
+    number: 6
+    title: "Multi-Platform Content Scheduler"
+    description: "Automate content creation and scheduling across multiple social platforms"
+    capabilities: ["CLA", "GEN", "TRA"]
+    prerequisites: [4, 5]
+    ai_models: ["GPT-4o"]
+    n8n_nodes: ["Schedule Trigger", "OpenAI", "Twitter", "LinkedIn"]
+    duration: 60
+    difficulty: "intermediate"
+    keywords: ["Cross-Platform Automation"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "07-meeting-notes-summariser"
+    number: 7
+    title: "Meeting Notes Summariser"
+    description: "Automatically transcribe and summarise meeting recordings with action items"
+    capabilities: ["CLA", "SUM", "SEA"]
+    prerequisites: [3]
+    ai_models: ["GPT-4o", "Claude Sonnet"]
+    n8n_nodes: ["Google Drive Trigger", "OpenAI", "Notion"]
+    duration: 45
+    difficulty: "intermediate"
+    keywords: ["Remote Work Automation"]
+    category: "foundation"
+    status: "planned"
+
+  - id: "08-research-article-digest"
+    number: 8
+    title: "Research Article Digest"
+    description: "Create personalised research digests from multiple sources"
+    capabilities: ["GEN", "SUM", "SEA"]
+    prerequisites: [3, 7]
+    ai_models: ["GPT-4o", "Perplexity API"]
+    n8n_nodes: ["RSS Feed", "HTTP Request", "OpenAI", "Email"]
+    duration: 50
+    difficulty: "intermediate"
+    keywords: ["Knowledge Management"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "09-feedback-consolidator"
+    number: 9
+    title: "Customer Feedback Consolidator"
+    description: "Aggregate and analyse customer feedback from multiple channels"
+    capabilities: ["CLA", "SUM", "SEA"]
+    prerequisites: [3, 7]
+    ai_models: ["GPT-4o", "Text-Embedding-3"]
+    n8n_nodes: ["Schedule Trigger", "Multiple DB", "OpenAI", "Slack"]
+    duration: 40
+    difficulty: "beginner"
+    keywords: ["Voice of Customer AI"]
+    category: "foundation"
+    status: "planned"
+
+  - id: "10-smart-document-search"
+    number: 10
+    title: "Smart Document Search"
+    description: "Implement RAG-based intelligent document search and retrieval"
+    capabilities: ["CLA", "SUM", "SEA"]
+    prerequisites: [3, 8]
+    ai_models: ["GPT-4o", "Text-Embedding-3", "Pinecone"]
+    n8n_nodes: ["Webhook", "Pinecone", "OpenAI", "Slack"]
+    duration: 55
+    difficulty: "intermediate"
+    keywords: ["RAG Implementation"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "11-code-documentation-explorer"
+    number: 11
+    title: "Code Documentation Explorer"
+    description: "Generate and search code documentation using AI"
+    capabilities: ["CLA", "GEN", "SEA"]
+    prerequisites: [8, 10]
+    ai_models: ["GPT-4o", "CodeT5", "Text-Embedding-3"]
+    n8n_nodes: ["GitHub Trigger", "OpenAI", "Vector DB", "Slack"]
+    duration: 65
+    difficulty: "advanced"
+    keywords: ["Developer Productivity"]
+    category: "advanced"
+    status: "planned"
+
+  - id: "12-customer-query-resolution"
+    number: 12
+    title: "Customer Query Resolution"
+    description: "Build an agentic support system with knowledge base integration"
+    capabilities: ["CLA", "GEN", "SEA"]
+    prerequisites: [10, 11]
+    ai_models: ["GPT-4o", "Text-Embedding-3", "Claude Sonnet"]
+    n8n_nodes: ["Zendesk Trigger", "Weaviate", "OpenAI", "Zendesk"]
+    duration: 45
+    difficulty: "intermediate"
+    keywords: ["Agentic Support"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "13-language-bridge-translator"
+    number: 13
+    title: "Language Bridge Translator"
+    description: "Create real-time multi-language translation workflows"
+    capabilities: ["CLA", "GEN", "TRA"]
+    prerequisites: [2]
+    ai_models: ["GPT-4o", "Google Translate API"]
+    n8n_nodes: ["Webhook", "OpenAI", "Slack", "Database"]
+    duration: 35
+    difficulty: "beginner"
+    keywords: ["Global Communication"]
+    category: "foundation"
+    status: "planned"
+
+  - id: "14-data-format-harmoniser"
+    number: 14
+    title: "Data Format Harmoniser"
+    description: "Transform and harmonise data across different enterprise systems"
+    capabilities: ["CLA", "GEN", "TRA"]
+    prerequisites: [13]
+    ai_models: ["GPT-4o", "Claude Sonnet"]
+    n8n_nodes: ["File Trigger", "Code", "OpenAI", "Multiple APIs"]
+    duration: 70
+    difficulty: "advanced"
+    keywords: ["Enterprise Integration"]
+    category: "advanced"
+    status: "planned"
+
+  - id: "15-content-style-adapter"
+    number: 15
+    title: "Content Style Adapter"
+    description: "Adapt content to maintain brand consistency across channels"
+    capabilities: ["CLA", "GEN", "TRA"]
+    prerequisites: [5, 13]
+    ai_models: ["GPT-4o", "Claude Sonnet"]
+    n8n_nodes: ["Google Docs Trigger", "OpenAI", "Google Docs"]
+    duration: 50
+    difficulty: "intermediate"
+    keywords: ["Brand Consistency AI"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "16-image-description-generator"
+    number: 16
+    title: "Image Description Generator"
+    description: "Generate accessibility descriptions for images using vision AI"
+    capabilities: ["CLA", "GEN", "VIS"]
+    prerequisites: [1]
+    ai_models: ["GPT-4o-Vision", "BLIP-2"]
+    n8n_nodes: ["Webhook", "OpenAI Vision", "Airtable"]
+    duration: 40
+    difficulty: "beginner"
+    keywords: ["Accessibility Automation"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "17-visual-content-moderator"
+    number: 17
+    title: "Visual Content Moderator"
+    description: "Automatically moderate visual content for safety and compliance"
+    capabilities: ["CLA", "GEN", "VIS"]
+    prerequisites: [16]
+    ai_models: ["GPT-4o-Vision", "CLIP", "Moderation API"]
+    n8n_nodes: ["File Upload Trigger", "OpenAI Vision", "IF", "Admin Alert"]
+    duration: 55
+    difficulty: "intermediate"
+    keywords: ["Content Safety AI"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "18-product-catalogue-analyser"
+    number: 18
+    title: "Product Catalogue Analyser"
+    description: "Analyse and categorise products using vision and text AI"
+    capabilities: ["CLA", "GEN", "SEA", "VIS"]
+    prerequisites: [16, 17, 10]
+    ai_models: ["GPT-4o-Vision", "CLIP", "Text-Embedding-3"]
+    n8n_nodes: ["Shopify Trigger", "OpenAI Vision", "Classification", "Inventory"]
+    duration: 75
+    difficulty: "advanced"
+    keywords: ["E-commerce Automation"]
+    category: "advanced"
+    status: "planned"
+
+  - id: "19-voice-note-transcriber"
+    number: 19
+    title: "Voice Note Transcriber & Processor"
+    description: "Convert voice notes to actionable tasks and summaries"
+    capabilities: ["CLA", "SUM", "AUD"]
+    prerequisites: [7]
+    ai_models: ["Whisper-v3", "GPT-4o"]
+    n8n_nodes: ["Telegram Trigger", "Whisper", "OpenAI", "Task Manager"]
+    duration: 45
+    difficulty: "intermediate"
+    keywords: ["Voice-First Workflows"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "20-podcast-content-extractor"
+    number: 20
+    title: "Podcast Content Extractor"
+    description: "Extract key insights and generate social content from podcasts"
+    capabilities: ["CLA", "GEN", "SUM", "AUD"]
+    prerequisites: [19, 8]
+    ai_models: ["Whisper-v3", "GPT-4o", "Claude Sonnet"]
+    n8n_nodes: ["RSS Feed", "Whisper", "OpenAI", "Social Media"]
+    duration: 60
+    difficulty: "intermediate"
+    keywords: ["Audio Content Mining"]
+    category: "ai-integration"
+    status: "planned"
+
+  - id: "21-multilanguage-audio-support"
+    number: 21
+    title: "Multi-language Audio Support"
+    description: "Build global voice support with real-time translation"
+    capabilities: ["CLA", "GEN", "TRA", "AUD"]
+    prerequisites: [19, 13]
+    ai_models: ["Whisper-v3", "GPT-4o", "Google Translate"]
+    n8n_nodes: ["Twilio Trigger", "Whisper", "Translation", "CRM"]
+    duration: 50
+    difficulty: "advanced"
+    keywords: ["Global Voice Support"]
+    category: "advanced"
+    status: "planned"
+
+  - id: "22-visual-storyboard-creator"
+    number: 22
+    title: "Visual Storyboard Creator"
+    description: "Generate visual storyboards from text descriptions"
+    capabilities: ["CLA", "GEN", "SEA", "VIS", "STO"]
+    prerequisites: [16, 8]
+    ai_models: ["GPT-4o", "DALL-E 3", "CLIP"]
+    n8n_nodes: ["Manual Trigger", "OpenAI", "DALL-E", "Notion"]
+    duration: 75
+    difficulty: "advanced"
+    keywords: ["Creative AI Workflows"]
+    category: "advanced"
+    status: "planned"
+
+  - id: "23-marketing-storyboard-automation"
+    number: 23
+    title: "Marketing Storyboard Automation"
+    description: "Automate campaign visualisation with AI-generated storyboards"
+    capabilities: ["CLA", "GEN", "SEA", "STO"]
+    prerequisites: [22, 5]
+    ai_models: ["GPT-4o", "DALL-E 3", "Text-Embedding-3"]
+    n8n_nodes: ["CRM Trigger", "OpenAI", "DALL-E", "Airtable"]
+    duration: 80
+    difficulty: "advanced"
+    keywords: ["Campaign Visualisation"]
+    category: "advanced"
+    status: "planned"
+
+  - id: "24-educational-content-storyboard"
+    number: 24
+    title: "Educational Content Storyboard"
+    description: "Create educational visual content with AI-powered storyboards"
+    capabilities: ["CLA", "GEN", "TRA", "STO"]
+    prerequisites: [22, 15]
+    ai_models: ["GPT-4o", "DALL-E 3", "Claude Sonnet"]
+    n8n_nodes: ["LMS Trigger", "OpenAI", "DALL-E", "Google Classroom"]
+    duration: 70
+    difficulty: "advanced"
+    keywords: ["EdTech Automation"]
+    category: "industry"
+    status: "planned"
+
+  - id: "25-runwayml-product-demos"
+    number: 25
+    title: "RunwayML Product Demo Videos"
+    description: "Generate product demo videos using AI video generation"
+    capabilities: ["CLA", "GEN", "SEA", "VIS", "STO", "VID"]
+    prerequisites: [22, 18]
+    ai_models: ["GPT-4o", "DALL-E 3", "RunwayML Gen-3"]
+    n8n_nodes: ["Shopify Trigger", "OpenAI", "RunwayML API", "YouTube API"]
+    duration: 90
+    difficulty: "expert"
+    keywords: ["AI Video Generation"]
+    category: "industry"
+    status: "planned"
+
+  - id: "26-pika-training-videos"
+    number: 26
+    title: "Pika Labs Training Videos"
+    description: "Create corporate training videos with AI voice and video"
+    capabilities: ["CLA", "GEN", "TRA", "AUD", "STO", "VID"]
+    prerequisites: [21, 24]
+    ai_models: ["GPT-4o", "ElevenLabs", "Pika Labs 1.5"]
+    n8n_nodes: ["HR System Trigger", "OpenAI", "ElevenLabs", "Pika API"]
+    duration: 85
+    difficulty: "expert"
+    keywords: ["Corporate Video AI"]
+    category: "industry"
+    status: "planned"
+
+  - id: "27-social-media-video-pipeline"
+    number: 27
+    title: "Social Media Video Pipeline"
+    description: "Build a viral content factory with AI video generation"
+    capabilities: ["CLA", "GEN", "TRA", "STO", "VID"]
+    prerequisites: [25, 26]
+    ai_models: ["GPT-4o", "RunwayML Gen-3", "Pika Labs 1.5"]
+    n8n_nodes: ["Schedule Trigger", "OpenAI", "RunwayML", "Social APIs"]
+    duration: 80
+    difficulty: "expert"
+    keywords: ["Viral Content Factory"]
+    category: "industry"
+    status: "planned"
+
+  - id: "28-reddit-trend-to-video"
+    number: 28
+    title: "Reddit Trend-to-Video Pipeline"
+    description: "Transform trending Reddit content into engaging videos"
+    capabilities: ["CLA", "GEN", "SUM", "SEA", "TRA", "VIS", "STO", "VID"]
+    prerequisites: [4, 27, 10]
+    ai_models: ["GPT-4o", "DALL-E 3", "RunwayML Gen-3", "CLIP", "Text-Embedding-3"]
+    n8n_nodes: ["Reddit API", "OpenAI", "RunwayML", "Social APIs", "Vector DB"]
+    duration: 120
+    difficulty: "expert"
+    keywords: ["Trending Content Automation"]
+    category: "industry"
+    status: "planned"
+
+  - id: "29-ai-agent-customer-journey"
+    number: 29
+    title: "AI Agent Customer Journey"
+    description: "Build autonomous customer experience with multi-agent systems"
+    capabilities: ["CLA", "GEN", "SUM", "SEA", "TRA"]
+    prerequisites: [2, 12, 10]
+    ai_models: ["GPT-4o", "Claude Sonnet", "Text-Embedding-3", "AutoGPT"]
+    n8n_nodes: ["Multi-trigger", "OpenAI", "Vector DB", "CRM APIs"]
+    duration: 90
+    difficulty: "expert"
+    keywords: ["Autonomous Customer Experience"]
+    category: "industry"
+    status: "planned"
+
+  - id: "30-omnichannel-ai-support"
+    number: 30
+    title: "Omnichannel AI Support Bot"
+    description: "Create multi-modal support across all communication channels"
+    capabilities: ["CLA", "GEN", "SUM", "SEA", "TRA", "VIS", "AUD"]
+    prerequisites: [12, 21, 18]
+    ai_models: ["GPT-4o", "Whisper-v3", "GPT-4o-Vision", "Claude Sonnet"]
+    n8n_nodes: ["Multi-trigger", "OpenAI", "Whisper", "Vision", "Chat APIs"]
+    duration: 120
+    difficulty: "expert"
+    keywords: ["Multi-Modal Support"]
+    category: "industry"
+    status: "planned"
+
+# Capability definitions
+capabilities:
+  CLA:
+    name: "Classification"
+    icon: "🏷️"
+    description: "Categorise and label data"
+  GEN:
+    name: "Generation"
+    icon: "✨"
+    description: "Create new content"
+  SUM:
+    name: "Summarisation"
+    icon: "📝"
+    description: "Extract key insights"
+  SEA:
+    name: "Search"
+    icon: "🔍"
+    description: "Find and retrieve information"
+  TRA:
+    name: "Transformation"
+    icon: "🔄"
+    description: "Convert between formats"
+  VIS:
+    name: "Vision"
+    icon: "👁️"
+    description: "Process visual content"
+  AUD:
+    name: "Audio"
+    icon: "🎧"
+    description: "Process audio content"
+  STO:
+    name: "Storyboard"
+    icon: "🎬"
+    description: "Create visual narratives"
+  VID:
+    name: "Video"
+    icon: "📹"
+    description: "Generate video content"
+
+# Categories
+categories:
+  foundation:
+    name: "Foundation"
+    description: "Core automation concepts and basic integrations"
+    exercises: [1, 2, 3, 7, 9, 13]
+  ai-integration:
+    name: "AI Integration"
+    description: "Working with LLMs and AI APIs"
+    exercises: [4, 5, 6, 8, 10, 12, 15, 16, 17, 19, 20]
+  advanced:
+    name: "Advanced Workflows"
+    description: "Complex multi-step automations"
+    exercises: [11, 14, 18, 21, 22, 23]
+  industry:
+    name: "Industry Applications"
+    description: "Real-world business scenarios"
+    exercises: [24, 25, 26, 27, 28, 29, 30]
+
+# Difficulty levels
+difficulty_levels:
+  beginner:
+    name: "Beginner"
+    description: "No prior experience required"
+    count: 5
+  intermediate:
+    name: "Intermediate"
+    description: "Some automation experience helpful"
+    count: 10
+  advanced:
+    name: "Advanced"
+    description: "Requires solid automation knowledge"
+    count: 9
+  expert:
+    name: "Expert"
+    description: "Master-level automation skills"
+    count: 6

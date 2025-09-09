@@ -1,0 +1,41 @@
+# Jekyll build output
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Bundle directory
+vendor/bundle/
+vendor/cache/
+vendor/gems/
+vendor/ruby/
+
+# Bundler config
+.bundle/
+
+# Ruby version manager files
+.ruby-version
+.ruby-gemset
+.rvmrc
+
+# macOS
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Node modules (if using any JS tools)
+node_modules/
+
+# Gemfile lock (optional - you may want to commit this)
+# Gemfile.lock

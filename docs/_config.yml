@@ -1,0 +1,100 @@
+# GitHub Pages Configuration for AI Automation Mastery Course
+
+title: AI Automation Mastery
+description: Hands-on automation exercises for future employability
+author: AI Training Institute
+email: contact@example.com
+
+# GitHub Pages settings
+domain: yourusername.github.io
+url: https://yourusername.github.io
+baseurl: /automation-exercises
+
+# Theme configuration
+theme: minima
+minima:
+  skin: auto
+  date_format: "%b %-d, %Y"
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    block:
+      line_numbers: true
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jemoji
+
+# Collections for exercises
+collections:
+  exercises:
+    output: true
+    permalink: /exercises/:path/
+    order:
+      - 01-email-classification.md
+      - 02-social-media-monitor.md
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "exercises"
+    values:
+      layout: "exercise"
+      toc: true
+      toc_sticky: true
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Getting Started
+    url: /guides/setup/
+  - title: Exercises
+    url: /exercises/
+  - title: Resources
+    url: /resources/
+
+# Exercise categories
+exercise_categories:
+  - title: "Foundation"
+    description: "Core automation concepts"
+    exercises: [1, 2, 3, 4, 5]
+  - title: "AI Integration" 
+    description: "Working with LLMs and AI APIs"
+    exercises: [6, 7, 8, 9, 10]
+  - title: "Advanced Workflows"
+    description: "Complex multi-step automations"
+    exercises: [11, 12, 13, 14, 15]
+  - title: "Industry Applications"
+    description: "Real-world business scenarios"
+    exercises: [16, 17, 18, 19, 20]
+
+# Search
+search: true
+search_full_content: true
+
+# Analytics (add your tracking ID)
+google_analytics: UA-XXXXXXXXX-X
+
+# Exclude from processing
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
