@@ -47,11 +47,6 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-        with:
-          # Static site generator config
-          static_site_generator: jekyll
-          # Generator source directory (where _config.yml is located)
-          generator_config_file: docs/_config.yml
 
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
