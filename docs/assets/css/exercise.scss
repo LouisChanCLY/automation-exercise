@@ -1,0 +1,230 @@
+---
+---
+
+// Exercise-specific styles
+
+.exercise-navigation {
+  margin-top: var(--spacing-xxl);
+  padding-top: var(--spacing-xl);
+  border-top: 2px solid var(--color-border);
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+// Tool and capability tags
+.tools-list,
+.capabilities-list {
+  margin-top: var(--spacing-md);
+
+  .tools-tags,
+  .capability-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+  }
+
+  .tool-tag,
+  .capability-tag {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-small);
+    font-weight: 500;
+  }
+}
+
+// Exercise content improvements
+.exercise-content {
+
+  // Better blockquote styling
+  blockquote {
+    background: var(--color-bg-secondary);
+    border-left: 4px solid var(--color-primary);
+    padding: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+    border-radius: var(--border-radius);
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Checkpoint styling
+  blockquote:has(> p:first-child:contains("✅")) {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: var(--color-success);
+  }
+
+  // Step numbers
+  h4 {
+    position: relative;
+    padding-left: var(--spacing-xl);
+
+    &:before {
+      content: attr(data-step);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      background: var(--color-primary);
+      color: var(--color-text-inverse);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-small);
+      font-weight: bold;
+    }
+  }
+
+  // Lists with better spacing
+  ul, ol {
+    margin: var(--spacing-md) 0;
+    padding-left: var(--spacing-xl);
+
+    li {
+      margin-bottom: var(--spacing-sm);
+      line-height: 1.7;
+    }
+  }
+
+  // Image captions
+  img + em {
+    display: block;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  // Better horizontal rules
+  hr {
+    border: none;
+    height: 2px;
+    background: var(--color-border);
+    margin: var(--spacing-xxl) 0;
+    position: relative;
+
+    &:after {
+      content: "§";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--color-bg);
+      padding: 0 var(--spacing-md);
+      color: var(--color-text-tertiary);
+      font-size: var(--font-size-large);
+    }
+  }
+}
+
+// Mermaid diagram container improvements
+.mermaid {
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  margin: var(--spacing-lg) 0;
+  overflow-x: auto;
+
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+// Code block improvements
+pre {
+  position: relative;
+
+  &:has(code.language-javascript):before {
+    content: "JavaScript";
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    border-radius: 0 var(--border-radius) 0 var(--border-radius);
+    font-size: var(--font-size-small);
+    font-family: var(--font-primary);
+  }
+
+  &:has(code.language-json):before {
+    content: "JSON";
+  }
+
+  &:has(code.language-yaml):before {
+    content: "YAML";
+  }
+
+  &:has(code.language-bash):before {
+    content: "Bash";
+  }
+
+  &:has(code.language-text):before {
+    content: "Text";
+  }
+}
+
+// Exercise list styling
+.exercise-list {
+  display: grid;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+
+  .exercise-card {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    transition: all var(--transition-base);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--color-primary);
+    }
+
+    h3 {
+      margin-top: 0;
+      color: var(--color-primary);
+    }
+
+    .exercise-metadata {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-sm);
+      font-size: var(--font-size-small);
+      color: var(--color-text-secondary);
+
+      span {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+      }
+    }
+  }
+}

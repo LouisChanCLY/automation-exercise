@@ -289,7 +289,7 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 
 #### Step 1: n8n Account Setup
 
-1. Navigate to [n8n.io](https://n8n.io)
+1. Navigate to [n8n.io](https://n8n.partnerlinks.io/gsl7xpbjua51)
 2. Click "Get started for free"
 3. Create account with email verification
 4. Choose workspace name (e.g., "ai-automation-course")
