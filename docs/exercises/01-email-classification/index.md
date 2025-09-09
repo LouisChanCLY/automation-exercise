@@ -265,18 +265,11 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
 {: .important }
 > **Before you begin**: This exercise requires setting up OAuth2 authentication with Gmail. Allow 15 minutes for initial configuration.
 
-### Quick Navigation
-
-| Guide | Description | Time |
-|:------|:------------|:-----|
-| [Setup Guide](./setup-guide) | Complete OAuth2 configuration with troubleshooting | 15 min |
-| [Visual Guide](./images-guide) | Screenshot references for each setup step | Reference |
-| [Quick Start](#part-a-environment-setup-15-minutes) | Abbreviated instructions for experienced users | 5 min |
+{% include progress-tracker.html %}
 
 ### Part A: Environment Setup (15 minutes)
 
-{: .note }
-> For detailed instructions with screenshots, see our [Complete Setup Guide](./setup-guide)
+Follow each step carefully. Click on any screenshot to zoom in for details.
 
 #### Step 1: n8n Account Setup
 
@@ -318,59 +311,98 @@ Multi-channel response system that acknowledges, tracks, and escalates appropria
    - Search "Gmail API" in library
    - Click "Enable"
 
-![Gmail API Enable Screen](./images/setup/04-gmail-api-enable.png)
+   ![Gmail API Enable Screen](./images/setup/04-gmail-api-enable.png)
 
-Step 4: Connect n8n with Gmail API:
-Create a new Credential in n8n
+#### Step 4: Connect n8n with Gmail
 
-Select Gmail OAuth2 API
+1. **In n8n**, go to Credentials (left sidebar) and click "Add Credential"
 
-Copy the OAuth Redirect URL
+   ![Create Credential in n8n](./images/setup/05-n8n-create-credential.png)
 
-Go back to Google Cloud Console to Create credentials:
+2. Select "Gmail OAuth2 API" from the list
 
-Go to "Credentials" → "Create Credentials" → "OAuth Client ID"
-Application type: "Web application"
-Name: "n8n Gmail Integration"
-Authorized redirect URIs: paste the OAuth Redirect URL from earlier
+   ![Select Gmail OAuth2](./images/setup/06-n8n-select-gmail-oauth.png)
 
-Copy Client ID and Client Secret back into the n8n Credential page
-Click Sign in with Google to connect n8n with Gmail API
+3. **Copy the OAuth Redirect URL** shown in n8n (you'll need this for Google)
 
-If prompted “Google hasn’t verified this app”, click “Show Advanced” and click “Go to … …”
+4. **Back in Google Cloud Console**, create OAuth credentials:
+   - Go to "Credentials" → "Create Credentials" → "OAuth Client ID"
 
-Click “Select all”
+   ![Google Cloud Credentials](./images/setup/07-google-cloud-credentials.png)
 
-Once connected, it should show this:
+5. Configure the OAuth Client:
+   - Application type: "Web application"
+   - Name: "n8n Gmail Integration"
 
-✓ Checkpoint: OAuth2 credentials ready, Gmail API enabled
+   ![OAuth Client Type](./images/setup/08-oauth-client-type.png)
 
-Part B: Workflow Construction (20 minutes)
-Step 5: Create a new Workflow
+6. Set up the consent screen if prompted:
 
-Rename to n8n Email Automation
-Step 6: Gmail Trigger Setup
+   ![OAuth Consent Screen](./images/setup/09-oauth-consent-screen.png)
 
-In n8n, click the plus button in the top right corner
-Search “Gmail”
+7. Add the Authorized redirect URI (paste from n8n):
 
-Click “Gmail” and select “On message received” trigger
+   ![OAuth Redirect URI](./images/setup/10-oauth-redirect-uri.png)
 
-Configure trigger:
-Credential: select the credential we created earlier
-Poll Time: Every Minute
-Event: "Message Received"
-Simplify Output: Toggle OFF
+8. Copy the Client ID and Client Secret:
 
-Test: Click “Fetch Test Event” -
-Test: Click "Listen for Event" - send test email to yourself
+   ![OAuth Credentials Created](./images/setup/11-oauth-credentials-created.png)
 
-Step 7: Email Data Preparation
+9. **Back in n8n**, paste the Client ID and Client Secret, then click "Sign in with Google"
 
-Add "Code" node after Gmail Trigger
-Name it: "Prepare Email for AI"
-Mode: “Run Once for Each Item”
-Language: “Javascript”
+   ![n8n Gmail Connected](./images/setup/12-n8n-gmail-connected.png)
+
+10. Authorize n8n to access your Gmail:
+    - If you see "Google hasn't verified this app", click "Advanced" → "Go to n8n (unsafe)"
+    - Select all permissions requested
+
+    ![Google Authorization](./images/setup/13-google-authorization.png)
+
+{: .highlight }
+> **Checkpoint**: You should see "Connected" status in n8n with your Gmail account email displayed
+
+### Part B: Workflow Construction (20 minutes)
+
+#### Step 5: Create a New Workflow
+
+1. Click "Add workflow" in your workspace
+2. Name it: "Email Classification & Routing"
+3. Click "Create"
+
+   ![n8n Workspace](./images/workflow/01-n8n-workspace.png)
+
+{: .note }
+> **Canvas navigation**: Click and drag to move around, scroll to zoom, right-click for options
+>
+#### Step 6: Gmail Trigger Setup
+
+1. Click the plus button in the top right corner
+2. Search for "Gmail" in the node panel
+3. Select "On message received" trigger
+
+   ![Add Gmail Trigger](./images/workflow/02-add-gmail-trigger.png)
+
+4. Configure trigger:
+   - Credential: select the credential we created earlier
+   - Poll Time: Every Minute
+   - Event: "Message Received"
+   - Simplify Output: Toggle OFF
+
+   ![Gmail Trigger Configuration](./images/workflow/03-gmail-trigger-config.png)
+
+5. Test the trigger:
+   - Click "Fetch Test Event"
+   - Click "Listen for Event"
+   - Send a test email to yourself
+
+#### Step 7: Email Data Preparation
+
+1. Add "Code" node after Gmail Trigger
+2. Name it: "Prepare Email for AI"
+3. Mode: "Run Once for Each Item"
+4. Language: "Javascript"
+
+   ![Add AI Node](./images/workflow/04-add-ai-node.png)
 Add this code:
 
 // Extract and clean email data
@@ -397,19 +429,21 @@ return {
   json: emailData
 };
 
-Step 8: AI Classification Node
+#### Step 8: AI Classification Node
 
-Add "Basic LLM Chain" node (under AI nodes)
-Source for Prompt: “Define below”
-Require Specific Output Format: toggle ON
+1. Add "Basic LLM Chain" node (under AI nodes)
+2. Source for Prompt: "Define below"
+3. Require Specific Output Format: toggle ON
 
 Close the node. We will now add the Chat Model, and the Output Parser.
 
 Click the “+” under Chat Model
 Pick OpenRouter Chat Model
 
-In the Openrouter node, choose the credentials we created earlier.
-Scroll down to select “google/gemma-3-27b-it:free”
+In the OpenRouter node, choose the credentials we created earlier.
+Scroll down to select "google/gemma-3-27b-it:free"
+
+   ![OpenRouter Configuration](./images/workflow/05-openrouter-config.png)
 
 Click the “+” under Output Parser
 
@@ -427,6 +461,8 @@ Put the following content as the JSON Example
 
 Go back to the Basic LLM Chain node. Now, add the Prompt:
 
+   ![AI Prompt Setup](./images/workflow/06-ai-prompt-setup.png)
+
 Analyze this email and classify it. Return ONLY valid JSON.
 
 Email from: {{$json.senderName}} <{{$json.sender}}>
@@ -441,10 +477,12 @@ Classify as:
 4. Action Required: true | false
 5. Confidence Score: 0.0-1.0
 
-Step 9: Parse AI Response
+#### Step 9: Parse AI Response
 
 Add "Edit Fields" node after Basic LLM Chain
  Name it: "Parse Classification"
+
+   ![JSON Parser Node](./images/workflow/07-json-parser-node.png)
  Operation: "Set Fields"
  Mode: "Manual Mapping"
 Configure the following field assignments:
@@ -471,7 +509,7 @@ The Basic LLM Chain with Structured Output Parser outputs directly to $json (not
 We're adding the department field which was missing
 We're using the correct node reference syntax $('Prepare Email for AI').item.json.fieldName
 
-Step 10: Routing with Switch Node
+#### Step 10: Routing with Switch Node
 
 Add "Switch" node
  Name it: "Route by Priority & Sentiment"
@@ -514,9 +552,11 @@ Angry customers get special handling
 Low priority emails can be batched
 Everything else (medium priority, neutral sentiment) follows standard processing
 
-Step 11: Gmail Label Application
+#### Step 11: Gmail Label Application
 
-Creating Labels in Gmail (Prerequisites)
+   ![Gmail Label Action](./images/workflow/08-gmail-label-action.png)
+
+**Creating Labels in Gmail (Prerequisites)**
 Open Gmail in your browser
 Click the gear icon → "See all settings"
 Go to "Labels" tab
@@ -546,11 +586,14 @@ Real-time visibility into email volumes by priority
 Can identify training needs (too many angry customers?)
 Data-driven decisions about staffing
 
-Step 12: Logging to Google Sheets
+#### Step 12: Logging to Google Sheets
 
-Add "Google Sheets" node at the end
-Connect Google account
-Configure:
+1. Add "Google Sheets" node at the end
+2. Connect Google account
+
+   ![Google Sheets Node](./images/workflow/09-google-sheets-node.png)
+
+3. Configure:
 
 Operation: "Append"
 Document: Create "Email Classification Log"
@@ -568,9 +611,16 @@ json{
   "Confidence": "={{$json.confidence}}",
   "Reasoning": "={{$json.reasoning}}"
 }
-Part C: Testing & Optimization (10 minutes)
 
-Step 13: Comprehensive Testing
+### Part C: Testing & Optimization (10 minutes)
+
+**Complete Workflow Overview:**
+
+   ![Workflow Complete](./images/workflow/10-workflow-complete.png)
+
+#### Step 13: Comprehensive Testing
+
+   ![Test Workflow](./images/workflow/11-test-workflow.png)
 
 Send test emails covering all scenarios:
 
@@ -582,19 +632,45 @@ Angry customer complaint
 
 Monitor execution:
 
-Check execution history
-Verify correct classification
-Confirm labels applied
-Review Google Sheets log
+   ![Workflow Execution](./images/workflow/12-workflow-execution.png)
 
-Step 14: Error Handling
+- Check execution history
+- Verify correct classification
+
+   ![Results View](./images/workflow/13-results-view.png)
+
+- Confirm labels applied in Gmail
+
+   ![Email Labeled](./images/workflow/14-email-labeled.png)
+
+- Review Google Sheets log
+
+   ![Sheets Log](./images/workflow/15-sheets-log.png)
+
+#### Step 14: Production Deployment
+
+1. Activate workflow for production:
+
+   ![Workflow Active](./images/workflow/16-workflow-active.png)
+
+2. Monitor workflow performance:
+
+   ![Monitoring View](./images/workflow/17-monitoring-view.png)
+
+3. Review execution history:
+
+   ![Execution History](./images/workflow/18-execution-history.png)
+
+#### Step 15: Error Handling
+
 Add error workflow:
 
 Create "Error Workflow" in settings
 Add Slack/Email notification for failures
 Log errors to separate sheet
 
-🏆 Challenge Tasks (If Completed Early)
+## Challenge Tasks (If Completed Early)
+
 Challenge 1: Multi-Language Support (15 min)
 Objective: Enhance classifier to handle non-English emails
 Requirements:
