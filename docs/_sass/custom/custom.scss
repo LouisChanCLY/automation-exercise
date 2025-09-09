@@ -1,0 +1,92 @@
+// Custom styles for AI Automation Mastery
+
+// Make the sidebar navigation wider
+.side-bar {
+  width: 320px !important; // Increased from default 248px
+}
+
+// Adjust main content to accommodate wider sidebar
+@media (min-width: 66.5rem) {
+  .main {
+    margin-left: 320px !important; // Match sidebar width
+  }
+}
+
+// Make the navigation items more readable
+.nav-list {
+  .nav-list-item {
+    .nav-list-link {
+      font-size: 14px !important;
+      padding: 0.25rem 0.5rem !important;
+    }
+
+    // Nested items (TOC entries)
+    .nav-list {
+      .nav-list-item {
+        .nav-list-link {
+          font-size: 13px !important;
+          padding: 0.2rem 0.5rem 0.2rem 1.5rem !important;
+        }
+      }
+    }
+  }
+}
+
+// Improve TOC styling in sidebar
+.navigation {
+  padding: 1rem !important;
+}
+
+// Better spacing for TOC items
+.nav-list .nav-list-item > .nav-list {
+  margin-top: 0.25rem;
+
+  .nav-list-item {
+    margin: 0;
+
+    .nav-list-link {
+      color: #5c5962;
+
+      &:hover {
+        background-color: #f5f6fa;
+      }
+
+      &.active {
+        font-weight: 600;
+        color: #27262b;
+        background-color: #ebedf5;
+      }
+    }
+  }
+}
+
+// Improve search box width in sidebar
+.search-input-wrap {
+  width: 100% !important;
+}
+
+// Better hierarchy indication for nested items
+.nav-list-item .nav-list-item .nav-list-link {
+  border-left: 2px solid #e1e4e8;
+
+  &:hover {
+    border-left-color: #0366d6;
+  }
+
+  &.active {
+    border-left-color: #7253ed;
+  }
+}
+
+// Ensure code blocks don't overflow
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+// Improve table of contents title styling
+.navigation-list-child-list {
+  .toc-list {
+    padding-left: 1rem;
+  }
+}

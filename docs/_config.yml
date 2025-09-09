@@ -68,6 +68,10 @@ sass:
   style: compressed
   quiet_deps: true  # Suppress deprecation warnings from dependencies
 
+# Import custom styles
+imports:
+  - custom/custom.scss
+
 # Build settings
 markdown: kramdown
 kramdown:
