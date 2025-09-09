@@ -1,0 +1,385 @@
+---
+title: 'Exercise 1: Email Classification'
+description: Build an AI-powered email automation system that intelligently categorises and routes messages
+sidebarTitle: 'Email Classification'
+icon: 'envelope'
+---
+
+<Info>
+  **Duration**: 45 minutes | **Difficulty**: Beginner | **Prerequisites**: Gmail account with 2FA
+</Info>
+
+## What You'll Build
+
+In this hands-on exercise, you'll create a smart email classification system that automatically processes incoming emails, understands their content using AI, and takes intelligent actions based on the message context.
+
+<CardGroup cols={2}>
+  <Card title="Real-time Monitoring" icon="clock">
+    Monitor Gmail inbox and process emails within 60 seconds
+  </Card>
+  <Card title="AI Classification" icon="brain">
+    Understand priority, sentiment, and department routing
+  </Card>
+  <Card title="Smart Labels" icon="tags">
+    Automatically organise emails with intelligent categorisation
+  </Card>
+  <Card title="Performance Tracking" icon="chart-line">
+    Log all classifications for insights and improvements
+  </Card>
+</CardGroup>
+
+## Why This Matters
+
+<Tabs>
+  <Tab title="Business Impact">
+    | Department | Key Benefits | Time Saved | ROI |
+    |:-----------|:-------------|:-----------|:----|
+    | **Customer Support** | • Reduce response time to minutes<br/>• Auto-escalate angry customers<br/>• Create tickets automatically | 3-4 hours/day | 300% |
+    | **Sales Teams** | • Never miss hot leads<br/>• Smart enquiry routing<br/>• Automated follow-ups | 2-3 hours/day | 250% |
+    | **HR Departments** | • Categorise by urgency<br/>• Route sensitive matters<br/>• Track common questions | 2 hours/day | 200% |
+  </Tab>
+  <Tab title="Learning Outcomes">
+    - **Master API Integration**: Connect multiple cloud services using OAuth2
+    - **Understand AI Prompting**: Write effective prompts for consistent results
+    - **Build Conditional Logic**: Create intelligent routing based on classifications
+    - **Implement Error Handling**: Ensure 24/7 reliability
+    - **Design User Workflows**: Think systematically about automation
+  </Tab>
+</Tabs>
+
+## Prerequisites
+
+<Steps>
+  <Step title="Required Accounts">
+    - Gmail account with 2-factor authentication enabled
+    - Modern web browser (Chrome, Firefox, Safari, Edge)
+    - 45-60 minutes of uninterrupted time
+  </Step>
+  <Step title="What You DON'T Need">
+    - Programming experience
+    - Technical background
+    - Paid software licenses
+    - Command line knowledge
+  </Step>
+</Steps>
+
+## Part A: Environment Setup
+
+### Step 1: Create Your n8n Account
+
+<Steps>
+  <Step title="Navigate to n8n">
+    Go to [n8n.io](https://n8n.io) and click "Get started for free"
+
+    ![n8n Homepage](/docs/exercises/01-email-classification/images/setup/01-n8n-homepage.png)
+  </Step>
+
+  <Step title="Sign Up">
+    Create your account with email verification
+
+    ![n8n Signup Form](/docs/exercises/01-email-classification/images/setup/02-n8n-signup-form.png)
+  </Step>
+
+  <Step title="Configure Workspace">
+    - Choose workspace name: "ai-automation-course"
+    - Select the "Starter" plan (free)
+
+    <Check>You should now see the n8n workflow canvas</Check>
+  </Step>
+</Steps>
+
+### Step 2: OpenRouter API Setup
+
+<Steps>
+  <Step title="Create OpenRouter Account">
+    Open [openrouter.ai](https://openrouter.ai) in a new tab
+
+    ![OpenRouter Homepage](/docs/exercises/01-email-classification/images/setup/03-openrouter-homepage.png)
+  </Step>
+
+  <Step title="Generate API Key">
+    1. Sign up using Google/GitHub authentication
+    2. Navigate to "API Keys" in dashboard
+    3. Click "Create New Key"
+    4. Name it: "n8n-email-classifier"
+
+    <Warning>
+      Copy and save the API key immediately - it's shown only once!
+    </Warning>
+  </Step>
+</Steps>
+
+### Step 3: Gmail API Configuration
+
+<Steps>
+  <Step title="Enable Gmail API">
+    1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+    2. Create new project: "n8n-email-automation"
+    3. Search "Gmail API" in library
+    4. Click "Enable"
+
+    ![Gmail API Enable](/docs/exercises/01-email-classification/images/setup/04-gmail-api-enable.png)
+  </Step>
+
+  <Step title="Create n8n Credential">
+    In n8n, create a new credential:
+
+    ![Create Credential](/docs/exercises/01-email-classification/images/setup/05-n8n-create-credential.png)
+
+    Select Gmail OAuth2 API:
+
+    ![Select Gmail OAuth](/docs/exercises/01-email-classification/images/setup/06-n8n-select-gmail-oauth.png)
+  </Step>
+
+  <Step title="Configure OAuth2">
+    1. Copy the OAuth Redirect URL from n8n
+
+    ![OAuth Redirect URI](/docs/exercises/01-email-classification/images/setup/10-oauth-redirect-uri.png)
+
+    2. In Google Cloud Console, go to Credentials → Create Credentials → OAuth Client ID
+
+    ![Google Cloud Credentials](/docs/exercises/01-email-classification/images/setup/07-google-cloud-credentials.png)
+
+    3. Select "Web application"
+
+    ![OAuth Client Type](/docs/exercises/01-email-classification/images/setup/08-oauth-client-type.png)
+
+    4. Configure:
+       - Name: "n8n Gmail Integration"
+       - Authorized redirect URIs: Paste the OAuth URL from n8n
+  </Step>
+
+  <Step title="Connect Gmail to n8n">
+    1. Copy Client ID and Secret from Google back to n8n
+
+    ![OAuth Credentials](/docs/exercises/01-email-classification/images/setup/11-oauth-credentials-created.png)
+
+    2. Click "Sign in with Google"
+
+    3. If you see "Google hasn't verified this app", click "Advanced" → "Go to app (unsafe)"
+
+    ![Google Authorization](/docs/exercises/01-email-classification/images/setup/13-google-authorization.png)
+
+    4. Grant all requested permissions
+
+    <Check>Connection successful! You'll see your Gmail account connected</Check>
+
+    ![Gmail Connected](/docs/exercises/01-email-classification/images/setup/12-n8n-gmail-connected.png)
+  </Step>
+</Steps>
+
+## Part B: Build Your Workflow
+
+### Step 1: Create the Workflow
+
+<Steps>
+  <Step title="New Workflow">
+    Open n8n and create a new workflow
+
+    ![n8n Workspace](/docs/exercises/01-email-classification/images/workflow/01-n8n-workspace.png)
+
+    Rename it to "Email Classification Automation"
+  </Step>
+</Steps>
+
+### Step 2: Add Gmail Trigger
+
+<Steps>
+  <Step title="Add Node">
+    Click the "+" button and search for "Gmail"
+
+    ![Add Gmail Trigger](/docs/exercises/01-email-classification/images/workflow/02-add-gmail-trigger.png)
+  </Step>
+
+  <Step title="Configure Trigger">
+    Set up the Gmail trigger:
+    - **Credential**: Select your Gmail credential
+    - **Poll Time**: Every Minute
+    - **Event**: Message Received
+    - **Simplify Output**: OFF
+
+    ![Gmail Trigger Config](/docs/exercises/01-email-classification/images/workflow/03-gmail-trigger-config.png)
+  </Step>
+
+  <Step title="Test">
+    Click "Listen for Event" and send yourself a test email
+
+    <Check>You should see the email data appear within 60 seconds</Check>
+  </Step>
+</Steps>
+
+### Step 3: Add AI Classification
+
+<Steps>
+  <Step title="Add AI Node">
+    Add a "Basic LLM Chain" node
+
+    ![Add AI Node](/docs/exercises/01-email-classification/images/workflow/04-add-ai-node.png)
+  </Step>
+
+  <Step title="Configure OpenRouter">
+    1. Click "+" under Chat Model
+    2. Select "OpenRouter Chat Model"
+    3. Add your OpenRouter credentials
+    4. Choose model: "google/gemini-flash-1.5"
+
+    ![OpenRouter Config](/docs/exercises/01-email-classification/images/workflow/05-openrouter-config.png)
+  </Step>
+
+  <Step title="Set Up Prompt">
+    Configure the AI prompt:
+
+    ```text
+    Analyze this email and classify it. Return ONLY valid JSON.
+
+    Email from: {{$json.from}}
+    Subject: {{$json.subject}}
+    Body: {{$json.text}}
+
+    Classify as:
+    1. Priority: "urgent" | "high" | "medium" | "low"
+    2. Sentiment: "positive" | "neutral" | "negative" | "angry"
+    3. Department: "sales" | "support" | "technical" | "hr" | "other"
+    4. Action Required: true | false
+
+    Return format:
+    {
+      "priority": "",
+      "sentiment": "",
+      "department": "",
+      "actionRequired": false,
+      "confidence": 0.0,
+      "reasoning": "Brief explanation"
+    }
+    ```
+
+    ![AI Prompt Setup](/docs/exercises/01-email-classification/images/workflow/06-ai-prompt-setup.png)
+  </Step>
+</Steps>
+
+### Step 4: Add Response Actions
+
+<Steps>
+  <Step title="Parse JSON">
+    Add a JSON parser node to process AI output
+
+    ![JSON Parser](/docs/exercises/01-email-classification/images/workflow/07-json-parser-node.png)
+  </Step>
+
+  <Step title="Add Gmail Labels">
+    Create a Gmail node to apply labels based on classification
+
+    ![Gmail Labels](/docs/exercises/01-email-classification/images/workflow/08-gmail-label-action.png)
+
+    Configure label rules:
+    - Urgent → "🔴 Urgent"
+    - Angry → "⚠️ Escalate"
+    - Sales → "💼 Sales"
+  </Step>
+
+  <Step title="Log to Sheets">
+    Add Google Sheets node for tracking
+
+    ![Google Sheets](/docs/exercises/01-email-classification/images/workflow/09-google-sheets-node.png)
+
+    Map fields:
+    - Timestamp
+    - Sender
+    - Subject
+    - Priority
+    - Sentiment
+    - Department
+  </Step>
+</Steps>
+
+### Step 5: Test & Deploy
+
+<Steps>
+  <Step title="Complete Workflow">
+    Your finished workflow should look like this:
+
+    ![Complete Workflow](/docs/exercises/01-email-classification/images/workflow/10-workflow-complete.png)
+  </Step>
+
+  <Step title="Test Execution">
+    Click "Execute Workflow" and send test emails
+
+    ![Test Workflow](/docs/exercises/01-email-classification/images/workflow/11-test-workflow.png)
+
+    Monitor execution:
+
+    ![Workflow Execution](/docs/exercises/01-email-classification/images/workflow/12-workflow-execution.png)
+  </Step>
+
+  <Step title="Verify Results">
+    Check your Gmail for applied labels:
+
+    ![Email Labeled](/docs/exercises/01-email-classification/images/workflow/14-email-labeled.png)
+
+    Review Google Sheets log:
+
+    ![Sheets Log](/docs/exercises/01-email-classification/images/workflow/15-sheets-log.png)
+  </Step>
+
+  <Step title="Activate">
+    Toggle workflow to "Active" for continuous monitoring
+
+    ![Workflow Active](/docs/exercises/01-email-classification/images/workflow/16-workflow-active.png)
+
+    <Check>Congratulations! Your email automation is now live</Check>
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Gmail not connecting">
+    - Ensure 2FA is enabled on your Google account
+    - Check that Gmail API is enabled in Google Cloud Console
+    - Verify OAuth redirect URL matches exactly
+  </Accordion>
+
+  <Accordion title="AI classification failing">
+    - Check OpenRouter API key is valid
+    - Ensure you have credits in your OpenRouter account
+    - Verify the prompt format is exactly as shown
+  </Accordion>
+
+  <Accordion title="Workflow not triggering">
+    - Confirm workflow is set to "Active"
+    - Check Gmail trigger poll time (minimum 1 minute)
+    - Send email to the correct Gmail account
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Exercise 2: Social Media Monitor"
+    icon="hashtag"
+    href="/exercises/02-social-media-monitor"
+  >
+    Track brand mentions across social platforms
+  </Card>
+  <Card
+    title="Exercise 3: Meeting Summariser"
+    icon="microphone"
+    href="/exercises/03-meeting-summariser"
+  >
+    Automatically transcribe and summarise meetings
+  </Card>
+</CardGroup>
+
+## Share Your Success
+
+Completed this exercise? Share your achievement:
+
+<Card
+  title="Get Your Certificate"
+  icon="certificate"
+  href="https://certificates.automationmastery.ai"
+  color="#10b981"
+>
+  Claim your completion certificate and add it to LinkedIn
+</Card>
