@@ -16,6 +16,12 @@ minima:
   skin: auto
   date_format: "%b %-d, %Y"
 
+# Custom styles to avoid Sass deprecation warnings
+sass:
+  sass_dir: _sass
+  style: compressed
+  quiet_deps: true  # Suppress deprecation warnings from dependencies
+
 # Build settings
 markdown: kramdown
 kramdown:

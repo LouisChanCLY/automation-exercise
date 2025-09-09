@@ -16,7 +16,7 @@ The course consists of 30+ progressive exercises covering:
 
 ## 🌐 Live Course Website
 
-Visit the course at: [https://[yourusername].github.io/automation-exercises/](https://[yourusername].github.io/automation-exercises/)
+Visit the course at: [https://louischancly.github.io/automation-exercises/](https://louischancly.github.io/automation-exercises/)
 
 ## 🛠️ Development Setup
 
@@ -29,27 +29,30 @@ Visit the course at: [https://[yourusername].github.io/automation-exercises/](ht
 ### Local Development
 
 1. Clone the repository:
-```bash
-git clone https://github.com/[yourusername]/automation-exercises.git
-cd automation-exercises
-```
+
+    ```bash
+    git clone https://github.com/louischancly/automation-exercises.git
+    cd automation-exercises
+    ```
 
 2. Install dependencies:
-```bash
-cd docs
-bundle install
-```
+
+    ```bash
+    cd docs
+    bundle install
+    ```
 
 3. Run Jekyll locally:
-```bash
-bundle exec jekyll serve
-```
+
+    ```bash
+    bundle exec jekyll serve
+    ```
 
 4. Open browser to: `http://localhost:4000/automation-exercises/`
 
 ## 📁 Repository Structure
 
-```
+```raw
 automation-exercises/
 ├── .github/
 │   └── workflows/
@@ -78,17 +81,19 @@ automation-exercises/
 
 1. Create exercise folder: `docs/exercises/XX-exercise-name/`
 2. Add `index.md` with YAML frontmatter:
-```yaml
----
-layout: exercise
-title: "Exercise XX: Title"
-description: Brief description
-category: foundation|ai-integration|advanced|industry
-difficulty: beginner|intermediate|advanced
-time: 45-120 minutes
-tools: [tool1, tool2]
----
-```
+
+    ```yaml
+    ---
+    layout: exercise
+    title: "Exercise XX: Title"
+    description: Brief description
+    category: foundation|ai-integration|advanced|industry
+    difficulty: beginner|intermediate|advanced
+    time: 45-120 minutes
+    tools: [tool1, tool2]
+    ---
+    ```
+
 3. Add images to `docs/exercises/XX-exercise-name/images/`
 4. Update `docs/_data/exercises.yml` with metadata
 5. Create PR for review
@@ -108,11 +113,12 @@ The site automatically deploys to GitHub Pages when changes are pushed to the `m
 1. Push changes to `main`
 2. GitHub Actions builds the Jekyll site
 3. Deploys to GitHub Pages
-4. Available at: `https://[yourusername].github.io/automation-exercises/`
+4. Available at: `https://louischancly.github.io/automation-exercises/`
 
 ### Manual Deployment
 
 To trigger a manual deployment:
+
 1. Go to Actions tab
 2. Select "Deploy Jekyll to GitHub Pages"
 3. Click "Run workflow"
@@ -120,12 +126,14 @@ To trigger a manual deployment:
 ## 📊 GitHub Actions Workflows
 
 ### Main Deployment (`deploy.yml`)
+
 - Triggers on push to `main` branch
 - Builds Jekyll site with Ruby 3.2
 - Deploys to GitHub Pages
 - Uses latest GitHub Actions (v4/v5)
 
 ### PR Preview (`pr-preview.yml`)
+
 - Builds PR changes for review
 - Posts build status as PR comment
 - Helps reviewers verify changes
@@ -152,4 +160,4 @@ For questions or suggestions, please open an issue or contact the maintainers.
 
 ---
 
-**Ready to start learning?** Visit [Exercise 1: Email Classification](https://[yourusername].github.io/automation-exercises/exercises/01-email-classification/) to begin your automation journey!
+**Ready to start learning?** Visit [Exercise 1: Email Classification](https://louischancly.github.io/automation-exercises/exercises/01-email-classification/) to begin your automation journey!
