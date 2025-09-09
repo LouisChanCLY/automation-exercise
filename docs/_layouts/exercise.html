@@ -1,0 +1,192 @@
+---
+layout: default
+---
+
+{% include copy-button.html %}
+{% include interactive-checklist.html %}
+
+<article class="exercise-content">
+  {{ content }}
+</article>
+
+<style>
+/* Exercise-specific styling */
+.exercise-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Style callout boxes */
+.callout {
+  padding: 16px;
+  margin: 20px 0;
+  border-left: 4px solid;
+  border-radius: 4px;
+  background: #f6f8fa;
+}
+
+.callout.note {
+  border-color: #0366d6;
+  background: #f0f9ff;
+}
+
+.callout.warning {
+  border-color: #f85149;
+  background: #fff8f8;
+}
+
+.callout.tip {
+  border-color: #2ea043;
+  background: #f0fdf4;
+}
+
+.callout.important {
+  border-color: #fb8500;
+  background: #fff7ed;
+}
+
+/* Image gallery with zoom */
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.image-gallery img {
+  width: 100%;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  cursor: zoom-in;
+  transition: transform 0.2s;
+}
+
+.image-gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Interactive step counter */
+.step-counter {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #0366d6;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(3, 102, 214, 0.3);
+  font-weight: bold;
+  z-index: 1000;
+}
+
+/* Animated success message */
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.success-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #2ea043;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
+  animation: slideIn 0.3s ease;
+  display: none;
+  z-index: 1001;
+}
+
+.success-message.show {
+  display: block;
+}
+</style>
+
+<script>
+// Track step completion
+document.addEventListener('DOMContentLoaded', function() {
+  let stepCount = 0;
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', function() {
+      if (this.checked) {
+        stepCount++;
+        showSuccessMessage('Step completed! Keep going! 🎯');
+      } else {
+        stepCount--;
+      }
+      updateStepCounter();
+    });
+  });
+
+  function updateStepCounter() {
+    let counter = document.querySelector('.step-counter');
+    if (!counter) {
+      counter = document.createElement('div');
+      counter.className = 'step-counter';
+      document.body.appendChild(counter);
+    }
+    counter.textContent = `${stepCount} steps done`;
+  }
+
+  function showSuccessMessage(message) {
+    let msg = document.querySelector('.success-message');
+    if (!msg) {
+      msg = document.createElement('div');
+      msg.className = 'success-message';
+      document.body.appendChild(msg);
+    }
+    msg.textContent = message;
+    msg.classList.add('show');
+    setTimeout(() => {
+      msg.classList.remove('show');
+    }, 3000);
+  }
+
+  // Image zoom functionality
+  const images = document.querySelectorAll('.exercise-content img');
+  images.forEach(img => {
+    img.addEventListener('click', function() {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        cursor: zoom-out;
+      `;
+
+      const zoomedImg = document.createElement('img');
+      zoomedImg.src = this.src;
+      zoomedImg.style.cssText = `
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 6px;
+      `;
+
+      overlay.appendChild(zoomedImg);
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener('click', function() {
+        document.body.removeChild(overlay);
+      });
+    });
+  });
+});
+</script>

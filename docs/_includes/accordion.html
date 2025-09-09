@@ -1,0 +1,105 @@
+<div class="accordion">
+  {% for item in include.items %}
+  <div class="accordion-item">
+    <button class="accordion-header" aria-expanded="false">
+      <span class="accordion-title">{{ item.title }}</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="accordion-content">
+      <div class="accordion-body">
+        {{ item.content | markdownify }}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const accordions = document.querySelectorAll('.accordion-header');
+
+  accordions.forEach(header => {
+    header.addEventListener('click', function() {
+      const item = this.parentElement;
+      const content = item.querySelector('.accordion-content');
+      const isOpen = this.getAttribute('aria-expanded') === 'true';
+
+      // Close all other accordions in the same group (optional)
+      const group = this.closest('.accordion');
+      const allHeaders = group.querySelectorAll('.accordion-header');
+      const allContents = group.querySelectorAll('.accordion-content');
+
+      allHeaders.forEach(h => h.setAttribute('aria-expanded', 'false'));
+      allContents.forEach(c => c.style.maxHeight = null);
+
+      // Toggle current accordion
+      if (!isOpen) {
+        this.setAttribute('aria-expanded', 'true');
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+    });
+  });
+});
+</script>
+
+<style>
+.accordion {
+  margin: 20px 0;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.accordion-item {
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-header {
+  width: 100%;
+  padding: 16px 20px;
+  background: #f6f8fa;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.accordion-header:hover {
+  background: #e1e4e8;
+}
+
+.accordion-header[aria-expanded="true"] {
+  background: #fff;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.accordion-header[aria-expanded="true"] .accordion-icon {
+  transform: rotate(180deg);
+}
+
+.accordion-icon {
+  transition: transform 0.3s;
+  font-size: 12px;
+  color: #586069;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: #fff;
+}
+
+.accordion-body {
+  padding: 20px;
+}
+</style>

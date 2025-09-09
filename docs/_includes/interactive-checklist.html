@@ -1,0 +1,81 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Convert task lists to interactive checkboxes
+  const taskLists = document.querySelectorAll('ul.task-list');
+  taskLists.forEach(list => {
+    list.classList.add('interactive-checklist');
+    const items = list.querySelectorAll('input[type="checkbox"]');
+    items.forEach(checkbox => {
+      checkbox.disabled = false;
+      checkbox.addEventListener('change', function() {
+        const key = 'checklist_' + window.location.pathname + '_' + Array.from(items).indexOf(checkbox);
+        localStorage.setItem(key, checkbox.checked);
+        updateProgress();
+      });
+      // Restore state from localStorage
+      const key = 'checklist_' + window.location.pathname + '_' + Array.from(items).indexOf(checkbox);
+      const saved = localStorage.getItem(key);
+      if (saved === 'true') {
+        checkbox.checked = true;
+      }
+    });
+  });
+
+  function updateProgress() {
+    const progressBar = document.getElementById('progress-bar');
+    if (progressBar) {
+      const checkboxes = document.querySelectorAll('.interactive-checklist input[type="checkbox"]');
+      const checked = document.querySelectorAll('.interactive-checklist input[type="checkbox"]:checked');
+      const percentage = (checked.length / checkboxes.length) * 100;
+      progressBar.style.width = percentage + '%';
+      progressBar.textContent = Math.round(percentage) + '%';
+    }
+  }
+
+  updateProgress();
+});
+</script>
+
+<style>
+.interactive-checklist {
+  list-style: none;
+  padding-left: 0;
+}
+
+.interactive-checklist li {
+  padding: 8px 0;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.interactive-checklist input[type="checkbox"] {
+  margin-right: 10px;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.interactive-checklist input[type="checkbox"]:checked + label {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  margin: 20px 0;
+  padding: 3px;
+}
+
+.progress-bar {
+  height: 30px;
+  background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+  border-radius: 8px;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  font-weight: bold;
+  transition: width 0.3s ease;
+  min-width: 40px;
+}
+</style>

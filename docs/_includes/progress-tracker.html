@@ -1,0 +1,98 @@
+<div class="progress-tracker">
+  <h3>Your Progress</h3>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar">0%</div>
+  </div>
+  <p class="progress-text">
+    <span id="completed-count">0</span> of <span id="total-count">0</span> steps completed
+  </p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function updateProgressTracker() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][class*="task-list"]');
+    const checked = document.querySelectorAll('input[type="checkbox"][class*="task-list"]:checked');
+
+    const total = checkboxes.length;
+    const completed = checked.length;
+    const percentage = total > 0 ? (completed / total) * 100 : 0;
+
+    const progressBar = document.getElementById('progress-bar');
+    const completedCount = document.getElementById('completed-count');
+    const totalCount = document.getElementById('total-count');
+
+    if (progressBar) {
+      progressBar.style.width = percentage + '%';
+      progressBar.textContent = Math.round(percentage) + '%';
+
+      // Change color based on progress
+      if (percentage === 100) {
+        progressBar.style.background = 'linear-gradient(90deg, #28a745 0%, #20c997 100%)';
+      } else if (percentage >= 75) {
+        progressBar.style.background = 'linear-gradient(90deg, #17a2b8 0%, #20c997 100%)';
+      } else if (percentage >= 50) {
+        progressBar.style.background = 'linear-gradient(90deg, #ffc107 0%, #fd7e14 100%)';
+      } else {
+        progressBar.style.background = 'linear-gradient(90deg, #dc3545 0%, #fd7e14 100%)';
+      }
+    }
+
+    if (completedCount) completedCount.textContent = completed;
+    if (totalCount) totalCount.textContent = total;
+  }
+
+  // Initial update
+  updateProgressTracker();
+
+  // Update on checkbox change
+  document.addEventListener('change', function(e) {
+    if (e.target.type === 'checkbox') {
+      updateProgressTracker();
+    }
+  });
+});
+</script>
+
+<style>
+.progress-tracker {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.progress-tracker h3 {
+  margin: 0 0 15px 0;
+  color: white;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 3px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  height: 30px;
+  background: linear-gradient(90deg, #dc3545 0%, #fd7e14 100%);
+  border-radius: 8px;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  font-weight: bold;
+  transition: all 0.5s ease;
+  min-width: 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.progress-text {
+  margin: 15px 0 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+</style>

@@ -1,0 +1,93 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Add copy button to all code blocks
+  const codeBlocks = document.querySelectorAll('pre');
+
+  codeBlocks.forEach(block => {
+    // Create wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
+    block.parentNode.insertBefore(wrapper, block);
+    wrapper.appendChild(block);
+
+    // Create copy button
+    const button = document.createElement('button');
+    button.className = 'copy-button';
+    button.textContent = 'Copy';
+    button.setAttribute('aria-label', 'Copy code to clipboard');
+    wrapper.appendChild(button);
+
+    button.addEventListener('click', async () => {
+      const code = block.querySelector('code');
+      const text = code ? code.textContent : block.textContent;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+
+        setTimeout(() => {
+          button.textContent = 'Copy';
+          button.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        button.textContent = 'Failed';
+        setTimeout(() => {
+          button.textContent = 'Copy';
+        }, 2000);
+      }
+    });
+  });
+});
+</script>
+
+<style>
+.code-block-wrapper {
+  position: relative;
+  margin: 16px 0;
+}
+
+.copy-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 12px;
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #24292e;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.copy-button:hover {
+  background: #fff;
+  border-color: #0366d6;
+  color: #0366d6;
+}
+
+.copy-button.copied {
+  background: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+/* Style the code blocks */
+pre {
+  background: #f6f8fa !important;
+  border: 1px solid #e1e4e8 !important;
+  border-radius: 6px !important;
+  padding: 16px !important;
+  overflow-x: auto;
+  position: relative;
+}
+
+pre code {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+</style>

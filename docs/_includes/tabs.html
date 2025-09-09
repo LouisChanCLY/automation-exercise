@@ -1,0 +1,117 @@
+<div class="tab-container">
+  <ul class="tab-buttons" role="tablist">
+    {% for tab in include.tabs %}
+    <li role="presentation">
+      <button role="tab"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-controls="tab-panel-{{ forloop.index }}"
+              id="tab-{{ forloop.index }}"
+              class="tab-button {% if forloop.first %}active{% endif %}">
+        {{ tab.title }}
+      </button>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <div class="tab-panels">
+    {% for tab in include.tabs %}
+    <div role="tabpanel"
+         id="tab-panel-{{ forloop.index }}"
+         aria-labelledby="tab-{{ forloop.index }}"
+         class="tab-panel {% if forloop.first %}active{% endif %}">
+      {{ tab.content | markdownify }}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const containers = document.querySelectorAll('.tab-container');
+
+  containers.forEach(container => {
+    const buttons = container.querySelectorAll('.tab-button');
+    const panels = container.querySelectorAll('.tab-panel');
+
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        // Remove active class from all
+        buttons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(p => p.classList.remove('active'));
+
+        // Add active class to clicked
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+        panels[index].classList.add('active');
+      });
+    });
+  });
+});
+</script>
+
+<style>
+.tab-container {
+  margin: 20px 0;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.tab-buttons {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: #f6f8fa;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.tab-buttons li {
+  margin: 0;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #586069;
+  transition: all 0.2s;
+}
+
+.tab-button:hover {
+  color: #24292e;
+  background: #fff;
+}
+
+.tab-button.active {
+  color: #0366d6;
+  background: #fff;
+  border-bottom-color: #0366d6;
+}
+
+.tab-panels {
+  background: #fff;
+}
+
+.tab-panel {
+  display: none;
+  padding: 20px;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
