@@ -29,6 +29,9 @@ search:
   rel_url: true
   button: false
 
+# Navigation structure
+nav_fold: false
+
 # Aux links for top navigation
 aux_links:
   "GitHub":

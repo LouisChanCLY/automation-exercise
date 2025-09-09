@@ -1,24 +1,14 @@
 ---
 layout: default
-title: Email Classification
+title: "Exercise 1: Email Classification"
 parent: Exercises
 nav_order: 1
-has_children: true
-has_toc: false
+has_children: false
+has_toc: true
+toc_sticky: true
 ---
 
 # Exercise 1: Email Classification
-
-{: .no_toc }
-
-## Table of contents
-
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
-
----
 
 ## What You'll Build
 
