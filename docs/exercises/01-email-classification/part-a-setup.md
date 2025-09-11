@@ -193,4 +193,4 @@ Environment setup complete! You now have:
 - ✅ Gmail OAuth connected
 - ✅ All credentials tested
 
-Continue to [Part B: Workflow Construction →](./part-b-workflow)
+Continue to [Part B: Build & Test →](./part-b-workflow)

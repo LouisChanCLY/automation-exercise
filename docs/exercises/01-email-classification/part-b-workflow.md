@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Part B: Workflow Construction"
+title: "Part B: Build & Test"
 parent: "Exercise 1: Email Classification"
 grand_parent: Exercises
 nav_order: 3
 ---
 
-# Part B: Workflow Construction
+# Part B: Build & Test
 
 {: .no_toc }
 
@@ -21,7 +21,7 @@ nav_order: 3
 
 ## Overview
 
-Now we'll build the actual automation workflow. This section takes about 20 minutes and involves creating nodes, connecting them, and configuring the AI classification logic.
+Now we'll build, test, and activate the automation workflow. This section takes about 25 minutes and covers creating nodes, configuring AI classification, testing, and going live.
 
 ---
 
@@ -303,31 +303,68 @@ Repeat for other priority levels with appropriate labels.
 
 ---
 
-## Workflow Complete
+## Step 13: Test Your Workflow
+
+### Complete Workflow Overview
 
 Your complete workflow should look like this:
 
 ![Workflow Complete](./images/workflow/10-workflow-complete.png)
 
-### Key Connections
+### Run Test
 
-- Gmail Trigger → Prepare Email for AI
-- Prepare Email for AI → Basic LLM Chain
-- Basic LLM Chain → Parse Classification
-- Parse Classification → Switch
-- Switch outputs → Individual Gmail nodes
-- All paths → Google Sheets logging
+1. Click "Test Workflow" button in n8n
+
+   ![Test Workflow](./images/workflow/11-test-workflow.png)
+
+2. Send test emails covering different scenarios:
+   - **Urgent request**: "URGENT: Server is down!"
+   - **Sales inquiry**: "Interested in enterprise pricing"
+   - **Support ticket**: "Bug found in login process"
+   - **Low priority**: "Question about vacation policy"
+
+3. Monitor the execution:
+
+   ![Workflow Execution](./images/workflow/12-workflow-execution.png)
+
+### Verify Results
+
+Check that:
+
+- All nodes show green checkmarks
+- Gmail labels were applied correctly
+- Data appears in Google Sheets (if configured)
+
+   ![Results View](./images/workflow/13-results-view.png)
+
+---
+
+## Step 14: Activate Your Workflow
+
+### Go Live
+
+Once testing is complete:
+
+1. Toggle the "Active" switch in the top-right corner
+
+   ![Workflow Active](./images/workflow/16-workflow-active.png)
+
+2. Configure settings:
+   - **Execution timeout**: 5 minutes
+   - **Retry on failure**: Yes (2 attempts)
+   - **Save execution data**: Last 100 runs
+
+Your workflow is now live and will automatically process incoming emails!
 
 ---
 
 ## Next Steps
 
-Workflow construction complete! You now have:
+Workflow complete! You've successfully:
 
-- ✅ Email trigger configured
-- ✅ AI classification implemented
-- ✅ Smart routing logic
-- ✅ Automated labeling
-- ✅ Analytics logging
+- ✅ Built an email classification system
+- ✅ Integrated AI for intelligent routing
+- ✅ Tested with real emails
+- ✅ Activated automatic processing
 
-Continue to [Part C: Testing & Activation →](./part-c-testing)
+Ready for more? Try the [Challenge Tasks →](./challenge-tasks)

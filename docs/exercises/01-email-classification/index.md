@@ -50,17 +50,9 @@ This exercise teaches you to build a production-ready email automation system th
 
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
-      <h4>🔧 Part B: Build</h4>
-      <p>Workflow construction (20 min)</p>
+      <h4>🔧 Part B: Build & Test</h4>
+      <p>Create, test, and activate (25 min)</p>
       <a href="./part-b-workflow">Build →</a>
-    </div>
-  </div>
-
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
-      <h4>🚀 Part C: Test & Activate</h4>
-      <p>Testing & going live (10 min)</p>
-      <a href="./part-c-testing">Activate →</a>
     </div>
   </div>
 
@@ -81,8 +73,7 @@ This exercise teaches you to build a production-ready email automation system th
 |---------|-------------|----------|
 | [Overview](./overview) | Why this matters, learning outcomes, architecture | 5 min |
 | [Part A: Setup](./part-a-setup) | Account creation, API configuration, prerequisites | 15 min |
-| [Part B: Build](./part-b-workflow) | Node creation, AI integration, routing logic | 20 min |
-| [Part C: Test & Activate](./part-c-testing) | Testing, monitoring, activation | 10 min |
+| [Part B: Build & Test](./part-b-workflow) | Node creation, AI integration, testing, activation | 25 min |
 | [Challenges](./challenge-tasks) | Multi-language, auto-reply, analytics | Optional |
 
 ---
@@ -95,7 +86,7 @@ This exercise teaches you to build a production-ready email automation system th
 }
 
 .col-4 {
-  flex: 0 0 33.333%;
+  flex: 0 0 50%;
   padding: 0.5rem;
 }
 
