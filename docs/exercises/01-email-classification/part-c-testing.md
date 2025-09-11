@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Part C: Testing & Deployment"
+title: "Part C: Testing & Activation"
 parent: "Exercise 1: Email Classification"
 grand_parent: Exercises
 nav_order: 4
 ---
 
-# Part C: Testing & Deployment
+# Part C: Testing & Activation
 
 {: .no_toc }
 
@@ -21,7 +21,7 @@ nav_order: 4
 
 ## Overview
 
-Time to test our workflow and deploy it to production. This section takes about 10 minutes and ensures everything works correctly before going live.
+Time to test our workflow and activate it in n8n cloud. This section takes about 10 minutes and ensures everything works correctly before turning on automation.
 
 ---
 
@@ -68,9 +68,9 @@ Check each component:
 
 ---
 
-## Step 14: Production Deployment
+## Step 14: Activate Your Workflow
 
-### Activate Your Workflow
+### Turn On Automation
 
 1. Toggle the "Active" switch in top-right corner
 
@@ -227,12 +227,12 @@ Before going live, ensure:
 
 ## Next Steps
 
-Deployment complete! Your system is now:
+Your automation is now live! You have:
 
-- ✅ Fully tested
-- ✅ Running in production
-- ✅ Monitoring enabled
-- ✅ Error handling active
-- ✅ Performance optimized
+- ✅ Fully tested the workflow
+- ✅ Activated automatic processing
+- ✅ Set up monitoring
+- ✅ Configured error handling
+- ✅ Optimized performance
 
 Continue to [Challenge Tasks →](./challenge-tasks)

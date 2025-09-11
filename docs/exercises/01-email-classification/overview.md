@@ -49,26 +49,6 @@ By completing this exercise, you will:
 - Build performance monitoring dashboards
 - Optimise workflows for scale
 
-## Prerequisites
-
-### Required Accounts (Free Tiers Available)
-
-- **Gmail account** with API access enabled
-- **n8n account** ([Sign up free](https://n8n.partnerlinks.io/gsl7xpbjua51))
-- **OpenRouter account** for AI access ([Sign up free](https://openrouter.ai))
-- **Google Sheets** (comes with Gmail)
-
-### Technical Requirements
-
-- Modern web browser (Chrome, Firefox, Safari)
-- Stable internet connection
-- 45 minutes of focused time
-
-### Knowledge Prerequisites
-
-- Basic understanding of email
-- Familiarity with web applications
-- No coding experience required
 
 ## System Architecture
 

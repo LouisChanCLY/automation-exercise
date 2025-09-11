@@ -25,6 +25,27 @@ In this section, we'll set up all the accounts and credentials needed for our em
 
 ---
 
+## Prerequisites
+
+### Required Accounts (Free Tiers Available)
+
+Before starting, ensure you have:
+
+- **Gmail account** with API access enabled
+- **n8n account** - [Sign up free](https://n8n.partnerlinks.io/gsl7xpbjua51)
+- **OpenRouter account** - [Sign up free](https://openrouter.ai)
+
+### Technical Requirements
+
+- Modern web browser (Chrome, Firefox, Safari)
+- Stable internet connection
+- 15 minutes of focused time
+
+{: .important }
+> **Note**: All services used in this exercise offer free tiers sufficient for learning purposes.
+
+---
+
 ## Step 1: n8n Account Setup
 
 ### Create Your n8n Workspace

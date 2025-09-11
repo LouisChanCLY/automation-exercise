@@ -330,4 +330,4 @@ Workflow construction complete! You now have:
 - ✅ Automated labeling
 - ✅ Analytics logging
 
-Continue to [Part C: Testing & Deployment →](./part-c-testing)
+Continue to [Part C: Testing & Activation →](./part-c-testing)

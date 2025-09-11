@@ -1,163 +1,113 @@
 # AI Automation Mastery - Training Exercises
 
-A comprehensive collection of hands-on automation exercises designed to help students gain practical experience with AI and automation tools, improving their future employability.
+Learn to build AI-powered automations through hands-on exercises. No coding experience required.
 
-## 🎯 Mission
+## 🎯 What You'll Learn
 
-To provide detailed, Coursera-quality hands-on exercises that enable students without technical backgrounds to become proficient in AI automation, ultimately enhancing their career prospects in an AI-driven economy.
+This course contains 30+ practical exercises that teach you to:
+
+- Build intelligent email classifiers that organize your inbox automatically
+- Create social media monitors that track brand mentions and sentiment
+- Automate document processing with AI-powered data extraction
+- Design complex workflows that save hours of manual work
+- Integrate AI models for smart decision-making in your automations
+
+## 🚀 Quick Start
+
+**Ready to begin?** Start with [Exercise 1: Email Classification](https://louischancly.github.io/automation-exercises/exercises/01-email-classification/)
+
+Each exercise includes:
+
+- Step-by-step instructions with screenshots
+- Downloadable workflow templates
+- Real-world applications
+- Challenge extensions for advanced learners
 
 ## 📚 Course Structure
 
-The course consists of 30+ progressive exercises covering:
+### Foundation Track (Exercises 1-10)
 
-- **Foundation (Exercises 1-10)**: Core automation concepts with n8n, APIs, and basic AI
-- **AI Integration (Exercises 11-20)**: Advanced LLM usage, prompt engineering, and intelligent workflows
-- **Advanced Workflows (Exercises 21-30)**: Complex multi-step automations solving real business problems
+Master the basics of automation with n8n, APIs, and introductory AI concepts.
 
-## 🌐 Live Course Website
+### AI Integration Track (Exercises 11-20)
 
-Visit the course at: [https://louischancly.github.io/automation-exercises/](https://louischancly.github.io/automation-exercises/)
+Deep dive into language models, prompt engineering, and intelligent workflows.
 
-## 🛠️ Development Setup
+### Advanced Workflows (Exercises 21-30)
 
-### Prerequisites
+Tackle complex business problems with multi-step automations and custom solutions.
 
-- Ruby 3.2+
-- Bundler gem
-- Git
+## 🛠️ Tools You'll Use
 
-### Local Development
+- **n8n** - Visual workflow automation platform (free tier available)
+- **OpenRouter** - Access to multiple AI models with one API (free credits included)
+- **Gmail, Sheets, Slack** - Integrate with tools you already know
+- **Custom APIs** - Connect to any service with REST APIs
 
-1. Clone the repository:
+## 📁 Exercise Resources
 
-    ```bash
-    git clone https://github.com/louischancly/automation-exercises.git
-    cd automation-exercises
-    ```
+Each exercise folder contains:
 
-2. Install dependencies:
+- `index.md` - Main exercise instructions
+- `images/` - Screenshots for every step
+- `downloads/` - n8n workflow JSON files you can import
+- `solutions/` - Completed workflows and code snippets
 
-    ```bash
-    cd docs
-    bundle install
-    ```
+## 💡 Who This Is For
 
-3. Run Jekyll locally:
+Perfect for:
 
-    ```bash
-    bundle exec jekyll serve
-    ```
+- **Students** seeking practical AI skills for employability
+- **Professionals** wanting to automate repetitive tasks
+- **Entrepreneurs** looking to build AI-powered solutions
+- **Anyone** curious about practical AI applications
 
-4. Open browser to: `http://localhost:4000/automation-exercises/`
+No prerequisites needed except:
 
-## 📁 Repository Structure
+- Basic computer skills
+- A web browser
+- Enthusiasm to learn!
 
-```raw
-automation-exercises/
-├── .github/
-│   └── workflows/
-│       ├── deploy.yml         # Main deployment workflow
-│       └── pr-preview.yml     # PR preview builds
-├── docs/                      # GitHub Pages content
-│   ├── _config.yml           # Jekyll configuration
-│   ├── Gemfile              # Ruby dependencies
-│   ├── index.md             # Landing page
-│   ├── assets/              # Global assets
-│   ├── exercises/           # All course exercises
-│   │   ├── 01-email-classification/
-│   │   │   ├── index.md    # Exercise content
-│   │   │   ├── images/     # Screenshots
-│   │   │   └── resources/  # Downloads
-│   │   └── ...
-│   ├── guides/              # Supporting documentation
-│   └── _data/              # Exercise metadata
-├── exercises/               # Development versions
-└── README.md               # This file
-```
+## 🎓 Learning Philosophy
 
-## ✍️ Contributing
+We believe in:
 
-### Adding a New Exercise
+- **Learning by doing** - Every concept is immediately applied
+- **Real-world focus** - Build things you'll actually use
+- **Progressive difficulty** - Start simple, gradually increase complexity
+- **Visual learning** - Screenshots for every single step
 
-1. Create exercise folder: `docs/exercises/XX-exercise-name/`
-2. Add `index.md` with YAML frontmatter:
+## 📊 What Success Looks Like
 
-    ```yaml
-    ---
-    layout: exercise
-    title: "Exercise XX: Title"
-    description: Brief description
-    category: foundation|ai-integration|advanced|industry
-    difficulty: beginner|intermediate|advanced
-    time: 45-120 minutes
-    tools: [tool1, tool2]
-    ---
-    ```
+After completing these exercises, you'll be able to:
 
-3. Add images to `docs/exercises/XX-exercise-name/images/`
-4. Update `docs/_data/exercises.yml` with metadata
-5. Create PR for review
+- Automate 2-3 hours of daily manual work
+- Build custom AI tools for your specific needs
+- Understand how to integrate AI into business processes
+- Create portfolio projects that demonstrate real skills
 
-### Content Guidelines
+## 🔗 Useful Links
 
-- **Detailed Instructions**: Every step should be explicit - assume no prior knowledge
-- **Visual Aids**: Include screenshots for every significant UI interaction
-- **Real-World Context**: Explain why each technique matters in actual job scenarios
-- **Troubleshooting**: Anticipate common errors and provide solutions
-- **Progressive Difficulty**: Each exercise builds on previous knowledge
+- [Course Website](https://louischancly.github.io/automation-exercises/)
+- [n8n Documentation](https://docs.n8n.io/)
+- [OpenRouter API](https://openrouter.ai/docs)
 
-## 🚀 Deployment
+## 📝 Note to Students
 
-The site automatically deploys to GitHub Pages when changes are pushed to the `main` branch:
+These exercises are designed to be completed in order, but feel free to jump to topics that interest you most. Each exercise builds on previous knowledge, so you might need to reference earlier exercises if you skip ahead.
 
-1. Push changes to `main`
-2. GitHub Actions builds the Jekyll site
-3. Deploys to GitHub Pages
-4. Available at: `https://louischancly.github.io/automation-exercises/`
+Remember: The goal isn't just to complete the exercises, but to understand the concepts so you can apply them to your own projects and work scenarios.
 
-### Manual Deployment
+## 🚦 Getting Started
 
-To trigger a manual deployment:
-
-1. Go to Actions tab
-2. Select "Deploy Jekyll to GitHub Pages"
-3. Click "Run workflow"
-
-## 📊 GitHub Actions Workflows
-
-### Main Deployment (`deploy.yml`)
-
-- Triggers on push to `main` branch
-- Builds Jekyll site with Ruby 3.2
-- Deploys to GitHub Pages
-- Uses latest GitHub Actions (v4/v5)
-
-### PR Preview (`pr-preview.yml`)
-
-- Builds PR changes for review
-- Posts build status as PR comment
-- Helps reviewers verify changes
-
-## 🏷️ Versioning
-
-- Main branch: Production-ready content
-- Feature branches: For new exercises
-- Releases: Tagged for course milestones
-
-## 📝 License
-
-This project is licensed under the MIT License - see LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Built for students seeking practical AI automation skills
-- Inspired by Coursera's hands-on learning approach
-- Powered by Jekyll and GitHub Pages
-
-## 📧 Contact
-
-For questions or suggestions, please open an issue or contact the maintainers.
+1. **Choose an exercise** from the [course website](https://louischancly.github.io/automation-exercises/)
+2. **Follow the setup instructions** in Part A of each exercise
+3. **Build the workflow** step-by-step in Part B
+4. **Test and deploy** your automation in Part C
+5. **Try the challenges** to extend your learning
 
 ---
 
-**Ready to start learning?** Visit [Exercise 1: Email Classification](https://louischancly.github.io/automation-exercises/exercises/01-email-classification/) to begin your automation journey!
+**Questions?** Open an issue on GitHub or reach out to the course maintainers.
+
+**Ready to transform your productivity with AI?** Let's begin! 🚀
