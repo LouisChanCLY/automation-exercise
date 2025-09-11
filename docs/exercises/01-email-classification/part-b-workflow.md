@@ -342,6 +342,8 @@ Your complete workflow should look like this:
 
 1. Click "Test Workflow" button in n8n
 
+   ![Test Workflow](./images/workflow/11-test-workflow.png)
+
 2. Send test emails covering all scenarios:
    - **Urgent support request**: Subject: "URGENT: Server is down!" Body: "Our production server has been down for 2 hours. Need immediate assistance!"
    - **Sales inquiry**: Subject: "Interested in enterprise pricing" Body: "We're looking to purchase licenses for 500 users. Can you send pricing?"
@@ -353,6 +355,8 @@ Your complete workflow should look like this:
    - Watch the workflow execute in real-time
    - Click on each node to see the output data
    - Verify the classification results match expectations
+
+   ![Workflow Execution](./images/workflow/12-workflow-execution.png)
 
 ### Verify Results
 
@@ -366,6 +370,8 @@ Check that:
   - Questions → appropriate department routing
 - Data appears in Google Sheets with all fields populated
 - Confidence scores are reasonable (0.7-1.0 for clear cases)
+
+   ![Results View](./images/workflow/13-results-view.png)
 
 ---
 
