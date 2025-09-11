@@ -383,6 +383,8 @@ Once testing is complete:
 
 1. Toggle the "Active" switch in the top-right corner of the workflow canvas
 
+   ![Workflow Active](./images/workflow/16-workflow-active.png)
+
 2. Configure workflow settings (click workflow name → Settings):
    - **Execution timeout**: 5 minutes
    - **Retry on failure**: Yes (2 attempts)
