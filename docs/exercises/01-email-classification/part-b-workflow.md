@@ -141,7 +141,7 @@ return {
 2. Select "OpenRouter Chat Model" from the list
 3. Configure:
    - **Credential**: Choose the OpenRouter credential
-   - **Model**: Select "google/gemma-2-9b-it:free"
+   - **Model**: Select "google/gemma-3-27b-it:free"
 
    ![OpenRouter Model Selection](./images/workflow/10-openrouter-model-select.png)
 
@@ -167,7 +167,7 @@ return {
 
 ### Configure the Prompt
 
-Return to the Basic LLM Chain node and add this prompt:
+Return to the Basic LLM Chain node and add this prompt in the "Prompt" field:
 
    ![LLM Chain Prompt](./images/workflow/07-llm-chain-prompt.png)
 
@@ -179,7 +179,6 @@ Subject: {{$json.subject}}
 Body: {{$json.truncatedBody}}
 
 Classify as:
-
 1. Priority: "urgent" | "high" | "medium" | "low"
 2. Sentiment: "positive" | "neutral" | "negative" | "angry"
 3. Department: "sales" | "support" | "technical" | "hr" | "finance" | "other"
@@ -203,22 +202,26 @@ Classify as:
 4. Add these field mappings by clicking "Add Field" for each:
 
 **From AI Classification:**
-Configure these fields from the LLM output:
+Click "Add Field" for each of these and configure from the Basic LLM Chain output:
 
-- Field: `priority` → Value: `={{ $json.priority }}`
-- Field: `sentiment` → Value: `={{ $json.sentiment }}`
-- Field: `department` → Value: `={{ $json.department }}`
-- Field: `actionRequired` → Value: `={{ $json.actionRequired }}` (Set Type: Boolean)
-- Field: `confidence` → Value: `={{ $json.confidence }}` (Set Type: Number)
-- Field: `reasoning` → Value: `={{ $json.reasoning }}`
+- Field Name: `priority` → Value: `={{ $json.priority }}`
+- Field Name: `sentiment` → Value: `={{ $json.sentiment }}`
+- Field Name: `department` → Value: `={{ $json.department }}`
+- Field Name: `actionRequired` → Value: `={{ $json.actionRequired }}` (Set Type: Boolean)
+- Field Name: `confidence` → Value: `={{ $json.confidence }}` (Set Type: Number)
+- Field Name: `reasoning` → Value: `={{ $json.reasoning }}`
 
 **From Email Data:**
-Add these fields from the original email (reference the "Prepare Email for AI" node):
+Click "Add Field" for each of these and reference the "Prepare Email for AI" node:
 
-- Field: `emailId` → Value: `={{ $('Prepare Email for AI').item.json.messageId }}`
-- Field: `subject` → Value: `={{ $('Prepare Email for AI').item.json.subject }}`
-- Field: `sender` → Value: `={{ $('Prepare Email for AI').item.json.sender }}`
-- Field: `senderName` → Value: `={{ $('Prepare Email for AI').item.json.senderName }}`
+- Field Name: `emailId` → Value: `={{ $('Prepare Email for AI').item.json.messageId }}`
+- Field Name: `subject` → Value: `={{ $('Prepare Email for AI').item.json.subject }}`
+- Field Name: `sender` → Value: `={{ $('Prepare Email for AI').item.json.sender }}`
+- Field Name: `senderName` → Value: `={{ $('Prepare Email for AI').item.json.senderName }}`
+
+**Additional Error Handling Field:**
+
+- Field Name: `error` → Value: `={{ $json.error ? true : false }}` (Set Type: Boolean)
 
 {: .important }
 > This Edit Fields node is crucial - it combines the AI's classification with the original email data so the Switch node can route appropriately.
@@ -237,27 +240,43 @@ Add these fields from the original email (reference the "Prepare Email for AI" n
 
    ![Switch Node Outputs](./images/workflow/16-switch-node-outputs.png)
 
-4. Add routing rules:
+4. Add routing rules by clicking "+ Add Rule" for each output:
 
 **Output 1 - Urgent:**
 
-- Condition: `{{ $json.priority }}` equals "urgent"
-- Rename Output: "Urgent"
+- Click "+ Add Rule"
+- Left Value: `{{ $json.priority }}`
+- Operator: equals
+- Right Value: `urgent`
+- Toggle "Rename Output" ON
+- Output Name: "Urgent"
 
 **Output 2 - High Priority:**
 
-- Condition: `{{ $json.priority }}` equals "high"
-- Rename Output: "High Priority"
+- Click "+ Add Rule"
+- Left Value: `{{ $json.priority }}`
+- Operator: equals
+- Right Value: `high`
+- Toggle "Rename Output" ON
+- Output Name: "High Priority"
 
 **Output 3 - Angry Customer:**
 
-- Condition: `{{ $json.sentiment }}` equals "angry"
-- Rename Output: "Angry Customers"
+- Click "+ Add Rule"
+- Left Value: `{{ $json.sentiment }}`
+- Operator: equals
+- Right Value: `angry`
+- Toggle "Rename Output" ON
+- Output Name: "Angry Customers"
 
 **Output 4 - Low Priority:**
 
-- Condition: `{{ $json.priority }}` equals "low"
-- Rename Output: "Low Priority"
+- Click "+ Add Rule"
+- Left Value: `{{ $json.priority }}`
+- Operator: equals
+- Right Value: `low`
+- Toggle "Rename Output" ON
+- Output Name: "Low Priority"
 
 ---
 
@@ -265,26 +284,61 @@ Add these fields from the original email (reference the "Prepare Email for AI" n
 
 ### Apply Smart Labels
 
-First, create labels in Gmail:
+**Prerequisites - Create Labels in Gmail:**
 
-1. Open Gmail in browser
-2. Settings → Labels → Create new labels:
+1. Open Gmail in your browser
+2. Click the gear icon → "See all settings"
+3. Go to "Labels" tab
+4. Create these labels by clicking "Create new label" for each:
    - URGENT-SUPPORT
    - HIGH-PRIORITY
    - ANGRY-CUSTOMER
    - LOW-PRIORITY
    - STANDARD-PROCESSING
 
+**Configure Gmail Nodes in n8n:**
 
-Then for each Switch output, add a Gmail node:
+For each Switch output, add a Gmail node:
 
 **For Urgent Output:**
 
-- Operation: "Label Add"
-- Message ID: `{{ $json.emailId }}`
-- Labels: Select "URGENT-SUPPORT"
+1. Add "Gmail" node connected to the "Urgent" output
+2. Configure:
+   - Operation: "Label Add"
+   - Message ID: `{{ $json.emailId }}`
+   - Labels: Select "URGENT-SUPPORT" from dropdown
 
-Repeat for other priority levels with appropriate labels.
+**For High Priority Output:**
+
+1. Add "Gmail" node connected to the "High Priority" output
+2. Configure:
+   - Operation: "Label Add"
+   - Message ID: `{{ $json.emailId }}`
+   - Labels: Select "HIGH-PRIORITY" from dropdown
+
+**For Angry Customers Output:**
+
+1. Add "Gmail" node connected to the "Angry Customers" output
+2. Configure:
+   - Operation: "Label Add"
+   - Message ID: `{{ $json.emailId }}`
+   - Labels: Select "ANGRY-CUSTOMER" from dropdown
+
+**For Low Priority Output:**
+
+1. Add "Gmail" node connected to the "Low Priority" output
+2. Configure:
+   - Operation: "Label Add"
+   - Message ID: `{{ $json.emailId }}`
+   - Labels: Select "LOW-PRIORITY" from dropdown
+
+**For Fallback (Extra) Output:**
+
+1. Add "Gmail" node connected to the "extra" output
+2. Configure:
+   - Operation: "Label Add"
+   - Message ID: `{{ $json.emailId }}`
+   - Labels: Select "STANDARD-PROCESSING" from dropdown
 
 ---
 
@@ -292,16 +346,15 @@ Repeat for other priority levels with appropriate labels.
 
 ### Create Analytics Dashboard
 
-1. Add "Google Sheets" node at the end
-2. Connect Google account when prompted
-3. Configure:
-
-
+1. Add "Google Sheets" node at the end of your workflow
+2. When prompted, connect your Google account (similar to Gmail OAuth)
+3. Configure the node:
    - **Operation**: "Append"
-   - **Document**: Create "Email Classification Log"
+   - **Document**: Select or create "Email Classification Log"
    - **Sheet**: "Sheet1"
+   - **Options**: Toggle "Data Property Name" OFF
 
-4. Map data fields:
+4. Map data fields by adding each field:
 
 ```json
 {
@@ -332,23 +385,32 @@ Your complete workflow should look like this:
 
    ![Test Workflow](./images/workflow/11-test-workflow.png)
 
-2. Send test emails covering different scenarios:
-   - **Urgent request**: "URGENT: Server is down!"
-   - **Sales inquiry**: "Interested in enterprise pricing"
-   - **Support ticket**: "Bug found in login process"
-   - **Low priority**: "Question about vacation policy"
+2. Send test emails covering all scenarios:
+   - **Urgent support request**: Subject: "URGENT: Server is down!" Body: "Our production server has been down for 2 hours. Need immediate assistance!"
+   - **Sales inquiry**: Subject: "Interested in enterprise pricing" Body: "We're looking to purchase licenses for 500 users. Can you send pricing?"
+   - **Technical bug report**: Subject: "Bug found in login process" Body: "Users cannot log in with special characters in passwords."
+   - **HR policy question**: Subject: "Question about vacation policy" Body: "How many vacation days do new employees get?"
+   - **Angry customer complaint**: Subject: "Terrible service!" Body: "I've been waiting 3 days for a response. This is unacceptable!"
 
 3. Monitor the execution:
+   - Watch the workflow execute in real-time
+   - Click on each node to see the output data
+   - Verify the classification results match expectations
 
-   ![Workflow Execution](./images/workflow/12-workflow-execution.png)
+   ![Workflow Execution](./images/workflow/11-test-workflow.png)
 
 ### Verify Results
 
 Check that:
 
-- All nodes show green checkmarks
-- Gmail labels were applied correctly
-- Data appears in Google Sheets (if configured)
+- All nodes show green checkmarks (successful execution)
+- Gmail labels were applied correctly in your inbox
+- Classifications match the email content:
+  - Urgent emails → "urgent" priority
+  - Complaints → "angry" sentiment
+  - Questions → appropriate department routing
+- Data appears in Google Sheets with all fields populated
+- Confidence scores are reasonable (0.7-1.0 for clear cases)
 
    ![Results View](./images/workflow/13-results-view.png)
 
@@ -360,16 +422,24 @@ Check that:
 
 Once testing is complete:
 
-1. Toggle the "Active" switch in the top-right corner
+1. Toggle the "Active" switch in the top-right corner of the workflow canvas
 
-   ![Workflow Active](./images/workflow/16-workflow-active.png)
-
-2. Configure settings:
+2. Configure workflow settings (click workflow name → Settings):
    - **Execution timeout**: 5 minutes
    - **Retry on failure**: Yes (2 attempts)
+   - **Retry wait time**: 5 seconds
    - **Save execution data**: Last 100 runs
+   - **Error Workflow**: Optional (for error notifications)
 
-Your workflow is now live and will automatically process incoming emails!
+3. Save the workflow (Ctrl/Cmd + S)
+
+Your workflow is now live and will automatically:
+
+- Check Gmail every minute for new emails
+- Classify each email using AI
+- Apply appropriate labels
+- Log all classifications to Google Sheets
+- Handle errors gracefully with retries
 
 ---
 
