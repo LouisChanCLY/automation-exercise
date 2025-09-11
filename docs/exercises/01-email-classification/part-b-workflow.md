@@ -191,51 +191,11 @@ Classify as:
 
 ---
 
-## Step 9: Parse AI Response
-
-### Structure the Classification Data
-
-1. Add "Edit Fields" node after Basic LLM Chain
-2. Name it: "Parse Classification"
-
-3. Configure:
-   - **Operation**: "Set Fields"
-   - **Mode**: "Manual Mapping"
-
-4. Add these field mappings by clicking "Add Field" for each:
-
-**From AI Classification:**
-Click "Add Field" for each of these and configure from the Basic LLM Chain output:
-
-- Field Name: `priority` → Value: `={{ $json.priority }}`
-- Field Name: `sentiment` → Value: `={{ $json.sentiment }}`
-- Field Name: `department` → Value: `={{ $json.department }}`
-- Field Name: `actionRequired` → Value: `={{ $json.actionRequired }}` (Set Type: Boolean)
-- Field Name: `confidence` → Value: `={{ $json.confidence }}` (Set Type: Number)
-- Field Name: `reasoning` → Value: `={{ $json.reasoning }}`
-
-**From Email Data:**
-Click "Add Field" for each of these and reference the "Prepare Email for AI" node:
-
-- Field Name: `emailId` → Value: `={{ $('Prepare Email for AI').item.json.messageId }}`
-- Field Name: `subject` → Value: `={{ $('Prepare Email for AI').item.json.subject }}`
-- Field Name: `sender` → Value: `={{ $('Prepare Email for AI').item.json.sender }}`
-- Field Name: `senderName` → Value: `={{ $('Prepare Email for AI').item.json.senderName }}`
-
-**Additional Error Handling Field:**
-
-- Field Name: `error` → Value: `={{ $json.error ? true : false }}` (Set Type: Boolean)
-
-{: .important }
-> This Edit Fields node is crucial - it combines the AI's classification with the original email data so the Switch node can route appropriately.
-
----
-
-## Step 10: Routing with Switch Node
+## Step 9: Routing with Switch Node
 
 ### Create Decision Tree
 
-1. Add "Switch" node after Parse Classification
+1. Add "Switch" node after Basic LLM Chain
 2. Name it: "Route by Priority & Sentiment"
 3. Configure:
    - **Mode**: "Rules"
@@ -283,7 +243,7 @@ Click "Add Field" for each of these and reference the "Prepare Email for AI" nod
 
 ---
 
-## Step 11: Gmail Label Application
+## Step 10: Gmail Label Application
 
 ### Apply Smart Labels
 
@@ -308,7 +268,7 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "Urgent" output
 2. Configure:
    - Operation: "Label Add"
-   - Message ID: `{{ $json.emailId }}`
+   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
    - Labels: Select "URGENT-SUPPORT" from dropdown
 
 **For High Priority Output:**
@@ -316,7 +276,7 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "High Priority" output
 2. Configure:
    - Operation: "Label Add"
-   - Message ID: `{{ $json.emailId }}`
+   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
    - Labels: Select "HIGH-PRIORITY" from dropdown
 
 **For Angry Customers Output:**
@@ -324,7 +284,7 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "Angry Customers" output
 2. Configure:
    - Operation: "Label Add"
-   - Message ID: `{{ $json.emailId }}`
+   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
    - Labels: Select "ANGRY-CUSTOMER" from dropdown
 
 **For Low Priority Output:**
@@ -332,7 +292,7 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "Low Priority" output
 2. Configure:
    - Operation: "Label Add"
-   - Message ID: `{{ $json.emailId }}`
+   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
    - Labels: Select "LOW-PRIORITY" from dropdown
 
 **For Fallback (Extra) Output:**
@@ -340,12 +300,12 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "extra" output
 2. Configure:
    - Operation: "Label Add"
-   - Message ID: `{{ $json.emailId }}`
+   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
    - Labels: Select "STANDARD-PROCESSING" from dropdown
 
 ---
 
-## Step 12: Logging to Google Sheets
+## Step 11: Logging to Google Sheets
 
 ### Create Analytics Dashboard
 
@@ -362,8 +322,8 @@ For each Switch output, add a Gmail node:
 ```json
 {
   "Timestamp": "={{new Date().toISOString()}}",
-  "Sender": "={{$json.sender}}",
-  "Subject": "={{$json.subject}}",
+  "Sender": "={{$('Prepare Email for AI').item.json.sender}}",
+  "Subject": "={{$('Prepare Email for AI').item.json.subject}}",
   "Priority": "={{$json.priority}}",
   "Sentiment": "={{$json.sentiment}}",
   "Department": "={{$json.department}}",
@@ -375,7 +335,7 @@ For each Switch output, add a Gmail node:
 
 ---
 
-## Step 13: Test Your Workflow
+## Step 12: Test Your Workflow
 
 ### Complete Workflow Overview
 
@@ -419,7 +379,7 @@ Check that:
 
 ---
 
-## Step 14: Activate Your Workflow
+## Step 13: Activate Your Workflow
 
 ### Go Live
 
