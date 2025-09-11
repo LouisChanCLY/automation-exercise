@@ -8,6 +8,7 @@ default: true
 MD013: false  # Disabled - long lines are OK for documentation
 
 # Headings
+MD024: false  # Allow duplicate headings (for consistent challenge structure)
 MD025: false  # Allow multiple top-level headings for documentation
 MD022: true  # Headings should be surrounded by blank lines
 MD026: true  # No trailing punctuation in headings
@@ -34,7 +35,7 @@ MD012:
   maximum: 2  # Maximum number of consecutive blank lines
 
 # Links and images
-MD042: true  # No empty links
+MD042: false  # Allow empty links (for placeholder Discord links etc)
 MD045: true  # Images should have alt text
 
 # HTML
