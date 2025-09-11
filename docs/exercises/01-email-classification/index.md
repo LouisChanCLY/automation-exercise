@@ -3,9 +3,8 @@ layout: default
 title: "Exercise 1: Email Classification"
 parent: Exercises
 nav_order: 1
-has_children: false
-has_toc: true
-toc_sticky: true
+has_children: true
+has_toc: false
 ---
 
 # Exercise 1: Email Classification
