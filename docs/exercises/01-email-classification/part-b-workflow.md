@@ -44,11 +44,17 @@ Now we'll build, test, and activate the automation workflow. This section takes 
 
 ### Configure Email Detection
 
-1. Click the plus button in the top right corner
-2. Search for "Gmail" in the node panel
+1. Click the plus button in the top right corner to open the nodes panel
+
+   ![Nodes Panel](./images/workflow/03-nodes-panel.png)
+
+2. Search for "Gmail" in the search box
+
+   ![Gmail Trigger Search](./images/workflow/04-gmail-trigger-search.png)
+
 3. Select "On message received" trigger
 
-   ![Add Gmail Trigger](./images/workflow/02-add-gmail-trigger.png)
+   ![Gmail Trigger Selection](./images/workflow/05-gmail-trigger-selection.png)
 
 4. Configure trigger settings:
    - **Credential**: Select the credential we created earlier
@@ -56,7 +62,7 @@ Now we'll build, test, and activate the automation workflow. This section takes 
    - **Event**: "Message Received"
    - **Simplify Output**: Toggle OFF
 
-   ![Gmail Trigger Configuration](./images/workflow/03-gmail-trigger-config.png)
+   ![Gmail Trigger Configuration](./images/workflow/06-gmail-trigger-config.png)
 
 5. Test the trigger:
    - Click "Fetch Test Event"
@@ -79,7 +85,6 @@ Now we'll build, test, and activate the automation workflow. This section takes 
    - **Mode**: "Run Once for Each Item"
    - **Language**: "Javascript"
 
-   ![Add Code Node](./images/workflow/04-add-ai-node.png)
 
 4. Add this code:
 
@@ -123,23 +128,31 @@ return {
    - **Source for Prompt**: "Define below"
    - **Require Specific Output Format**: Toggle ON
 
-3. Close the node temporarily
+   ![Basic LLM Chain Node](./images/workflow/08-llm-chain-node.png)
+
+3. This node needs three components: Chat Model, Output Parser, and the Prompt (configured below)
 
 ### Add Chat Model
 
-1. Click the "+" under Chat Model
-2. Select "OpenRouter Chat Model"
+1. Click the "+" under Chat Model to see available language models
+
+   ![Language Models Menu](./images/workflow/09-language-models-menu.png)
+
+2. Select "OpenRouter Chat Model" from the list
 3. Configure:
    - **Credential**: Choose the OpenRouter credential
    - **Model**: Select "google/gemma-2-9b-it:free"
 
-   ![OpenRouter Configuration](./images/workflow/05-openrouter-config.png)
+   ![OpenRouter Model Selection](./images/workflow/10-openrouter-model-select.png)
 
 ### Add Output Parser
 
 1. Click the "+" under Output Parser
+
+   ![Output Parser Selection](./images/workflow/12-output-parser-selection.png)
+
 2. Select "Structured Output Parser"
-3. Add this JSON schema:
+3. Add this JSON schema in the JSON Example field:
 
 ```json
 {
@@ -156,7 +169,7 @@ return {
 
 Return to the Basic LLM Chain node and add this prompt:
 
-   ![AI Prompt Setup](./images/workflow/06-ai-prompt-setup.png)
+   ![LLM Chain Prompt](./images/workflow/07-llm-chain-prompt.png)
 
 ```
 Analyze this email and classify it. Return ONLY valid JSON.
@@ -183,29 +196,32 @@ Classify as:
 1. Add "Edit Fields" node after Basic LLM Chain
 2. Name it: "Parse Classification"
 
-   ![JSON Parser Node](./images/workflow/07-json-parser-node.png)
-
 3. Configure:
    - **Operation**: "Set Fields"
    - **Mode**: "Manual Mapping"
 
-4. Add these field mappings:
+4. Add these field mappings by clicking "Add Field" for each:
 
 **From AI Classification:**
+Configure these fields from the LLM output:
 
-- priority → `={{ $json.priority }}`
-- sentiment → `={{ $json.sentiment }}`
-- department → `={{ $json.department }}`
-- actionRequired → `={{ $json.actionRequired }}` (Type: Boolean)
-- confidence → `={{ $json.confidence }}` (Type: Number)
-- reasoning → `={{ $json.reasoning }}`
+- Field: `priority` → Value: `={{ $json.priority }}`
+- Field: `sentiment` → Value: `={{ $json.sentiment }}`
+- Field: `department` → Value: `={{ $json.department }}`
+- Field: `actionRequired` → Value: `={{ $json.actionRequired }}` (Set Type: Boolean)
+- Field: `confidence` → Value: `={{ $json.confidence }}` (Set Type: Number)
+- Field: `reasoning` → Value: `={{ $json.reasoning }}`
 
 **From Email Data:**
+Add these fields from the original email (reference the "Prepare Email for AI" node):
 
-- emailId → `={{ $('Prepare Email for AI').item.json.messageId }}`
-- subject → `={{ $('Prepare Email for AI').item.json.subject }}`
-- sender → `={{ $('Prepare Email for AI').item.json.sender }}`
-- senderName → `={{ $('Prepare Email for AI').item.json.senderName }}`
+- Field: `emailId` → Value: `={{ $('Prepare Email for AI').item.json.messageId }}`
+- Field: `subject` → Value: `={{ $('Prepare Email for AI').item.json.subject }}`
+- Field: `sender` → Value: `={{ $('Prepare Email for AI').item.json.sender }}`
+- Field: `senderName` → Value: `={{ $('Prepare Email for AI').item.json.senderName }}`
+
+{: .important }
+> This Edit Fields node is crucial - it combines the AI's classification with the original email data so the Switch node can route appropriately.
 
 ---
 
@@ -218,6 +234,8 @@ Classify as:
 3. Configure:
    - **Mode**: "Rules"
    - **Fallback Output**: "Extra Output"
+
+   ![Switch Node Outputs](./images/workflow/16-switch-node-outputs.png)
 
 4. Add routing rules:
 
@@ -257,7 +275,6 @@ First, create labels in Gmail:
    - LOW-PRIORITY
    - STANDARD-PROCESSING
 
-   ![Gmail Label Action](./images/workflow/08-gmail-label-action.png)
 
 Then for each Switch output, add a Gmail node:
 
@@ -279,7 +296,6 @@ Repeat for other priority levels with appropriate labels.
 2. Connect Google account when prompted
 3. Configure:
 
-   ![Google Sheets Node](./images/workflow/09-google-sheets-node.png)
 
    - **Operation**: "Append"
    - **Document**: Create "Email Classification Log"
@@ -309,7 +325,6 @@ Repeat for other priority levels with appropriate labels.
 
 Your complete workflow should look like this:
 
-![Workflow Complete](./images/workflow/10-workflow-complete.png)
 
 ### Run Test
 
