@@ -174,9 +174,9 @@ Return to the Basic LLM Chain node and add this prompt in the "Prompt" field:
 ```
 Analyze this email and classify it. Return ONLY valid JSON.
 
-Email from: {{$json.senderName}} <{{$json.sender}}>
-Subject: {{$json.subject}}
-Body: {{$json.truncatedBody}}
+Email from: {{ $json.senderName }} <{{ $json.sender }}>
+Subject: {{ $json.subject }}
+Body: {{ $json.truncatedBody }}
 
 Classify as:
 1. Priority: "urgent" | "high" | "medium" | "low"
@@ -185,6 +185,9 @@ Classify as:
 4. Action Required: true | false
 5. Confidence Score: 0.0-1.0
 ```
+
+{: .important }
+> **Field References**: The double curly braces `{{ }}` are essential - they tell n8n to replace these with actual values from the "Prepare Email for AI" node. Make sure to include the spaces inside the brackets exactly as shown.
 
 ---
 
