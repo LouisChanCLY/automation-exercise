@@ -167,9 +167,7 @@ return {
 
 ### Configure the Prompt
 
-Return to the Basic LLM Chain node and add this prompt in the "Prompt" field:
-
-   ![LLM Chain Prompt](./images/workflow/07-llm-chain-prompt.png)
+Return to the Basic LLM Chain node and enter this prompt in the "Prompt" text field (copy and paste exactly):
 
 ```
 Analyze this email and classify it. Return ONLY valid JSON.
@@ -186,8 +184,10 @@ Classify as:
 5. Confidence Score: 0.0-1.0
 ```
 
+   ![LLM Chain Prompt](./images/workflow/07-llm-chain-prompt.png)
+
 {: .important }
-> **Field References**: The double curly braces `{{ }}` are essential - they tell n8n to replace these with actual values from the "Prepare Email for AI" node. Make sure to include the spaces inside the brackets exactly as shown.
+> **Critical**: Copy this prompt exactly as shown above, including the spaces inside `{{ }}`. These field references pull data from the "Prepare Email for AI" node. The prompt should appear in n8n's interface with the variable references highlighted in a different colour.
 
 ---
 
