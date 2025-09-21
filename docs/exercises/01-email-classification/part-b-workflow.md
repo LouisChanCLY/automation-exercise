@@ -171,7 +171,7 @@ return {
 ### Configure the AI Model
 
 {: .note }
-> **Understanding LLM Chains**: The Basic LLM Chain combines three components: a language model (the AI), a prompt (your instructions), and an output parser (to structure the response). This modular approach lets you swap models or modify prompts without rebuilding the entire workflow.
+> **Understanding LLM Chains**: The Basic LLM Chain combines three components: an output parser (to structure the response), a prompt (your instructions), and a language model (the AI). We configure them in this order because defining the output structure first helps write better prompts, and the model selection comes last as it's often interchangeable.
 
 1. Add "Basic LLM Chain" node (under AI nodes)
 2. Configure initial settings:
@@ -180,22 +180,12 @@ return {
 
    ![Basic LLM Chain Node](./images/workflow/08-llm-chain-node.png)
 
-3. This node needs three components: Chat Model, Output Parser, and the Prompt (configured below)
+3. Now we'll configure the three components in logical order: Output Parser → Prompt → Model
 
-### Add Chat Model
+### Step 1: Define Output Structure (Parser)
 
-1. Click the "+" under Chat Model to see available language models
-
-   ![Language Models Menu](./images/workflow/09-language-models-menu.png)
-
-2. Select "OpenRouter Chat Model" from the list
-3. Configure:
-   - **Credential**: Choose the OpenRouter credential
-   - **Model**: Select "google/gemma-3-27b-it:free"
-
-   ![OpenRouter Model Selection](./images/workflow/10-openrouter-model-select.png)
-
-### Add Output Parser
+{: .important }
+> **Why Output Parser First?** Structured output is crucial for automation. JSON schemas ensure AI responses are predictable, parseable, and can integrate with databases, APIs, and downstream processes. Without structured output, you'd need complex text parsing that breaks easily.
 
 1. Click the "+" under Output Parser
 
@@ -215,9 +205,14 @@ return {
 }
 ```
 
-### Configure the Prompt
+{: .note }
+> **Schema Benefits**: This structure guarantees the AI returns data your Switch node can read. The schema acts as a contract between the AI and your workflow, preventing errors from unexpected response formats.
 
-Return to the Basic LLM Chain node and enter this prompt in the "Prompt" text field (copy and paste exactly):
+### Step 2: Write the Prompt
+
+Now that we've defined what output we expect, we can write a prompt that produces it.
+
+In the Basic LLM Chain node, enter this prompt in the "Prompt" text field:
 
 {% raw %}
 
@@ -245,6 +240,24 @@ Classify as:
 
 {: .tip }
 > **Save API Tokens During Development**: After testing the Basic LLM Chain node once, click the pin icon 📌 in the output panel to save the result. This prevents repeated API calls (and token consumption) while you build the rest of your workflow. Remember to unpin before going live!
+
+### Step 3: Select the AI Model
+
+Finally, we choose which AI model will process our prompt.
+
+1. Click the "+" under Chat Model to see available language models
+
+   ![Language Models Menu](./images/workflow/09-language-models-menu.png)
+
+2. Select "OpenRouter Chat Model" from the list
+3. Configure:
+   - **Credential**: Choose the OpenRouter credential
+   - **Model**: Select "google/gemma-3-27b-it:free"
+
+   ![OpenRouter Model Selection](./images/workflow/10-openrouter-model-select.png)
+
+{: .note }
+> **Why Model Last?** The beauty of this setup is model flexibility. You can easily swap between GPT-4, Claude, Gemma, or any other model without changing your prompt or output structure. Start with free models for testing, upgrade to premium models for production.
 
 ---
 
