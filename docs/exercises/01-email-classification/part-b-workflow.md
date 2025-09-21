@@ -44,6 +44,9 @@ Now we'll build, test, and activate the automation workflow. This section takes 
 
 ### Configure Email Detection
 
+{: .note }
+> **What's a Trigger?** Triggers are special nodes that start workflows automatically when something happens (like receiving an email). They're different from regular nodes because they "listen" for events rather than processing data.
+
 1. Click the plus button in the top right corner to open the nodes panel
 
    ![Nodes Panel](./images/workflow/03-nodes-panel.png)
@@ -78,6 +81,9 @@ Now we'll build, test, and activate the automation workflow. This section takes 
 ## Step 7: Email Data Preparation
 
 ### Extract and Clean Email Content
+
+{: .note }
+> **Why Use a Code Node?** While n8n has built-in nodes for many tasks, the Code node gives you flexibility to transform data exactly how you need it. It's perfect for cleaning text, extracting specific fields, and preparing data for AI processing.
 
 1. Add "Code" node after Gmail Trigger (click the + on the connection)
 2. Name it: "Code" (or "Prepare Email for AI")
@@ -122,6 +128,9 @@ return {
 ## Step 8: AI Classification Node
 
 ### Configure the AI Model
+
+{: .note }
+> **Understanding LLM Chains**: The Basic LLM Chain combines three components: a language model (the AI), a prompt (your instructions), and an output parser (to structure the response). This modular approach lets you swap models or modify prompts without rebuilding the entire workflow.
 
 1. Add "Basic LLM Chain" node (under AI nodes)
 2. Configure initial settings:
@@ -202,6 +211,9 @@ Classify as:
 
 ### Create Decision Tree
 
+{: .note }
+> **What's a Switch Node?** Think of it as an intelligent traffic controller. It examines incoming data and routes it down different paths based on conditions you define. This enables your workflow to take different actions based on the email classification.
+
 1. Add "Switch" node after Basic LLM Chain
 2. Name it: "Route by Priority & Sentiment"
 3. Configure:
@@ -250,6 +262,9 @@ Classify as:
 ## Step 10: Gmail Label Application
 
 ### Apply Smart Labels
+
+{: .note }
+> **Why Multiple Gmail Nodes?** Each Switch output needs its own Gmail node to apply different labels. While this seems repetitive, it gives you precise control over what happens in each scenario. All paths will converge at the Edit Fields node later.
 
 **Prerequisites - Create Labels in Gmail:**
 
@@ -312,6 +327,9 @@ For each Switch output, add a Gmail node:
 
 ### Consolidate Email Classification Data
 
+{: .note }
+> **Understanding Edit Fields**: This node is like a data formatter. It takes information from multiple sources (email data from Code node, AI results from LLM Chain) and combines them into a single, clean dataset ready for storage.
+
 Before sending to Google Sheets, we need to combine the email metadata with the AI classification results.
 
 1. Add "Edit Fields" node (or "Set" node in newer versions)
@@ -351,6 +369,9 @@ Before sending to Google Sheets, we need to combine the email metadata with the 
 ## Step 12: Logging to Google Sheets
 
 ### Create Analytics Dashboard
+
+{: .note }
+> **Google Sheets as a Database**: For simple automation projects, Google Sheets acts as a free, visual database. It's perfect for logging, analytics, and sharing data with non-technical stakeholders who are comfortable with spreadsheets.
 
 **First, prepare your Google Sheet:**
 
