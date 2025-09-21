@@ -390,60 +390,23 @@ Before sending to Google Sheets, we need to combine the email metadata with the 
 
 ---
 
-## Step 13: Test Your Workflow
+## Step 13: Test & Activate Your Workflow
 
-### Complete Workflow Overview
-
-Your complete workflow should look like this:
-
-
-### Run Test
+### Test Your Workflow
 
 1. Click "Test Workflow" button in n8n
-
-2. Send test emails covering all scenarios:
-   - **Urgent support request**: Subject: "URGENT: Server is down!" Body: "Our production server has been down for 2 hours. Need immediate assistance!"
-   - **Sales inquiry**: Subject: "Interested in enterprise pricing" Body: "We're looking to purchase licenses for 500 users. Can you send pricing?"
-   - **Technical bug report**: Subject: "Bug found in login process" Body: "Users cannot log in with special characters in passwords."
-   - **HR policy question**: Subject: "Question about vacation policy" Body: "How many vacation days do new employees get?"
-   - **Angry customer complaint**: Subject: "Terrible service!" Body: "I've been waiting 3 days for a response. This is unacceptable!"
-
-3. Monitor the execution:
-   - Watch the workflow execute in real-time
-   - Click on each node to see the output data
-   - Verify the classification results match expectations
-
-### Verify Results
-
-Check that:
-
-- All nodes show green checkmarks (successful execution)
-- Gmail labels were applied correctly in your inbox
-- Classifications match the email content:
-  - Urgent emails → "urgent" priority
-  - Complaints → "angry" sentiment
-  - Questions → appropriate department routing
-- Data appears in Google Sheets with all fields populated
-- Confidence scores are reasonable (0.7-1.0 for clear cases)
-
----
-
-## Step 14: Activate Your Workflow
+2. Send yourself a test email with a clear subject like "URGENT: Test message"
+3. Wait for the workflow to execute (it checks Gmail every minute)
+4. Verify:
+   - The email received the correct Gmail label
+   - Data appeared in your Google Sheets log
 
 ### Go Live
 
-Once testing is complete:
+Once your test succeeds:
 
 1. Toggle the "Active" switch in the top-right corner of the workflow canvas
-
-2. Configure workflow settings (click workflow name → Settings):
-   - **Execution timeout**: 5 minutes
-   - **Retry on failure**: Yes (2 attempts)
-   - **Retry wait time**: 5 seconds
-   - **Save execution data**: Last 100 runs
-   - **Error Workflow**: Optional (for error notifications)
-
-3. Save the workflow (Ctrl/Cmd + S)
+2. Save the workflow (Ctrl/Cmd + S)
 
 Your workflow is now live and will automatically:
 
@@ -451,7 +414,6 @@ Your workflow is now live and will automatically:
 - Classify each email using AI
 - Apply appropriate labels
 - Log all classifications to Google Sheets
-- Handle errors gracefully with retries
 
 ---
 
