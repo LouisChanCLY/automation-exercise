@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test n8n Expressions</title>
+</head>
+<body>
+    <h2>Test: n8n Expression Rendering</h2>
+
+    <h3>Without raw tags (will be broken):</h3>
+    <code>{{ new Date().toISOString() }}</code>
+
+    <h3>With raw tags (should work):</h3>
+    <code>{% raw %}{{ new Date().toISOString() }}{% endraw %}</code>
+
+    <h3>Full example:</h3>
+    <ul>
+        {% raw %}
+        <li>Timestamp: <code>={{ new Date().toISOString() }}</code></li>
+        <li>Sender: <code>={{ $('Prepare Email for AI').item.json.sender }}</code></li>
+        <li>Priority: <code>={{ $json.priority }}</code></li>
+        {% endraw %}
+    </ul>
+</body>
+</html>

@@ -169,6 +169,8 @@ return {
 
 Return to the Basic LLM Chain node and enter this prompt in the "Prompt" text field (copy and paste exactly):
 
+{% raw %}
+
 ```
 Analyze this email and classify it. Return ONLY valid JSON.
 
@@ -183,6 +185,8 @@ Classify as:
 4. Action Required: true | false
 5. Confidence Score: 0.0-1.0
 ```
+
+{% endraw %}
 
    ![LLM Chain Prompt](./images/workflow/07-llm-chain-prompt.png)
 
@@ -208,7 +212,9 @@ Classify as:
 **Output 1 - Urgent:**
 
 - Click "+ Add Rule"
+{% raw %}
 - Left Value: `{{ $json.priority }}`
+{% endraw %}
 - Operator: equals
 - Right Value: `urgent`
 - Toggle "Rename Output" ON
@@ -217,7 +223,9 @@ Classify as:
 **Output 2 - High Priority:**
 
 - Click "+ Add Rule"
+{% raw %}
 - Left Value: `{{ $json.priority }}`
+{% endraw %}
 - Operator: equals
 - Right Value: `high`
 - Toggle "Rename Output" ON
@@ -226,7 +234,9 @@ Classify as:
 **Output 3 - Angry Customer:**
 
 - Click "+ Add Rule"
+{% raw %}
 - Left Value: `{{ $json.sentiment }}`
+{% endraw %}
 - Operator: equals
 - Right Value: `angry`
 - Toggle "Rename Output" ON
@@ -235,7 +245,9 @@ Classify as:
 **Output 4 - Low Priority:**
 
 - Click "+ Add Rule"
+{% raw %}
 - Left Value: `{{ $json.priority }}`
+{% endraw %}
 - Operator: equals
 - Right Value: `low`
 - Toggle "Rename Output" ON
@@ -268,7 +280,9 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "Urgent" output
 2. Configure:
    - Operation: "Label Add"
+{% raw %}
    - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
+{% endraw %}
    - Labels: Select "URGENT-SUPPORT" from dropdown
 
 **For High Priority Output:**
@@ -276,7 +290,9 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "High Priority" output
 2. Configure:
    - Operation: "Label Add"
+{% raw %}
    - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
+{% endraw %}
    - Labels: Select "HIGH-PRIORITY" from dropdown
 
 **For Angry Customers Output:**
@@ -284,7 +300,9 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "Angry Customers" output
 2. Configure:
    - Operation: "Label Add"
+{% raw %}
    - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
+{% endraw %}
    - Labels: Select "ANGRY-CUSTOMER" from dropdown
 
 **For Low Priority Output:**
@@ -292,7 +310,9 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "Low Priority" output
 2. Configure:
    - Operation: "Label Add"
+{% raw %}
    - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
+{% endraw %}
    - Labels: Select "LOW-PRIORITY" from dropdown
 
 **For Fallback (Extra) Output:**
@@ -300,7 +320,9 @@ For each Switch output, add a Gmail node:
 1. Add "Gmail" node connected to the "extra" output
 2. Configure:
    - Operation: "Label Add"
+{% raw %}
    - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
+{% endraw %}
    - Labels: Select "STANDARD-PROCESSING" from dropdown
 
 ---
@@ -319,6 +341,8 @@ For each Switch output, add a Gmail node:
 
 4. Map data fields by clicking "Add Field" for each:
 
+{% raw %}
+
 - **Timestamp**: `={{ new Date().toISOString() }}`
 - **Sender**: `={{ $('Prepare Email for AI').item.json.sender }}`
 - **Subject**: `={{ $('Prepare Email for AI').item.json.subject }}`
@@ -328,6 +352,7 @@ For each Switch output, add a Gmail node:
 - **Action Required**: `={{ $json.actionRequired }}`
 - **Confidence**: `={{ $json.confidence }}`
 - **Reasoning**: `={{ $json.reasoning }}`
+{% endraw %}
 
 ---
 
