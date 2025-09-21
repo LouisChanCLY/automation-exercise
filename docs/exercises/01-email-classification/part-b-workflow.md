@@ -193,6 +193,9 @@ Classify as:
 {: .important }
 > **Critical**: Copy this prompt exactly as shown above, including the spaces inside `{{ }}`. These field references pull data from the "Prepare Email for AI" node. The prompt should appear in n8n's interface with the variable references highlighted in a different colour.
 
+{: .tip }
+> **Save API Tokens During Development**: After testing the Basic LLM Chain node once, click the pin icon 📌 in the output panel to save the result. This prevents repeated API calls (and token consumption) while you build the rest of your workflow. Remember to unpin before going live!
+
 ---
 
 ## Step 9: Routing with Switch Node
