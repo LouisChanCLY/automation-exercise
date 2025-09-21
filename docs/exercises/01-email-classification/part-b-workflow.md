@@ -341,7 +341,7 @@ Before sending to Google Sheets, we need to combine the email metadata with the 
 {% endraw %}
 
 {: .note }
-> **Why Edit Fields?** This node consolidates all data paths from the Switch node into a single stream for Google Sheets.
+> **Why Edit Fields?** This node consolidates all data paths from the Switch node into a single stream for Google Sheets. This is crucial for API optimization - instead of making multiple Google Sheets API calls from different branches, we make just one call per email processed.
 
 ---
 
@@ -384,6 +384,9 @@ Before sending to Google Sheets, we need to combine the email metadata with the 
 
 {: .note }
 > **Auto-Mapping**: Since we prepared all fields in the Edit Fields node with matching column names, Google Sheets will automatically map them to the correct columns.
+
+{: .important }
+> **API Rate Limits**: Google Sheets has quota limits (300 requests per minute for free accounts). By consolidating all paths through Edit Fields into a single Google Sheets node, we ensure only one API call per email, preventing rate limit errors even during high email volumes.
 
 ---
 
