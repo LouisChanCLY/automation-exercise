@@ -242,17 +242,6 @@ Classify as:
 - Toggle "Rename Output" ON
 - Output Name: "Angry Customers"
 
-**Output 4 - Low Priority:**
-
-- Click "+ Add Rule"
-{% raw %}
-- Left Value: `{{ $json.priority }}`
-{% endraw %}
-- Operator: equals
-- Right Value: `low`
-- Toggle "Rename Output" ON
-- Output Name: "Low Priority"
-
 ---
 
 ## Step 10: Gmail Label Application
@@ -268,7 +257,6 @@ Classify as:
    - URGENT-SUPPORT
    - HIGH-PRIORITY
    - ANGRY-CUSTOMER
-   - LOW-PRIORITY
    - STANDARD-PROCESSING
 
 **Configure Gmail Nodes in n8n:**
@@ -304,16 +292,6 @@ For each Switch output, add a Gmail node:
    - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
 {% endraw %}
    - Labels: Select "ANGRY-CUSTOMER" from dropdown
-
-**For Low Priority Output:**
-
-1. Add "Gmail" node connected to the "Low Priority" output
-2. Configure:
-   - Operation: "Label Add"
-{% raw %}
-   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
-{% endraw %}
-   - Labels: Select "LOW-PRIORITY" from dropdown
 
 **For Fallback (Extra) Output:**
 
