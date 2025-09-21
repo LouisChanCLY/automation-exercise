@@ -80,7 +80,7 @@ Now we'll build, test, and activate the automation workflow. This section takes 
 ### Extract and Clean Email Content
 
 1. Add "Code" node after Gmail Trigger (click the + on the connection)
-2. Name it: "Prepare Email for AI"
+2. Name it: "Code" (or "Prepare Email for AI")
 3. Configure:
    - **Mode**: "Run Once for Each Item"
    - **Language**: "Javascript"
@@ -305,36 +305,89 @@ For each Switch output, add a Gmail node:
 
 ---
 
-## Step 11: Logging to Google Sheets
+## Step 11: Prepare Data for Logging
 
-### Create Analytics Dashboard
+### Consolidate Email Classification Data
 
-1. Add "Google Sheets" node at the end of your workflow
-2. When prompted, connect your Google account (similar to Gmail OAuth)
-3. Configure the node:
-   - **Operation**: "Append"
-   - **Document**: Select or create "Email Classification Log"
-   - **Sheet**: "Sheet1"
-   - **Options**: Toggle "Data Property Name" OFF
+Before sending to Google Sheets, we need to combine the email metadata with the AI classification results.
 
-4. Map data fields by clicking "Add Field" for each:
+1. Add "Edit Fields" node (or "Set" node in newer versions)
+2. Connect all Gmail label nodes to this single Edit Fields node
+3. Configure:
+   - **Mode**: "Manual Mapping"
+   - **Keep Only Set**: Toggle OFF
+
+4. Add these field assignments:
 
 {% raw %}
+**Email Metadata Fields:**
 
-- **Timestamp**: `={{ new Date().toISOString() }}`
-- **Sender**: `={{ $('Prepare Email for AI').item.json.sender }}`
-- **Subject**: `={{ $('Prepare Email for AI').item.json.subject }}`
-- **Priority**: `={{ $json.priority }}`
-- **Sentiment**: `={{ $json.sentiment }}`
-- **Department**: `={{ $json.department }}`
-- **Action Required**: `={{ $json.actionRequired }}`
-- **Confidence**: `={{ $json.confidence }}`
-- **Reasoning**: `={{ $json.reasoning }}`
+- `messageId` → `={{ $('Code').item.json.messageId }}`
+- `threadId` → `={{ $('Code').item.json.threadId }}`
+- `receivedDate` → `={{ $('Code').item.json.receivedDate }}`
+- `sender` → `={{ $('Code').item.json.sender }}`
+- `senderName` → `={{ $('Code').item.json.senderName }}`
+- `subject` → `={{ $('Code').item.json.subject }}`
+- `processed_date` → `={{ DateTime.now().toISO() }}`
+
+**AI Classification Fields:**
+
+- `priority` → `={{ $('Basic LLM Chain').item.json.output.priority }}`
+- `sentiment` → `={{ $('Basic LLM Chain').item.json.output.sentiment }}`
+- `department` → `={{ $('Basic LLM Chain').item.json.output.department }}`
+- `actionRequired` → `={{ $('Basic LLM Chain').item.json.output.actionRequired }}` (Set Type: Boolean)
+- `confidence` → `={{ $('Basic LLM Chain').item.json.output.confidence }}` (Set Type: Number)
+- `reasoning` → `={{ $('Basic LLM Chain').item.json.output.reasoning }}`
 {% endraw %}
+
+{: .note }
+> **Why Edit Fields?** This node consolidates all data paths from the Switch node into a single stream for Google Sheets.
 
 ---
 
-## Step 12: Test Your Workflow
+## Step 12: Logging to Google Sheets
+
+### Create Analytics Dashboard
+
+**First, prepare your Google Sheet:**
+
+1. Go to [Google Sheets](https://sheets.google.com)
+2. Create a new spreadsheet named "Email Classification Log"
+3. In the first row, add these column headers:
+   - messageId
+   - threadId
+   - receivedDate
+   - sender
+   - senderName
+   - subject
+   - processed_date
+   - priority
+   - sentiment
+   - department
+   - actionRequired
+   - confidence
+   - reasoning
+
+**Then configure the Google Sheets node in n8n:**
+
+1. Add "Google Sheets" node connected to the Edit Fields node
+2. Name it: "Append row in sheet"
+3. When prompted, connect your Google account (similar to Gmail OAuth)
+4. Configure the node:
+   - **Operation**: "Append"
+   - **Document**: Select "Email Classification Log" from dropdown
+   - **Sheet**: "Sheet1"
+   - **Mapping Mode**: "Auto-Map Input Data"
+   - **Options**:
+     - Toggle "Use Append" ON
+     - Toggle "Data Property Name" OFF
+
+{: .note }
+> **Auto-Mapping**: Since we prepared all fields in the Edit Fields node with matching column names, Google Sheets will automatically map them to the correct columns.
+
+---
+
+## Step 13: Test Your Workflow
 
 ### Complete Workflow Overview
 
@@ -372,7 +425,7 @@ Check that:
 
 ---
 
-## Step 13: Activate Your Workflow
+## Step 14: Activate Your Workflow
 
 ### Go Live
 
@@ -407,5 +460,34 @@ Workflow complete! You've successfully:
 - ✅ Integrated AI for intelligent routing
 - ✅ Tested with real emails
 - ✅ Activated automatic processing
+
+---
+
+## Download Complete Workflow
+
+### Import Pre-Built Template
+
+Save time by importing our complete workflow:
+
+1. Download the workflow JSON file:
+   - [📥 Download Email Classification Workflow](./downloads/email-classification-workflow.json)
+
+2. Import into n8n:
+   - Open n8n
+   - Click "Workflows" → "Import"
+   - Select the downloaded JSON file
+   - Click "Import"
+
+3. Update credentials:
+   - Gmail OAuth2 connection
+   - OpenRouter API key
+   - Google Sheets OAuth2 connection
+
+4. Update label IDs:
+   - Check your Gmail label IDs
+   - Update in each Gmail node
+
+{: .warning }
+> **Important**: The imported workflow uses placeholder credentials. You must update them with your own before testing.
 
 Ready for more? Try the [Challenge Tasks →](./challenge-tasks)

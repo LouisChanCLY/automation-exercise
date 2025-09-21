@@ -1,0 +1,550 @@
+{
+  "name": "Email Classification & Routing",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -928,
+        -144
+      ],
+      "id": "3425285e-d975-444e-86a0-302bf9c0a653",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Gmail - Personal"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Extract and clean email data\nconst emailData = {\n  sender: $input.item.json.from.value[0].address,\n  senderName: $input.item.json.from.value[0].name || 'Unknown',\n  subject: $input.item.json.subject,\n  body: $input.item.json.text || $input.item.json.snippet,\n  receivedDate: $input.item.json.date,\n  messageId: $input.item.json.id,\n  threadId: $input.item.json.threadId\n};\n\n// Clean body text (remove signatures, quotes)\nemailData.cleanBody = emailData.body\n  .split(/\\r?\\n-- \\r?\\n/)[0]  // Remove signature\n  .split(/On .+ wrote:/)[0]    // Remove quoted text\n  .trim();\n\n// Truncate for API limits (first 1000 chars)\nemailData.truncatedBody = emailData.cleanBody.substring(0, 1000);\n\nreturn {\n  json: emailData\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -704,
+        -144
+      ],
+      "id": "6d0eaa83-c115-43ac-aba7-180427f6effa",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this email and classify it. Return ONLY valid JSON.\n\nEmail from: {{ $json.senderName }} <{{ $json.sender }}>\nSubject: {{ $json.subject }}\nBody: {{ $json.truncatedBody }}\n\nClassify as:\n1. Priority: \"urgent\" | \"high\" | \"medium\" | \"low\"\n2. Sentiment: \"positive\" | \"neutral\" | \"negative\" | \"angry\"\n3. Department: \"sales\" | \"support\" | \"technical\" | \"hr\" | \"finance\" | \"other\"\n4. Action Required: true | false\n5. Confidence Score: 0.0-1.0",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -496,
+        -144
+      ],
+      "id": "30f7b81d-9fa3-4b90-8b6f-b77b404124ef",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "google/gemma-3-27b-it:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        272
+      ],
+      "id": "80cefe21-396e-49ac-8d89-e9674b25ab70",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "OpenRouter - Free Tier"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"priority\": {\n      \"type\": \"string\",\n      \"enum\": [\"urgent\", \"high\", \"medium\", \"low\"]\n    },\n    \"sentiment\": {\n      \"type\": \"string\",\n      \"enum\": [\"positive\", \"neutral\", \"negative\", \"angry\"]\n    },\n    \"department\": {\n      \"type\": \"string\",\n      \"enum\": [\"sales\", \"support\", \"technical\", \"hr\", \"finance\", \"other\"]\n    },\n    \"actionRequired\": {\n      \"type\": \"boolean\"\n    },\n    \"confidence\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"reasoning\": {\n      \"type\": \"string\",\n      \"minLength\": 10\n    }\n  },\n  \"required\": [\n    \"priority\",\n    \"sentiment\",\n    \"department\",\n    \"actionRequired\",\n    \"confidence\",\n    \"reasoning\"\n  ],\n  \"additionalProperties\": false\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -368,
+        64
+      ],
+      "id": "5f99f9af-df8e-4e96-847b-a808415f445a",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.priority }}",
+                    "rightValue": "urgent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Urgent"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.priority }}",
+                    "rightValue": "high",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "High Priority"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.sentiment }}",
+                    "rightValue": "angry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Angry Customers"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -80,
+        -192
+      ],
+      "id": "c1fa65ba-1646-4544-856b-c23a0aa8e9a7",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Code').item.json.messageId }}",
+        "labelIds": [
+          "REPLACE_WITH_STANDARD_PROCESSING_LABEL_ID"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        48
+      ],
+      "id": "7c415afa-6d74-4604-9317-0208f63ff553",
+      "name": "Gmail - Standard Processing",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Gmail - Personal"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Code').item.json.messageId }}",
+        "labelIds": [
+          "REPLACE_WITH_ANGRY_CUSTOMER_LABEL_ID"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        -96
+      ],
+      "id": "1cf28abd-ad30-4e30-82f6-57a5966795a0",
+      "name": "Gmail - Angry Customer",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Gmail - Personal"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Code').item.json.messageId }}",
+        "labelIds": [
+          "REPLACE_WITH_HIGH_PRIORITY_LABEL_ID"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        -240
+      ],
+      "id": "d566370c-5807-468f-a003-88db8c30221e",
+      "name": "Gmail - High Priority",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Gmail - Personal"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Code').item.json.messageId }}",
+        "labelIds": [
+          "REPLACE_WITH_URGENT_SUPPORT_LABEL_ID"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        -384
+      ],
+      "id": "728b25ec-5e5c-4c99-a31e-023e13a46b49",
+      "name": "Gmail - Urgent Support",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Gmail - Personal"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "messageId",
+              "value": "={{ $('Code').item.json.messageId }}",
+              "type": "string"
+            },
+            {
+              "name": "threadId",
+              "value": "={{ $('Code').item.json.threadId }}",
+              "type": "string"
+            },
+            {
+              "name": "receivedDate",
+              "value": "={{ $('Code').item.json.receivedDate }}",
+              "type": "string"
+            },
+            {
+              "name": "sender",
+              "value": "={{ $('Code').item.json.sender }}",
+              "type": "string"
+            },
+            {
+              "name": "senderName",
+              "value": "={{ $('Code').item.json.senderName }}",
+              "type": "string"
+            },
+            {
+              "name": "subject",
+              "value": "={{ $('Code').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "name": "processed_date",
+              "value": "={{ DateTime.now().toISO() }}",
+              "type": "string"
+            },
+            {
+              "name": "priority",
+              "value": "={{ $('Basic LLM Chain').item.json.output.priority }}",
+              "type": "string"
+            },
+            {
+              "name": "sentiment",
+              "value": "={{ $('Basic LLM Chain').item.json.output.sentiment }}",
+              "type": "string"
+            },
+            {
+              "name": "department",
+              "value": "={{ $('Basic LLM Chain').item.json.output.department }}",
+              "type": "string"
+            },
+            {
+              "name": "actionRequired",
+              "value": "={{ $('Basic LLM Chain').item.json.output.actionRequired }}",
+              "type": "boolean"
+            },
+            {
+              "name": "confidence",
+              "value": "={{ $('Basic LLM Chain').item.json.output.confidence }}",
+              "type": "number"
+            },
+            {
+              "name": "reasoning",
+              "value": "={{ $('Basic LLM Chain').item.json.output.reasoning }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        -192
+      ],
+      "id": "224efd66-9fc2-4ad1-93d6-e2bf237ce39a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        864,
+        -192
+      ],
+      "id": "423cab2f-8779-4906-ab61-8a73f85cd616",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Google Sheets - Personal"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Urgent Support",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - High Priority",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Angry Customer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Standard Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Standard Processing": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Angry Customer": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - High Priority": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Urgent Support": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "automation-exercises-template"
+  }
+}

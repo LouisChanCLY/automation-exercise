@@ -14,7 +14,7 @@ This course contains 30+ practical exercises that teach you to:
 
 ## 🚀 Quick Start
 
-**Ready to begin?** Start with [Exercise 1: Email Classification](https://louischancly.github.io/automation-exercises/exercises/01-email-classification/)
+**Ready to begin?** Start with [Exercise 1: Email Classification](https://louischancly.github.io/automation-exercises/exercises/01-email-classification/index)
 
 Each exercise includes:
 
