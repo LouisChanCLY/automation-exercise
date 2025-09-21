@@ -29,6 +29,24 @@ This exercise teaches you to build a production-ready email automation system th
 - **Intelligent routing system** based on priority and sentiment
 - **Automated labeling** for inbox organization
 
+### The Universal Pattern
+
+You're learning the **Intelligent Triage & Routing** pattern:
+
+```
+[Data Source] → [AI Analysis] → [Smart Routing] → [Different Actions]
+```
+
+**Today's Implementation:**
+
+- Gmail → AI Classification → Switch Node → Labels & Logging
+
+**Tomorrow's Applications:**
+
+- Support Tickets → Categorization → Priority Routing → Team Assignment
+- Error Logs → Severity Analysis → Alert Rules → Incident Creation
+- Documents → Content Type → Approval Flow → Processing Pipeline
+
 ### Exercise Structure
 
 <div class="grid">
