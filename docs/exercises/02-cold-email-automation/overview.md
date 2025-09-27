@@ -45,12 +45,24 @@ An AI-powered system that:
 
 You're learning the **AI Research & Personalization** archetype:
 
-```
-[Trigger] → [Research Phase] → [Generation Phase] → [Execution] → [Analytics]
-     ↓            ↓                    ↓                ↓            ↓
-   Form      Perplexity AI      Content Creation    Email Send   Track Results
-   API       Web Search         Document Gen        SMS/Slack    Database
-   CRM       Database Query     Proposal Build      API Call     Dashboard
+```mermaid
+graph TD
+    T[Trigger] --> R[Research Phase]
+    R --> G[Generation Phase]
+    G --> E[Execution]
+    E --> A[Analytics]
+
+    T -.-> T1[Form<br/>API<br/>CRM]
+    R -.-> R1[Perplexity AI<br/>Web Search<br/>Database Query]
+    G -.-> G1[Content Creation<br/>Document Gen<br/>Proposal Build]
+    E -.-> E1[Email Send<br/>SMS/Slack<br/>API Call]
+    A -.-> A1[Track Results<br/>Database<br/>Dashboard]
+
+    style T fill:#e1f5fe
+    style R fill:#fff3e0
+    style G fill:#fff3e0
+    style E fill:#f3e5f5
+    style A fill:#e8f5e9
 ```
 
 {: .important }

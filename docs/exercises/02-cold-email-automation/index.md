@@ -34,20 +34,58 @@ This exercise teaches you to build an AI-powered cold outreach system that combi
 
 You're learning the **AI Research & Personalization** pattern:
 
-```
-[Input] → [AI Research] → [AI Generation] → [Action] → [Analytics]
+```mermaid
+graph LR
+    A[Input] --> B[AI Research]
+    B --> C[AI Generation]
+    C --> D[Action]
+    D --> E[Analytics]
+
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#fff3e0
+    style D fill:#f3e5f5
+    style E fill:#e8f5e9
 ```
 
 **Today's Implementation:**
 
-- Form → Perplexity Research → Email Generation → Gmail Send → Sheets Log
+```mermaid
+graph LR
+    F[Form] --> PR[Perplexity Research]
+    PR --> EG[Email Generation]
+    EG --> GS[Gmail Send]
+    GS --> SL[Sheets Log]
+```
 
 **Tomorrow's Applications:**
 
-- LinkedIn Profile → Company Research → Connection Request → CRM Update
-- Job Posting → Company Culture Research → Cover Letter → Application Submit
-- Customer Data → Market Research → Proposal Generation → Slack Notification
-- Event Registration → Attendee Research → Personalized Follow-up → Database Entry
+```mermaid
+graph TD
+    subgraph "LinkedIn Outreach"
+        LP[LinkedIn Profile] --> CR1[Company Research]
+        CR1 --> CNR[Connection Request]
+        CNR --> CRM[CRM Update]
+    end
+
+    subgraph "Job Applications"
+        JP[Job Posting] --> CCR[Company Culture Research]
+        CCR --> CL[Cover Letter]
+        CL --> AS[Application Submit]
+    end
+
+    subgraph "Sales Pipeline"
+        CD[Customer Data] --> MR[Market Research]
+        MR --> PG[Proposal Generation]
+        PG --> SN[Slack Notification]
+    end
+
+    subgraph "Event Follow-up"
+        ER[Event Registration] --> AR[Attendee Research]
+        AR --> PF[Personalised Follow-up]
+        PF --> DE[Database Entry]
+    end
+```
 
 ### Exercise Structure
 

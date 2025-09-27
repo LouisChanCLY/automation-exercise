@@ -325,12 +325,28 @@ sent_status: "sent"
 
 Connect nodes in this sequence:
 
-```
-Form Trigger → Research Agent → Email Agent → Gmail → Enrich → Sheets
-                      ↓                ↓
-                 Perplexity Tool   Output Parser
-                      ↓                ↓
-                 Gemini Model     Gemini Model
+```mermaid
+graph LR
+    FT[Form Trigger] --> RA[Research Agent]
+    RA --> EA[Email Agent]
+    EA --> GM[Gmail]
+    GM --> EN[Enrich]
+    EN --> SH[Sheets]
+
+    RA -.-> PT[Perplexity Tool]
+    PT -.-> G1[Gemini Model]
+
+    EA -.-> OP[Output Parser]
+    OP -.-> G2[Gemini Model]
+
+    style FT fill:#e1f5fe
+    style RA fill:#fff3e0
+    style EA fill:#fff3e0
+    style GM fill:#f3e5f5
+    style EN fill:#ffe0b2
+    style SH fill:#e8f5e9
+    style PT fill:#fffde7
+    style OP fill:#fffde7
 ```
 
 ---

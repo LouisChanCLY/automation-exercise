@@ -33,19 +33,49 @@ This exercise teaches you to build a production-ready email automation system th
 
 You're learning the **Intelligent Triage & Routing** pattern:
 
-```
-[Data Source] → [AI Analysis] → [Smart Routing] → [Different Actions]
+```mermaid
+graph LR
+    A[Data Source] --> B[AI Analysis]
+    B --> C[Smart Routing]
+    C --> D[Different Actions]
+
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e9
 ```
 
 **Today's Implementation:**
 
-- Gmail → AI Classification → Switch Node → Labels & Logging
+```mermaid
+graph LR
+    A1[Gmail] --> B1[AI Classification]
+    B1 --> C1[Switch Node]
+    C1 --> D1[Labels & Logging]
+```
 
 **Tomorrow's Applications:**
 
-- Support Tickets → Categorization → Priority Routing → Team Assignment
-- Error Logs → Severity Analysis → Alert Rules → Incident Creation
-- Documents → Content Type → Approval Flow → Processing Pipeline
+```mermaid
+graph TD
+    subgraph "Support System"
+        ST[Support Tickets] --> CAT[Categorization]
+        CAT --> PR[Priority Routing]
+        PR --> TA[Team Assignment]
+    end
+
+    subgraph "Error Monitoring"
+        EL[Error Logs] --> SA[Severity Analysis]
+        SA --> AR[Alert Rules]
+        AR --> IC[Incident Creation]
+    end
+
+    subgraph "Document Processing"
+        DOC[Documents] --> CT[Content Type]
+        CT --> AF[Approval Flow]
+        AF --> PP[Processing Pipeline]
+    end
+```
 
 ### Exercise Structure
 
