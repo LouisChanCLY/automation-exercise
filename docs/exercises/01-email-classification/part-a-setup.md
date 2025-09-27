@@ -24,7 +24,7 @@ nav_order: 2
 This section covers the specific setup needed for the email classification exercise.
 
 {: .important }
-> **Prerequisites First**: If you haven't completed the [Common Prerequisites](/common-prerequisites), do that first. It covers Google Cloud Console, OAuth setup, and API keys you'll need across all exercises.
+> **Prerequisites First**: If you haven't completed the [Common Prerequisites](../../common-prerequisites), do that first. It covers Google Cloud Console, OAuth setup, and API keys you'll need across all exercises.
 
 ---
 
@@ -37,7 +37,7 @@ From the Common Prerequisites, ensure you have:
 - ✅ OpenRouter API key
 - ✅ n8n instance running
 
-If any are missing, complete the [Common Prerequisites](/common-prerequisites) first.
+If any are missing, complete the [Common Prerequisites](../../common-prerequisites) first.
 
 ---
 
@@ -52,7 +52,7 @@ If you completed the Common Prerequisites:
 
 If you haven't set up n8n yet:
 
-1. Follow the [n8n Platform Setup](/common-prerequisites#n8n-platform-setup) guide
+1. Follow the [n8n Platform Setup](../../common-prerequisites#n8n-platform-setup) guide
 2. Return here once complete
 
 {: .highlight }
@@ -74,7 +74,7 @@ From the Common Prerequisites, you should have your OpenRouter API key.
 4. Click "Create"
 
 {: .note }
-> **No API Key?** Complete [OpenRouter Setup](/common-prerequisites#openrouter-setup) first.
+> **No API Key?** Complete [OpenRouter Setup](../../common-prerequisites#openrouter-setup) first.
 
 ---
 
@@ -101,7 +101,7 @@ From the Common Prerequisites, you should have:
 7. Click "Save"
 
 {: .note }
-> **Missing OAuth Credentials?** Complete [Google Cloud Console Setup](/common-prerequisites#google-cloud-console-setup) first.
+> **Missing OAuth Credentials?** Complete [Google Cloud Console Setup](../../common-prerequisites#google-cloud-console-setup) first.
 
 {: .highlight }
 > **Success**: You should see "Connection Established" in n8n.
@@ -140,7 +140,7 @@ For the classification system to work, create these labels in Gmail:
 | "Redirect URI mismatch" | Ensure n8n URL matches exactly in Google Cloud |
 
 {: .tip }
-> **Need Help?** Check the [Common Prerequisites Troubleshooting](/common-prerequisites#troubleshooting) for detailed solutions.
+> **Need Help?** Check the [Common Prerequisites Troubleshooting](../../common-prerequisites#troubleshooting) for detailed solutions.
 
 ---
 

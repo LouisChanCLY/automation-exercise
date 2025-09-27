@@ -338,9 +338,9 @@ Once in n8n, add all your credentials:
 
 With prerequisites complete, you're ready to begin any exercise:
 
-- [Exercise 1: Email Classification](./exercises/01-email-classification/) - Start here
-- [Exercise 2: Cold Email Automation](./exercises/02-cold-email-automation/) - AI research & personalisation
-- [View All Exercises](./exercises/) - Browse the complete curriculum
+- [Exercise 1: Email Classification](../exercises/01-email-classification/) - Start here
+- [Exercise 2: Cold Email Automation](../exercises/02-cold-email-automation/) - AI research & personalisation
+- [View All Exercises](../exercises/) - Browse the complete curriculum
 
 {: .highlight }
 > **Pro Tip**: Bookmark this page - you'll reference these credentials in every exercise!

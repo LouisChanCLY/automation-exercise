@@ -24,7 +24,7 @@ nav_order: 2
 This section covers the specific setup needed for the cold email automation exercise.
 
 {: .important }
-> **Prerequisites First**: If you haven't completed the [Common Prerequisites](/common-prerequisites), do that first. It covers Google Cloud Console, OAuth setup, and core services you'll need.
+> **Prerequisites First**: If you haven't completed the [Common Prerequisites](../../common-prerequisites), do that first. It covers Google Cloud Console, OAuth setup, and core services you'll need.
 
 ### Additional Services for This Exercise
 
@@ -47,7 +47,7 @@ From the Common Prerequisites, ensure you have:
 - ✅ Gmail connected to n8n
 - ✅ Google Sheets connected to n8n
 
-If any are missing, complete the [Common Prerequisites](/common-prerequisites) first.
+If any are missing, complete the [Common Prerequisites](../../common-prerequisites) first.
 
 ---
 
@@ -57,7 +57,7 @@ If any are missing, complete the [Common Prerequisites](/common-prerequisites) f
 
 If you haven't already set up Perplexity:
 
-1. Follow the [Perplexity API guide](/common-prerequisites#perplexity-api)
+1. Follow the [Perplexity API guide](../../common-prerequisites#perplexity-api)
 2. Return here with your API key
 
 If you have your Perplexity API key:
@@ -80,7 +80,7 @@ If you have your Perplexity API key:
 
 If you haven't set up Gemini:
 
-1. Follow the [Google Gemini guide](/common-prerequisites#google-gemini-free-tier)
+1. Follow the [Google Gemini guide](../../common-prerequisites#google-gemini-free-tier)
 2. Return here with your API key
 
 If you have your Gemini API key:
@@ -109,7 +109,7 @@ From the Common Prerequisites, you should already have:
 
 If not configured:
 
-1. Complete [Google Cloud Console Setup](/common-prerequisites#google-cloud-console-setup)
+1. Complete [Google Cloud Console Setup](../../common-prerequisites#google-cloud-console-setup)
 2. Add Gmail OAuth credential to n8n
 3. Add Google Sheets OAuth credential to n8n
 
@@ -151,7 +151,7 @@ In your n8n instance, confirm these credentials are configured:
 
 | Service | Credential Name | Setup Guide |
 |---------|----------------|-------------|
-| **Gmail** | `Google - All Services` | [Common Prerequisites](/common-prerequisites#google-oauth2-gmail--sheets) |
+| **Gmail** | `Google - All Services` | [Common Prerequisites](../../common-prerequisites#google-oauth2-gmail--sheets) |
 | **Google Sheets** | `Google - All Services` | Same OAuth credential as Gmail |
 | **Perplexity** | `Perplexity - Cold Email Research` | Step 2 above |
 | **Google Gemini** | `Gemini - AI Agents` | Step 3 above |
