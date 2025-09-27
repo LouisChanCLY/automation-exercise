@@ -29,7 +29,7 @@ nav_order: 3
 The pattern has four core components:
 
 1. **Data Ingestion** (Gmail Trigger) → Could be webhooks, forms, APIs, databases
-2. **AI Classification** (LLM Chain) → Categorize based on ANY criteria you define
+2. **AI Classification** (LLM Chain) → Categorise based on ANY criteria you define
 3. **Intelligent Routing** (Switch) → Send different types to different processes
 4. **Action & Logging** (Labels/Sheets) → Could be tickets, alerts, workflows, databases
 
@@ -60,7 +60,7 @@ The pattern has four core components:
 - **Actions**: Route for approval, auto-approve small amounts, flag anomalies
 
 {: .note }
-> **Why Email?** We use email classification as our example because everyone understands email. But once you grasp this pattern, you can apply it to any data stream in your organization.
+> **Why Email?** We use email classification as our example because everyone understands email. But once you grasp this pattern, you can apply it to any data stream in your organisation.
 
 Now we'll build this pattern step-by-step, and you'll see how easily each component can be swapped for your specific use case.
 
@@ -162,7 +162,7 @@ return {
 ```
 
 {: .note }
-> **Why clean the data?** AI models work better with clean, focused text without signatures or quoted content.
+> **Why clean the data?** AI models work better with clean, focussed text without signatures or quoted content.
 
 ---
 
@@ -217,7 +217,7 @@ In the Basic LLM Chain node, enter this prompt in the "Prompt" text field:
 {% raw %}
 
 ```
-Analyze this email and classify it. Return ONLY valid JSON.
+Analyse this email and classify it. Return ONLY valid JSON.
 
 Email from: {{ $json.senderName }} <{{ $json.sender }}>
 Subject: {{ $json.subject }}
@@ -416,7 +416,7 @@ Before sending to Google Sheets, we need to combine the email metadata with the 
 {% endraw %}
 
 {: .note }
-> **Why Edit Fields?** This node consolidates all data paths from the Switch node into a single stream for Google Sheets. This is crucial for API optimization - instead of making multiple Google Sheets API calls from different branches, we make just one call per email processed.
+> **Why Edit Fields?** This node consolidates all data paths from the Switch node into a single stream for Google Sheets. This is crucial for API optimisation - instead of making multiple Google Sheets API calls from different branches, we make just one call per email processed.
 
 ---
 

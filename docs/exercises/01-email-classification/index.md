@@ -14,7 +14,7 @@ Build an intelligent email classification system that automatically processes, c
 {: .fs-6 .fw-300 }
 
 [Start Exercise](./overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[Download Workflow](./downloads/email-classification-complete.json){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Download Workflow](./downloads/email-classification-workflow.json){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 

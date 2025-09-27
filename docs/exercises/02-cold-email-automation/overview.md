@@ -35,8 +35,8 @@ Cold outreach is broken. Generic templates get ignored. Manual personalization d
 An AI-powered system that:
 
 - Researches prospects automatically using Perplexity
-- Generates genuinely personalized emails based on real data
-- Maintains your authentic voice while scaling outreach
+- Generates genuinely personalised emails based on real data
+- Maintains your authentic voice whilst scaling outreach
 - Tracks everything for continuous improvement
 
 ---
@@ -72,9 +72,9 @@ By completing this exercise, you'll master:
 
 ### Business Applications
 
-- Scale personalized outreach from 10 to 1000+ contacts
+- Scale personalised outreach from 10 to 1000+ contacts
 - Reduce research time from 20 minutes to 20 seconds
-- Increase email open rates through genuine personalization
+- Increase email open rates through genuine personalisation
 - Build reusable templates for different outreach scenarios
 
 ---
@@ -83,21 +83,24 @@ By completing this exercise, you'll master:
 
 ### Visual Flow
 
-```
-┌─────────────┐     ┌──────────────┐     ┌──────────────┐
-│  Web Form   │────▶│  AI Research │────▶│   AI Email   │
-│   Trigger   │     │    Agent     │     │   Generator  │
-└─────────────┘     └──────────────┘     └──────────────┘
-                           │                      │
-                    ┌──────▼──────┐       ┌──────▼──────┐
-                    │  Perplexity │       │ Structured  │
-                    │     Tool    │       │   Output    │
-                    └─────────────┘       └─────────────┘
-                                                  │
-                    ┌─────────────┐       ┌──────▼──────┐
-                    │   Logging   │◀──────│    Gmail    │
-                    │   (Sheets)  │       │    Send     │
-                    └─────────────┘       └─────────────┘
+```mermaid
+graph LR
+    A[Web Form<br/>Trigger] --> B[AI Research<br/>Agent]
+    B --> C[AI Email<br/>Generator]
+
+    B -.-> D[Perplexity<br/>Tool]
+    C -.-> E[Structured<br/>Output]
+
+    C --> F[Gmail<br/>Send]
+    F --> G[Logging<br/>Sheets]
+
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#fff3e0
+    style F fill:#f3e5f5
+    style G fill:#e8f5e9
+    style D fill:#fffde7
+    style E fill:#fffde7
 ```
 
 ### Component Breakdown
@@ -117,25 +120,25 @@ By completing this exercise, you'll master:
 ### Sales & Business Development
 
 - Research prospects before demos
-- Personalize pitches based on company news
+- Personalise pitches based on company news
 - Follow up with relevant value propositions
 
 ### Recruiting & Talent
 
 - Research candidates' backgrounds
-- Personalize outreach to passive candidates
+- Personalise outreach to passive candidates
 - Tailor job descriptions to candidate interests
 
 ### Networking & Partnerships
 
 - Research conference attendees
-- Personalize connection requests
+- Personalise connection requests
 - Follow up with relevant collaboration ideas
 
 ### Content & Marketing
 
 - Research influencers for campaigns
-- Personalize partnership proposals
+- Personalise partnership proposals
 - Create targeted content suggestions
 
 ---
@@ -160,7 +163,7 @@ Your completed workflow will:
 
 - ✅ Accept form submissions with lead information
 - ✅ Research prospects in real-time using Perplexity
-- ✅ Generate personalized emails with <150 words
+- ✅ Generate personalised emails with <150 words
 - ✅ Send via Gmail automatically
 - ✅ Log all activity to Google Sheets
 - ✅ Process leads in under 30 seconds
@@ -169,6 +172,6 @@ Your completed workflow will:
 
 ## Ready to Build?
 
-You're about to create a system that turns cold outreach into warm conversations. This same pattern can be adapted for any scenario requiring intelligent research and personalization.
+You're about to create a system that turns cold outreach into warm conversations. This same pattern can be adapted for any scenario requiring intelligent research and personalisation.
 
 [Continue to Part A: Environment Setup →](./part-a-setup){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }

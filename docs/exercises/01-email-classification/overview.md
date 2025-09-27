@@ -54,8 +54,17 @@ By completing this exercise, you will:
 
 ### High-Level Overview
 
-```
-Gmail Inbox → n8n Trigger → AI Classification → Smart Actions → Logging
+```mermaid
+graph LR
+    A[Gmail Inbox] --> B[n8n Trigger]
+    B --> C[AI Classification]
+    C --> D[Smart Actions]
+    D --> E[Logging]
+
+    style A fill:#e1f5fe
+    style C fill:#fff3e0
+    style D fill:#f3e5f5
+    style E fill:#e8f5e9
 ```
 
 ### Data Flow Explanation
