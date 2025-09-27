@@ -1,0 +1,353 @@
+{
+  "name": "AI Cold Email Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lead Information",
+        "formDescription": "Enter prospect details for personalized outreach",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company",
+              "fieldType": "text",
+              "requiredField": false
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Key Points / Context",
+              "fieldType": "textarea",
+              "requiredField": true,
+              "placeholder": "What's your goal with this outreach?"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [112, 192],
+      "id": "2446bf70-cea6-43c4-a9da-4caabfcb9144",
+      "name": "On form submission",
+      "webhookId": "REPLACE_WITH_YOUR_WEBHOOK_ID"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Research the following person/company and find relevant information for a personalized cold email:\n\nName: {{ $json.Name }}\nCompany: {{ $json.Company }}\nEmail: {{ $json.Email }}\nContext: {{ $json['Key Points / Context'] }}\n\nUse the Perplexity tool to find:\n1. Recent news or achievements about them or their company\n2. Their business challenges or interests\n3. Common connections or shared interests\n4. Any relevant context for personalization\n\nProvide a concise research summary focusing on information useful for email personalization.",
+        "options": {
+          "systemMessage": "You are an expert researcher specializing in finding relevant information about prospects for cold outreach. Use the Perplexity tool to search for recent, relevant information that can help personalize the email.",
+          "maxIterations": 10,
+          "returnIntermediateSteps": false
+        }
+      },
+      "id": "035420f3-a913-4d2e-b8c6-2fb63a993884",
+      "name": "AI Agent - Research Prospect",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [336, 192]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Based on the research about {{ $('On form submission').item.json.Name }}, create a personalized cold email.\n\nResearch findings:\n{{ $('AI Agent - Research Prospect').item.json.output }}\n\nOriginal context: {{ $('On form submission').item.json['Key Points / Context'] }}\n\nCreate a cold email that:\n1. Opens with a personalized hook based on the research\n2. Shows understanding of their situation or interests\n3. Presents a clear value proposition\n4. Has a specific, low-commitment call-to-action\n5. Stays under 150 words\n6. Feels genuine and conversational, not templated\n\nFormat the output with clear sections for subject, hook, body, and CTA.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an expert cold email copywriter. Create distinct email components that will be assembled into a cohesive email. Focus on personalization and value.",
+          "maxIterations": 5,
+          "returnIntermediateSteps": false
+        }
+      },
+      "id": "85682f73-aef5-4028-8cfe-c89e289acb22",
+      "name": "AI Agent - Craft Email",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [704, 192]
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"subject\": {\n      \"type\": \"string\",\n      \"description\": \"Compelling subject line under 60 characters\"\n    },\n    \"hook\": {\n      \"type\": \"string\",\n      \"description\": \"Personalized opening line based on research\"\n    },\n    \"body\": {\n      \"type\": \"string\",\n      \"description\": \"Main value proposition and context\"\n    },\n    \"cta\": {\n      \"type\": \"string\",\n      \"description\": \"Specific call-to-action\"\n    }\n  },\n  \"required\": [\"subject\", \"hook\", \"body\", \"cta\"]\n}",
+        "autoFix": true
+      },
+      "id": "7e50fa8a-99b0-4cf3-9cd4-0f882fd875a3",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [688, 416]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "={{ $json.output.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.output.hook }}\n\n{{ $json.output.body }}\n\n{{ $json.output.cta }}\n\nBest regards,\n[Your Name]",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1040, 192],
+      "id": "f592acbb-af69-4fe1-9227-ee864c4a2479",
+      "name": "Send Email via Gmail",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Gmail - Outreach"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "timestamp",
+              "value": "={{ new Date().toISOString() }}",
+              "type": "string"
+            },
+            {
+              "name": "prospect_name",
+              "value": "={{ $('On form submission').item.json.Name }}",
+              "type": "string"
+            },
+            {
+              "name": "prospect_email",
+              "value": "={{ $('On form submission').item.json.Email }}",
+              "type": "string"
+            },
+            {
+              "name": "company",
+              "value": "={{ $('On form submission').item.json.Company }}",
+              "type": "string"
+            },
+            {
+              "name": "research_summary",
+              "value": "={{ $('AI Agent - Research Prospect').item.json.output }}",
+              "type": "string"
+            },
+            {
+              "name": "email_subject",
+              "value": "={{ $('AI Agent - Craft Email').item.json.output.subject }}",
+              "type": "string"
+            },
+            {
+              "name": "email_hook",
+              "value": "={{ $('AI Agent - Craft Email').item.json.output.hook }}",
+              "type": "string"
+            },
+            {
+              "name": "email_body",
+              "value": "={{ $('AI Agent - Craft Email').item.json.output.body }}",
+              "type": "string"
+            },
+            {
+              "name": "email_cta",
+              "value": "={{ $('AI Agent - Craft Email').item.json.output.cta }}",
+              "type": "string"
+            },
+            {
+              "name": "workflow_id",
+              "value": "={{ $execution.id }}",
+              "type": "string"
+            },
+            {
+              "name": "sent_status",
+              "value": "sent",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "458b5100-3146-457e-99fa-e026ef6cf112",
+      "name": "Enrich with Metadata",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1264, 192]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_YOUR_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "cb81b033-cb01-48de-bbc2-ff9aadc4eee3",
+      "name": "Log to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1488, 192],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Sheets - Tracking"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "sonar",
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexityTool",
+      "typeVersion": 1,
+      "position": [480, 576],
+      "id": "7dc38ba5-1efd-44ef-9175-53e8852e87af",
+      "name": "Perplexity Tool",
+      "credentials": {
+        "perplexityApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Perplexity - Research"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gemini-1.5-flash",
+        "options": {
+          "temperature": 0.7,
+          "maxOutputTokens": 2048
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [336, 576],
+      "id": "4ec4b1f6-1d45-4c2b-b2f2-eddfe4a2927f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Gemini - AI Agents"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Research Prospect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Research Prospect": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Craft Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Craft Email": {
+      "main": [
+        [
+          {
+            "node": "Send Email via Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent - Craft Email",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email via Gmail": {
+      "main": [
+        [
+          {
+            "node": "Enrich with Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich with Metadata": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perplexity Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent - Research Prospect",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Research Prospect",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent - Craft Email",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "automation-exercises-cold-email"
+  }
+}
