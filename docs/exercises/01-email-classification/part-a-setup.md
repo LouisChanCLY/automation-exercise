@@ -21,160 +21,110 @@ nav_order: 2
 
 ## Overview
 
-In this section, we'll set up all the accounts and credentials needed for our email classification system. This takes about 15 minutes and only needs to be done once.
-
----
-
-## Prerequisites
-
-### Required Accounts (Free Tiers Available)
-
-Before starting, ensure you have:
-
-- **Gmail account** with API access enabled
-- **n8n account** - [Sign up free](https://n8n.partnerlinks.io/gsl7xpbjua51)
-- **OpenRouter account** - [Sign up free](https://openrouter.ai)
-
-### Technical Requirements
-
-- Modern web browser (Chrome, Firefox, Safari)
-- Stable internet connection
-- 15 minutes of focused time
+This section covers the specific setup needed for the email classification exercise.
 
 {: .important }
-> **Note**: All services used in this exercise offer free tiers sufficient for learning purposes.
+> **Prerequisites First**: If you haven't completed the [Common Prerequisites](/common-prerequisites), do that first. It covers Google Cloud Console, OAuth setup, and API keys you'll need across all exercises.
 
 ---
 
-## Step 1: n8n Account Setup
+## What You'll Need
 
-### Create Your n8n Workspace
+From the Common Prerequisites, ensure you have:
 
-1. Navigate to [n8n.io](https://n8n.partnerlinks.io/gsl7xpbjua51)
-2. Click "Get started for free"
+- ✅ Google Cloud Project with Gmail API enabled
+- ✅ OAuth credentials configured
+- ✅ OpenRouter API key
+- ✅ n8n instance running
 
-   ![n8n Homepage](./images/setup/01-n8n-homepage.png)
+If any are missing, complete the [Common Prerequisites](/common-prerequisites) first.
 
-3. Create account with email verification
+---
 
-   ![n8n Signup Form](./images/setup/02-n8n-signup-form.png)
+## Step 1: Verify n8n Setup
 
-4. Choose workspace name (e.g., "ai-automation-course")
-5. Select the "Starter" plan for this exercise
+### Access Your Workspace
+
+If you completed the Common Prerequisites:
+
+1. Log into your n8n instance
+2. You should see the workflow canvas
+
+If you haven't set up n8n yet:
+
+1. Follow the [n8n Platform Setup](/common-prerequisites#n8n-platform-setup) guide
+2. Return here once complete
 
 {: .highlight }
 > **Checkpoint**: You should see the n8n workflow canvas
 
 ---
 
-## Step 2: OpenRouter API Setup
+## Step 2: Add OpenRouter to n8n
 
-### Get Your AI Access Token
+### Configure AI Model Access
 
-1. Open new tab: [openrouter.ai](https://openrouter.ai)
+From the Common Prerequisites, you should have your OpenRouter API key.
 
-   ![OpenRouter Homepage](./images/setup/03-openrouter-homepage.png)
-
-2. Sign up using Google/GitHub authentication
-3. Navigate to "API Keys" in dashboard
-4. Click "Create New Key"
-5. Name it "n8n-email-classifier"
-6. Copy and save the API key securely
-
-{: .warning }
-> **Important**: This key is shown only once. Save it in a password manager.
-
----
-
-## Step 3: Gmail API Configuration
-
-### Enable Gmail Access for Automation
-
-1. In n8n, click "Credentials" → "New"
-
-   ![Create Credential](./images/setup/05-n8n-create-credential.png)
-
-2. Search and select "Gmail OAuth2 API"
-
-   ![Select Gmail OAuth](./images/setup/06-n8n-select-gmail-oauth.png)
-
-3. You'll see the OAuth2 configuration screen
-4. Copy the OAuth Redirect URL shown (you'll need this for Google Cloud Console)
+1. In n8n, go to **Credentials** → **Add Credential**
+2. Search for "OpenRouter"
+3. Enter:
+   - **API Key**: Your OpenRouter key from prerequisites
+   - **Name**: `OpenRouter - Email Classification`
+4. Click "Create"
 
 {: .note }
-> **Why these permissions?** We need to read emails, apply labels, and mark as read.
+> **No API Key?** Complete [OpenRouter Setup](/common-prerequisites#openrouter-setup) first.
 
 ---
 
-## Step 4: Configure Google Cloud Console
+## Step 3: Connect Gmail to n8n
 
-### Set Up OAuth Credentials
+### Use Your Google OAuth Credentials
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing
-3. Enable Gmail API:
-   - Go to "APIs & Services" → "Library"
-   - Search for "Gmail API"
-   - Click "Enable"
+From the Common Prerequisites, you should have:
 
-   ![Gmail API Enable](./images/setup/04-gmail-api-enable.png)
+- Google Cloud Project with Gmail API enabled
+- OAuth Client ID and Secret
 
-4. Navigate to "APIs & Services" → "Credentials"
+1. In n8n, go to **Credentials** → **Add Credential**
+2. Search and select "Gmail OAuth2 API"
+3. Enter your credentials:
+   - **Client ID**: From Google Cloud Console
+   - **Client Secret**: From Google Cloud Console
+4. Click "Sign in with Google"
+5. Authorise the permissions:
+   - Read and modify emails
+   - Manage labels
+   - Mark emails as read
+6. Name it: `Gmail - Email Classification`
+7. Click "Save"
 
-   ![Google Cloud Credentials](./images/setup/07-google-cloud-credentials.png)
-
-5. Click "Create Credentials" → "OAuth client ID"
-
-   ![OAuth Client Type](./images/setup/08-oauth-client-type.png)
-
-6. If prompted, configure OAuth consent screen:
-   - User type: External
-   - App name: "n8n Email Automation"
-   - Support email: Your email
-   - Add scopes: Gmail API
-
-   ![OAuth Consent Screen](./images/setup/09-oauth-consent-screen.png)
-
-7. Create OAuth client:
-   - Application type: "Web application"
-   - Name: "n8n Gmail Integration"
-   - Authorized redirect URIs: Paste the URL from n8n (Step 3)
-
-   ![OAuth Redirect URI](./images/setup/10-oauth-redirect-uri.png)
-
-8. Copy the Client ID and Client Secret
-
-   ![OAuth Credentials Created](./images/setup/11-oauth-credentials-created.png)
-
-9. Return to n8n and paste:
-   - Client ID
-   - Client Secret
-
-   ![n8n Gmail Connected](./images/setup/12-n8n-gmail-connected.png)
-
-10. Click "Sign in with Google" and authorize the app
-
-   ![Google Authorization](./images/setup/13-google-authorization.png)
+{: .note }
+> **Missing OAuth Credentials?** Complete [Google Cloud Console Setup](/common-prerequisites#google-cloud-console-setup) first.
 
 {: .highlight }
-> **Success!** You should see "Connection successful"
+> **Success**: You should see "Connection Established" in n8n.
 
 ---
 
-## Step 5: OpenRouter Credential Setup
+## Step 4: Create Gmail Labels
 
-### Add AI Model Access
+### Prepare Your Inbox
 
-1. In n8n, go to "Credentials" → "New"
-2. Search for "OpenRouter"
-3. Select "OpenRouter API"
-4. Paste your API key from Step 2
-5. Name it "OpenRouter - Free Tier"
-6. Click "Save"
-7. Test the connection
+For the classification system to work, create these labels in Gmail:
 
-{: .highlight }
-> **Checkpoint**: Both Gmail and OpenRouter show "Connected"
+1. Open [Gmail](https://mail.google.com) in your browser
+2. Click the gear icon → "See all settings"
+3. Go to "Labels" tab
+4. Create these labels by clicking "Create new label":
+   - `URGENT-SUPPORT`
+   - `HIGH-PRIORITY`
+   - `ANGRY-CUSTOMER`
+   - `STANDARD-PROCESSING`
+
+{: .note }
+> **Why Labels?** The workflow will automatically apply these based on AI classification.
 
 ---
 
@@ -182,33 +132,29 @@ Before starting, ensure you have:
 
 ### Common Issues and Solutions
 
-#### Gmail Connection Fails
+| Problem | Solution |
+|---------|----------|
+| "Access blocked" in Gmail OAuth | Add your email to test users in Google Cloud Console |
+| "Scope not authorised" | Add Gmail scopes in OAuth consent screen |
+| "Invalid API key" for OpenRouter | Check for extra spaces, regenerate if needed |
+| "Redirect URI mismatch" | Ensure n8n URL matches exactly in Google Cloud |
 
-- **Issue**: "Access blocked" error
-- **Solution**: Enable "Less secure app access" in Google Account settings
-- **Alternative**: Use App Password if 2FA is enabled
-
-#### OpenRouter API Key Invalid
-
-- **Issue**: "Invalid API key" error
-- **Solution**: Regenerate key in OpenRouter dashboard
-- **Check**: No extra spaces when pasting
-
-#### n8n Canvas Not Loading
-
-- **Issue**: Blank screen after login
-- **Solution**: Clear browser cache and cookies
-- **Try**: Different browser or incognito mode
+{: .tip }
+> **Need Help?** Check the [Common Prerequisites Troubleshooting](/common-prerequisites#troubleshooting) for detailed solutions.
 
 ---
 
 ## Next Steps
 
-Environment setup complete! You now have:
+Setup complete! You now have:
 
-- ✅ n8n workspace created
+- ✅ n8n workspace accessible
+- ✅ Gmail OAuth connected via Google Cloud Console
 - ✅ OpenRouter API configured
-- ✅ Gmail OAuth connected
-- ✅ All credentials tested
+- ✅ Gmail labels created
+- ✅ All credentials tested and working
+
+{: .highlight }
+> **Ready to Build!** You've completed all setup. The OAuth approach you've learned will work for any Google service.
 
 Continue to [Part B: Build & Test →](./part-b-workflow)

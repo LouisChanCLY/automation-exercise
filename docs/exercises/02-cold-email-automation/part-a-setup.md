@@ -21,98 +21,106 @@ nav_order: 2
 
 ## Overview
 
-This setup phase takes about 20 minutes and prepares all the tools needed for AI-powered cold email automation.
+This section covers the specific setup needed for the cold email automation exercise.
 
-### What We'll Set Up
+{: .important }
+> **Prerequisites First**: If you haven't completed the [Common Prerequisites](/common-prerequisites), do that first. It covers Google Cloud Console, OAuth setup, and core services you'll need.
+
+### Additional Services for This Exercise
+
+Beyond the common prerequisites, you'll need:
 
 1. **Perplexity API** - For real-time web research
 2. **Google Gemini** - For AI agents (free tier)
-3. **Gmail OAuth** - For sending emails
-4. **Google Sheets** - For logging and analytics
-5. **n8n Workspace** - If not already configured
 
 ---
 
-## Step 1: Perplexity API Setup
+## Step 1: Verify Prerequisites
 
-### Create Your Research Account
+### Check Your Setup
 
-Perplexity provides real-time web search capabilities that our AI agent will use to research prospects.
+From the Common Prerequisites, ensure you have:
 
-1. Go to [Perplexity AI](https://www.perplexity.ai/)
-2. Click "Try Pro" or "API" in the navigation
-3. Navigate to [Perplexity API Settings](https://www.perplexity.ai/settings/api)
-4. Sign up for an API account (free tier available)
+- ✅ Google Cloud Project with Gmail & Sheets APIs enabled
+- ✅ OAuth credentials configured
+- ✅ n8n instance running
+- ✅ Gmail connected to n8n
+- ✅ Google Sheets connected to n8n
 
-### Generate API Key
-
-1. In your Perplexity dashboard, go to "API Keys"
-2. Click "Generate New Key"
-3. Name it: "n8n-cold-email"
-4. Copy and save the API key securely
-
-{: .warning }
-> **Important**: Perplexity offers $5 free credits monthly. This covers ~1000 research queries.
-
-### Understanding Perplexity Models
-
-- **Sonar**: Fast, efficient model for basic research (we'll use this)
-- **Sonar Pro**: Advanced reasoning for complex queries
-- **Online Models**: Include real-time web search results
+If any are missing, complete the [Common Prerequisites](/common-prerequisites) first.
 
 ---
 
-## Step 2: Google Gemini Setup
+## Step 2: Perplexity API Setup
 
-### Access Gemini API
+### Get Your Research API Key
 
-We'll use Google's Gemini for our AI agents as it offers a generous free tier.
+If you haven't already set up Perplexity:
 
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Sign in with your Google account
-3. Click "Get API Key"
-4. Select or create a Google Cloud project
-5. Click "Generate API Key"
-6. Copy and save the key
+1. Follow the [Perplexity API guide](/common-prerequisites#perplexity-api)
+2. Return here with your API key
 
-{: .highlight }
-> **Free Tier**: Gemini offers 60 requests per minute free - perfect for development!
+If you have your Perplexity API key:
 
----
-
-## Step 3: Gmail Configuration
-
-### Enable Gmail API
-
-If you completed Exercise 1, skip to "Create App Password". Otherwise:
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project: "n8n-automations"
-3. Enable Gmail API:
-   - Navigate to "APIs & Services" → "Library"
-   - Search for "Gmail API"
-   - Click "Enable"
-
-### Create App Password (Recommended)
-
-For simpler setup, use an App Password:
-
-1. Go to [Google Account Security](https://myaccount.google.com/security)
-2. Enable 2-factor authentication if not already enabled
-3. Search for "App passwords"
-4. Create new app password:
-   - App: Mail
-   - Device: n8n
-5. Copy the 16-character password
+1. In n8n, go to **Credentials** → **Add Credential**
+2. Search for "Perplexity"
+3. Enter:
+   - **API Key**: Your Perplexity key
+   - **Name**: `Perplexity - Cold Email Research`
+4. Click "Create"
 
 {: .note }
-> **OAuth vs App Password**: App passwords are simpler for testing. Use OAuth for production.
+> **Model Selection**: We'll use "sonar" for fast, efficient research
 
 ---
 
-## Step 4: Google Sheets Preparation
+## Step 3: Google Gemini Setup
 
-### Create Your Tracking Spreadsheet
+### Configure AI Agent Model
+
+If you haven't set up Gemini:
+
+1. Follow the [Google Gemini guide](/common-prerequisites#google-gemini-free-tier)
+2. Return here with your API key
+
+If you have your Gemini API key:
+
+1. In n8n, go to **Credentials** → **Add Credential**
+2. Search for "Google PaLM" (includes Gemini)
+3. Enter:
+   - **API Key**: Your Gemini key
+   - **Host**: `generativelanguage.googleapis.com`
+   - **Name**: `Gemini - AI Agents`
+4. Click "Create"
+
+{: .highlight }
+> **Why Gemini?**: Free tier with 60 req/min - perfect for AI agents!
+
+---
+
+## Step 4: Verify Gmail & Sheets Access
+
+### Confirm Google Services
+
+From the Common Prerequisites, you should already have:
+
+- Gmail OAuth connected to n8n
+- Google Sheets OAuth connected to n8n
+
+If not configured:
+
+1. Complete [Google Cloud Console Setup](/common-prerequisites#google-cloud-console-setup)
+2. Add Gmail OAuth credential to n8n
+3. Add Google Sheets OAuth credential to n8n
+
+{: .important }
+> **OAuth is Best Practice**: We use OAuth for professional, secure access to Google services. App passwords are deprecated and less secure.
+
+---
+
+## Step 5: Create Tracking Spreadsheet
+
+### Set Up Your Analytics
 
 1. Go to [Google Sheets](https://sheets.google.com)
 2. Create a new spreadsheet: "Cold Email Tracking"
@@ -130,74 +138,30 @@ For simpler setup, use an App Password:
    https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit
    ```
 
-### Enable Sheets API
-
-1. Return to Google Cloud Console
-2. Enable "Google Sheets API" (same process as Gmail)
-3. Your existing credentials will work for both
+{: .note }
+> **Sheets API**: Already enabled if you completed Common Prerequisites
 
 ---
 
-## Step 5: n8n Workspace
+## Summary: Required Credentials
 
-### Access Your Workspace
+### Verify All Services
 
-**If you completed Exercise 1:**
+In your n8n instance, confirm these credentials are configured:
 
-- Log into your existing n8n account
-- Your Gmail and Sheets credentials are already configured
+| Service | Credential Name | Setup Guide |
+|---------|----------------|-------------|
+| **Gmail** | `Google - All Services` | [Common Prerequisites](/common-prerequisites#google-oauth2-gmail--sheets) |
+| **Google Sheets** | `Google - All Services` | Same OAuth credential as Gmail |
+| **Perplexity** | `Perplexity - Cold Email Research` | Step 2 above |
+| **Google Gemini** | `Gemini - AI Agents` | Step 3 above |
 
-**If you're starting fresh:**
-
-1. Go to [n8n.cloud](https://n8n.cloud)
-2. Sign up for free account
-3. Verify your email
-4. Log into your workspace
-
-### Add Credentials in n8n
-
-Navigate to "Credentials" → "Add Credential" for each:
-
-#### Perplexity Credential
-
-1. Search for "Perplexity"
-2. Select "Perplexity API"
-3. Paste your API key
-4. Name: "Perplexity - Research"
-5. Click "Create"
-
-#### Google Gemini Credential
-
-1. Search for "Google Palm" (includes Gemini)
-2. Select "Google PaLM API"
-3. Enter:
-   - **API Key**: Your Gemini key
-   - **Host**: `generativelanguage.googleapis.com`
-4. Name: "Gemini - AI Agents"
-5. Click "Create"
-
-#### Gmail Credential (App Password Method)
-
-1. Search for "Gmail"
-2. Select "Gmail OAuth2 API"
-3. For App Password:
-   - Toggle to "Service Account or App Password"
-   - **Email**: Your Gmail address
-   - **Password**: Your 16-character app password
-4. Name: "Gmail - Outreach"
-5. Test and save
-
-#### Google Sheets Credential
-
-1. Search for "Google Sheets"
-2. Select "Google Sheets OAuth2 API"
-3. Follow OAuth flow (similar to Gmail)
-4. Name: "Sheets - Tracking"
-5. Test and save
+{: .note }
+> **Single OAuth**: One Google OAuth credential works for both Gmail and Sheets - that's the power of OAuth!
 
 ---
 
-## Step 6: Verify Setup
+## Step 6: Final Verification
 
 ### Credentials Checklist
 
@@ -205,7 +169,7 @@ Confirm all credentials show "Connected":
 
 - [ ] Perplexity API
 - [ ] Google Gemini
-- [ ] Gmail (OAuth or App Password)
+- [ ] Gmail (OAuth via Google Cloud Console)
 - [ ] Google Sheets
 - [ ] Spreadsheet created with headers
 
@@ -229,8 +193,9 @@ Confirm all credentials show "Connected":
 |-------|----------|
 | Perplexity "Invalid API Key" | Check for spaces, regenerate if needed |
 | Gemini "Quota Exceeded" | Wait 1 minute, you hit rate limit |
-| Gmail "Authentication Failed" | Ensure 2FA is on, recreate app password |
+| Gmail "Scope not authorised" | Add Gmail scopes in OAuth consent screen |
 | Sheets "File Not Found" | Check spreadsheet ID, ensure it's shared |
+| "Redirect URI mismatch" | Update redirect URI in Google Cloud Console |
 
 ### Getting Help
 
