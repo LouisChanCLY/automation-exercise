@@ -192,16 +192,31 @@ return {
    ![Output Parser Selection](./images/workflow/12-output-parser-selection.png)
 
 2. Select "Structured Output Parser"
-3. Add this JSON schema in the JSON Example field:
+3. Configure the schema:
+   - **Schema Type**: Manual
+   - **Input Schema**: Add this JSON Schema:
 
 ```json
 {
-  "priority": "",
-  "sentiment": "",
-  "department": "",
-  "actionRequired": false,
-  "confidence": 0.0,
-  "reasoning": "Brief explanation"
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "priority": {
+      "type": "string",
+      "enum": ["urgent", "high", "medium", "low"]
+    },
+    "actionRequired": {
+      "type": "boolean"
+    },
+    "confidence": {
+      "type": "number"
+    },
+    "reasoning": {
+      "type": "string"
+    }
+  },
+  "required": ["priority", "actionRequired", "confidence", "reasoning"],
+  "additionalProperties": false
 }
 ```
 
@@ -217,18 +232,15 @@ In the Basic LLM Chain node, enter this prompt in the "Prompt" text field:
 {% raw %}
 
 ```
-Analyse this email and classify it. Return ONLY valid JSON.
-
 Email from: {{ $json.senderName }} <{{ $json.sender }}>
 Subject: {{ $json.subject }}
 Body: {{ $json.truncatedBody }}
 
 Classify as:
 1. Priority: "urgent" | "high" | "medium" | "low"
-2. Sentiment: "positive" | "neutral" | "negative" | "angry"
-3. Department: "sales" | "support" | "technical" | "hr" | "finance" | "other"
-4. Action Required: true | false
-5. Confidence Score: 0.0-1.0
+2. Action Required: true | false
+3. Confidence Score: 0.0-1.0
+4. Reasoning: Brief explanation of classification
 ```
 
 {% endraw %}
@@ -261,158 +273,143 @@ Finally, we choose which AI model will process our prompt.
 
 ---
 
-## Step 9: Routing with Switch Node
+## Step 9: First Edit Fields Node
 
-### Create Decision Tree
+### Extract AI Classification Results
 
 {: .note }
-> **What's a Switch Node?** Think of it as an intelligent traffic controller. It examines incoming data and routes it down different paths based on conditions you define. This enables your workflow to take different actions based on the email classification.
+> **Edit Fields Node**: This node extracts and prepares data for routing. We'll create a clean dataset with just the fields we need.
 
-1. Add "Switch" node after Basic LLM Chain
-2. Name it: "Route by Priority & Sentiment"
+1. Add "Edit Fields" node after Basic LLM Chain
+2. Configure:
+   - **Assignments Mode**: Manual
+   - Add these fields:
+
+{% raw %}
+
+- `priority` → `{{ $json.output.priority }}`  (Type: String)
+- `confidence` → `{{ $json.output.confidence }}`  (Type: Number)
+- `reasoning` → `{{ $json.output.reasoning }}`  (Type: String)
+- `sender` → `{{ $('Prepare Email for AI').item.json.sender }}`  (Type: String)
+- `subject` → `{{ $('Prepare Email for AI').item.json.subject }}`  (Type: String)
+- `messageId` → `{{ $('Prepare Email for AI').item.json.messageId }}`  (Type: String)
+{% endraw %}
+
+---
+
+## Step 10: Routing with Switch Node
+
+### Create Priority-Based Routing
+
+{: .note }
+> **Simplified Routing**: We're focusing on the most important emails - urgent and high priority. Everything else goes to standard processing.
+
+1. Add "Switch" node after Edit Fields
+2. Name it: "Route by Priority"
 3. Configure:
    - **Mode**: "Rules"
    - **Fallback Output**: "Extra Output"
 
-   ![Switch Node Outputs](./images/workflow/16-switch-node-outputs.png)
+4. Add routing rules:
 
-4. Add routing rules by clicking "+ Add Rule" for each output:
+**Output 1 - Urgent Support:**
 
-**Output 1 - Urgent:**
-
-- Click "+ Add Rule"
 {% raw %}
+
 - Left Value: `{{ $json.priority }}`
-{% endraw %}
 - Operator: equals
 - Right Value: `urgent`
-- Toggle "Rename Output" ON
-- Output Name: "Urgent"
+- Rename Output: "Urgent Support"
+{% endraw %}
 
 **Output 2 - High Priority:**
 
-- Click "+ Add Rule"
 {% raw %}
+
 - Left Value: `{{ $json.priority }}`
-{% endraw %}
 - Operator: equals
 - Right Value: `high`
-- Toggle "Rename Output" ON
-- Output Name: "High Priority"
-
-**Output 3 - Angry Customer:**
-
-- Click "+ Add Rule"
-{% raw %}
-- Left Value: `{{ $json.sentiment }}`
+- Rename Output: "High Priority"
 {% endraw %}
-- Operator: equals
-- Right Value: `angry`
-- Toggle "Rename Output" ON
-- Output Name: "Angry Customers"
 
 ---
 
-## Step 10: Gmail Label Application
+## Step 11: Gmail Label Application
 
-### Apply Smart Labels
+### Apply Priority Labels
 
 {: .note }
-> **Why Multiple Gmail Nodes?** Each Switch output needs its own Gmail node to apply different labels. While this seems repetitive, it gives you precise control over what happens in each scenario. All paths will converge at the Edit Fields node later.
+> **Label Strategy**: We'll apply labels to urgent and high-priority emails. Standard emails can use a "No Operation" node to skip labelling.
 
 **Prerequisites - Create Labels in Gmail:**
 
 1. Open Gmail in your browser
 2. Click the gear icon → "See all settings"
 3. Go to "Labels" tab
-4. Create these labels by clicking "Create new label" for each:
+4. Create these labels:
    - URGENT-SUPPORT
    - HIGH-PRIORITY
-   - ANGRY-CUSTOMER
-   - STANDARD-PROCESSING
 
 **Configure Gmail Nodes in n8n:**
 
-For each Switch output, add a Gmail node:
+**For Urgent Support Output:**
 
-**For Urgent Output:**
-
-1. Add "Gmail" node connected to the "Urgent" output
-2. Configure:
-   - Operation: "Label Add"
+1. Add "Gmail" node connected to "Urgent Support" output
+2. Name it: "Add label to message"
+3. Configure:
+   - Operation: "Add Labels"
 {% raw %}
-   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
+   - Message ID: `{{ $('Edit Fields').item.json.messageId }}`
 {% endraw %}
-   - Labels: Select "URGENT-SUPPORT" from dropdown
+   - Labels: Select "URGENT-SUPPORT"
 
 **For High Priority Output:**
 
-1. Add "Gmail" node connected to the "High Priority" output
-2. Configure:
-   - Operation: "Label Add"
+1. Add "Gmail" node connected to "High Priority" output
+2. Name it: "Add label to message1"
+3. Configure:
+   - Operation: "Add Labels"
 {% raw %}
-   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
+   - Message ID: `{{ $('Edit Fields').item.json.messageId }}`
 {% endraw %}
-   - Labels: Select "HIGH-PRIORITY" from dropdown
-
-**For Angry Customers Output:**
-
-1. Add "Gmail" node connected to the "Angry Customers" output
-2. Configure:
-   - Operation: "Label Add"
-{% raw %}
-   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
-{% endraw %}
-   - Labels: Select "ANGRY-CUSTOMER" from dropdown
+   - Labels: Select "HIGH-PRIORITY"
 
 **For Fallback (Extra) Output:**
 
-1. Add "Gmail" node connected to the "extra" output
-2. Configure:
-   - Operation: "Label Add"
-{% raw %}
-   - Message ID: `{{ $('Prepare Email for AI').item.json.messageId }}`
-{% endraw %}
-   - Labels: Select "STANDARD-PROCESSING" from dropdown
+1. Add "No Operation, do nothing" node
+2. Connect to the "extra" output
+3. This skips labelling for standard emails
 
 ---
 
-## Step 11: Prepare Data for Logging
+## Step 12: Second Edit Fields Node
 
-### Consolidate Email Classification Data
+### Consolidate All Data for Logging
 
 {: .note }
-> **Understanding Edit Fields**: This node is like a data formatter. It takes information from multiple sources (email data from Code node, AI results from LLM Chain) and combines them into a single, clean dataset ready for storage.
+> **Data Consolidation**: This second Edit Fields node combines all email metadata with AI classification results before sending to Google Sheets.
 
-Before sending to Google Sheets, we need to combine the email metadata with the AI classification results.
-
-1. Add "Edit Fields" node (or "Set" node in newer versions)
-2. Connect all Gmail label nodes to this single Edit Fields node
-3. Configure:
-   - **Mode**: "Manual Mapping"
-   - **Keep Only Set**: Toggle OFF
-
-4. Add these field assignments:
+1. Add another "Edit Fields" node
+2. Name it: "Edit Fields1"
+3. Connect both Gmail nodes to this Edit Fields node
+4. Configure these field assignments:
 
 {% raw %}
-**Email Metadata Fields:**
+**Core Fields:**
 
-- `messageId` → `={{ $('Code').item.json.messageId }}`
-- `threadId` → `={{ $('Code').item.json.threadId }}`
-- `receivedDate` → `={{ $('Code').item.json.receivedDate }}`
-- `sender` → `={{ $('Code').item.json.sender }}`
-- `senderName` → `={{ $('Code').item.json.senderName }}`
-- `subject` → `={{ $('Code').item.json.subject }}`
-- `processed_date` → `={{ DateTime.now().toISO() }}`
+- `messageId` → `{{ $('Edit Fields').item.json.messageId }}`  (Type: String)
+- `threadId` → `{{ $json.threadId }}`  (Type: String)
+- `receivedDate` → `{{ $('Prepare Email for AI').item.json.receivedDate }}`  (Type: String)
+- `sender` → `{{ $('Prepare Email for AI').item.json.sender }}`  (Type: String)
+- `senderName` → `{{ $('Prepare Email for AI').item.json.senderName }}`  (Type: String)
+- `subject` → `{{ $('Prepare Email for AI').item.json.subject }}`  (Type: String)
+- `processed_date` → `{{ DateTime.now().toISO() }}`  (Type: String)
 
-**AI Classification Fields:**
+**Classification Fields:**
 
-- `priority` → `={{ $('Basic LLM Chain').item.json.output.priority }}`
-- `sentiment` → `={{ $('Basic LLM Chain').item.json.output.sentiment }}`
-- `department` → `={{ $('Basic LLM Chain').item.json.output.department }}`
-- `actionRequired` → `={{ $('Basic LLM Chain').item.json.output.actionRequired }}` (Set Type: Boolean)
-- `confidence` → `={{ $('Basic LLM Chain').item.json.output.confidence }}` (Set Type: Number)
-- `reasoning` → `={{ $('Basic LLM Chain').item.json.output.reasoning }}`
+- `priority` → `{{ $('Edit Fields').item.json.priority }}`  (Type: String)
+- `confidence` → `{{ $('Edit Fields').item.json.confidence }}`  (Type: Number)
+- `reasoning` → `{{ $('Edit Fields').item.json.reasoning }}`  (Type: String)
 {% endraw %}
 
 {: .note }
@@ -420,7 +417,7 @@ Before sending to Google Sheets, we need to combine the email metadata with the 
 
 ---
 
-## Step 12: Logging to Google Sheets
+## Step 13: Logging to Google Sheets
 
 ### Create Analytics Dashboard
 
@@ -440,25 +437,22 @@ Before sending to Google Sheets, we need to combine the email metadata with the 
    - subject
    - processed_date
    - priority
-   - sentiment
-   - department
-   - actionRequired
    - confidence
    - reasoning
 
 **Then configure the Google Sheets node in n8n:**
 
-1. Add "Google Sheets" node connected to the Edit Fields node
-2. Name it: "Append row in sheet"
-3. When prompted, connect your Google account (similar to Gmail OAuth)
+1. Add "Google Sheets" node connected to "Edit Fields1" node
+2. Name it: "Append or update row in sheet"
+3. When prompted, connect your Google account
 4. Configure the node:
-   - **Operation**: "Append"
+   - **Operation**: "Append or Update"
    - **Document**: Select "Email Classification Log" from dropdown
    - **Sheet**: "Sheet1"
-   - **Mapping Mode**: "Auto-Map Input Data"
-   - **Options**:
-     - Toggle "Use Append" ON
-     - Toggle "Data Property Name" OFF
+   - **Columns**:
+     - **Mapping Mode**: "Auto-Map Input Data"
+     - **Matching Columns**: `messageId` (prevents duplicate entries)
+   - The schema will auto-populate from your sheet headers
 
 {: .note }
 > **Auto-Mapping**: Since we prepared all fields in the Edit Fields node with matching column names, Google Sheets will automatically map them to the correct columns.
@@ -468,7 +462,7 @@ Before sending to Google Sheets, we need to combine the email metadata with the 
 
 ---
 
-## Step 13: Test & Activate Your Workflow
+## Step 14: Test & Activate Your Workflow
 
 ### Test Your Workflow
 

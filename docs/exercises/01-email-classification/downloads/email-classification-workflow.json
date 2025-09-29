@@ -15,48 +15,34 @@
         "options": {}
       },
       "type": "n8n-nodes-base.gmailTrigger",
-      "typeVersion": 1.3,
+      "typeVersion": 1.2,
       "position": [
-        -928,
-        -144
+        -464,
+        -224
       ],
-      "id": "3425285e-d975-444e-86a0-302bf9c0a653",
+      "id": "0635c9d2-6fbb-4d87-9a23-47fff77d3c5b",
       "name": "Gmail Trigger",
       "credentials": {
         "gmailOAuth2": {
           "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "Gmail - Personal"
+          "name": "Gmail account"
         }
       }
     },
     {
       "parameters": {
-        "mode": "runOnceForEachItem",
-        "jsCode": "// Extract and clean email data\nconst emailData = {\n  sender: $input.item.json.from.value[0].address,\n  senderName: $input.item.json.from.value[0].name || 'Unknown',\n  subject: $input.item.json.subject,\n  body: $input.item.json.text || $input.item.json.snippet,\n  receivedDate: $input.item.json.date,\n  messageId: $input.item.json.id,\n  threadId: $input.item.json.threadId\n};\n\n// Clean body text (remove signatures, quotes)\nemailData.cleanBody = emailData.body\n  .split(/\\r?\\n-- \\r?\\n/)[0]  // Remove signature\n  .split(/On .+ wrote:/)[0]    // Remove quoted text\n  .trim();\n\n// Truncate for API limits (first 1000 chars)\nemailData.truncatedBody = emailData.cleanBody.substring(0, 1000);\n\nreturn {\n  json: emailData\n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -704,
-        -144
-      ],
-      "id": "6d0eaa83-c115-43ac-aba7-180427f6effa",
-      "name": "Code"
-    },
-    {
-      "parameters": {
         "promptType": "define",
-        "text": "=Analyze this email and classify it. Return ONLY valid JSON.\n\nEmail from: {{ $json.senderName }} <{{ $json.sender }}>\nSubject: {{ $json.subject }}\nBody: {{ $json.truncatedBody }}\n\nClassify as:\n1. Priority: \"urgent\" | \"high\" | \"medium\" | \"low\"\n2. Sentiment: \"positive\" | \"neutral\" | \"negative\" | \"angry\"\n3. Department: \"sales\" | \"support\" | \"technical\" | \"hr\" | \"finance\" | \"other\"\n4. Action Required: true | false\n5. Confidence Score: 0.0-1.0",
+        "text": "=Email from: {{$json.senderName}} <{{$json.sender}}>\nSubject: {{$json.subject}}\nBody: {{$json.truncatedBody}}\n\nClassify as:\n1. Priority: \"urgent\" | \"high\" | \"medium\" | \"low\"\n2. Action Required: true | false\n3. Confidence Score: 0.0-1.0\n4. Reasoning: Brief explanation of classification",
         "hasOutputParser": true,
         "batching": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        -496,
-        -144
+        -16,
+        -224
       ],
-      "id": "30f7b81d-9fa3-4b90-8b6f-b77b404124ef",
+      "id": "bd5a0c68-e3a7-42e1-9afa-d63a6efb8fe6",
       "name": "Basic LLM Chain"
     },
     {
@@ -67,32 +53,98 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -544,
-        272
+        -8,
+        0
       ],
-      "id": "80cefe21-396e-49ac-8d89-e9674b25ab70",
+      "id": "52d12bff-2b30-4e3c-bcd8-41221a26ad33",
       "name": "OpenRouter Chat Model",
       "credentials": {
         "openRouterApi": {
           "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "OpenRouter - Free Tier"
+          "name": "OpenRouter - AI Models"
         }
       }
     },
     {
       "parameters": {
         "schemaType": "manual",
-        "inputSchema": "{\n  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"priority\": {\n      \"type\": \"string\",\n      \"enum\": [\"urgent\", \"high\", \"medium\", \"low\"]\n    },\n    \"sentiment\": {\n      \"type\": \"string\",\n      \"enum\": [\"positive\", \"neutral\", \"negative\", \"angry\"]\n    },\n    \"department\": {\n      \"type\": \"string\",\n      \"enum\": [\"sales\", \"support\", \"technical\", \"hr\", \"finance\", \"other\"]\n    },\n    \"actionRequired\": {\n      \"type\": \"boolean\"\n    },\n    \"confidence\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"reasoning\": {\n      \"type\": \"string\",\n      \"minLength\": 10\n    }\n  },\n  \"required\": [\n    \"priority\",\n    \"sentiment\",\n    \"department\",\n    \"actionRequired\",\n    \"confidence\",\n    \"reasoning\"\n  ],\n  \"additionalProperties\": false\n}",
-        "autoFix": true
+        "inputSchema": "{\n  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"priority\": {\n      \"type\": \"string\",\n      \"enum\": [\"urgent\", \"high\", \"medium\", \"low\"]\n    },\n    \"actionRequired\": {\n      \"type\": \"boolean\"\n    },\n    \"confidence\": {\n      \"type\": \"number\"\n    },\n    \"reasoning\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"priority\", \"actionRequired\", \"confidence\", \"reasoning\"],\n  \"additionalProperties\": false\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        -368,
-        64
+        120,
+        0
       ],
-      "id": "5f99f9af-df8e-4e96-847b-a808415f445a",
+      "id": "1448e5c4-b29f-43d6-bcb2-0ff5ddaef948",
       "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Extract and clean email data\nconst emailData = {\n  sender: $input.item.json.from.value[0].address,\n  senderName: $input.item.json.from.value[0].name || 'Unknown',\n  subject: $input.item.json.subject,\n  body: $input.item.json.text || $input.item.json.snippet,\n  receivedDate: $input.item.json.date,\n  messageId: $input.item.json.id,\n  threadId: $input.item.json.threadId\n};\n\n// Clean body text (remove signatures, quotes)\nemailData.cleanBody = emailData.body\n  .split(/\\r?\\n-- \\r?\\n/)[0]  // Remove signature\n  .split(/On .+ wrote:/)[0]    // Remove quoted text\n  .trim();\n\n// Truncate for API limits (first 1000 chars)\nemailData.truncatedBody = emailData.cleanBody.substring(0, 1000);\n\nreturn {\n  json: emailData\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -224
+      ],
+      "id": "5a9e6746-b84d-4429-a2ff-21ccc86758c2",
+      "name": "Prepare Email for AI"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cebe9552-08f9-44cb-8a85-03f5159e3c0c",
+              "name": "priority",
+              "value": "={{ $json.output.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "dfdc943e-cef4-4a80-8ce9-113a1124ecd3",
+              "name": "confidence",
+              "value": "={{ $json.output.confidence }}",
+              "type": "number"
+            },
+            {
+              "id": "7507e457-ddea-45df-b4a7-8e7d2ab38200",
+              "name": "reasoning",
+              "value": "={{ $json.output.reasoning }}",
+              "type": "string"
+            },
+            {
+              "id": "f380bd7b-28a9-49c6-ac21-65477883a95b",
+              "name": "sender",
+              "value": "={{ $('Prepare Email for AI').item.json.sender }}",
+              "type": "string"
+            },
+            {
+              "id": "1d169cf6-f209-4f14-8d08-0892be28b6eb",
+              "name": "subject",
+              "value": "={{ $('Prepare Email for AI').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "5681715d-40e2-4f02-8209-37020a7fb83d",
+              "name": "messageId",
+              "value": "={{ $('Prepare Email for AI').item.json.messageId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        -224
+      ],
+      "id": "a6aa6b71-ef5e-44d0-9c83-b0a94ff20df8",
+      "name": "Edit Fields"
     },
     {
       "parameters": {
@@ -108,7 +160,7 @@
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.output.priority }}",
+                    "leftValue": "={{ $json.priority }}",
                     "rightValue": "urgent",
                     "operator": {
                       "type": "string",
@@ -119,7 +171,7 @@
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "Urgent"
+              "outputKey": "Urgent Support"
             },
             {
               "conditions": {
@@ -131,7 +183,7 @@
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.output.priority }}",
+                    "leftValue": "={{ $json.priority }}",
                     "rightValue": "high",
                     "operator": {
                       "type": "string",
@@ -143,29 +195,6 @@
               },
               "renameOutput": true,
               "outputKey": "High Priority"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.output.sentiment }}",
-                    "rightValue": "angry",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Angry Customers"
             }
           ]
         },
@@ -176,62 +205,39 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -80,
-        -192
+        560,
+        -240
       ],
-      "id": "c1fa65ba-1646-4544-856b-c23a0aa8e9a7",
-      "name": "Switch"
+      "id": "6a3992f3-bbc0-4e16-ab3a-403416eae458",
+      "name": "Route by Priority"
     },
     {
       "parameters": {
         "operation": "addLabels",
-        "messageId": "={{ $('Code').item.json.messageId }}",
+        "messageId": "={{ $('Edit Fields').item.json.messageId }}",
         "labelIds": [
-          "REPLACE_WITH_STANDARD_PROCESSING_LABEL_ID"
+          "REPLACE_WITH_URGENT_LABEL_ID"
         ]
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        256,
-        48
+        784,
+        -416
       ],
-      "id": "7c415afa-6d74-4604-9317-0208f63ff553",
-      "name": "Gmail - Standard Processing",
+      "id": "e100c151-3e83-4816-b802-d891397e01d6",
+      "name": "Add label to message",
       "credentials": {
         "gmailOAuth2": {
           "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "Gmail - Personal"
+          "name": "Gmail account"
         }
       }
     },
     {
       "parameters": {
         "operation": "addLabels",
-        "messageId": "={{ $('Code').item.json.messageId }}",
-        "labelIds": [
-          "REPLACE_WITH_ANGRY_CUSTOMER_LABEL_ID"
-        ]
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        256,
-        -96
-      ],
-      "id": "1cf28abd-ad30-4e30-82f6-57a5966795a0",
-      "name": "Gmail - Angry Customer",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "Gmail - Personal"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "addLabels",
-        "messageId": "={{ $('Code').item.json.messageId }}",
+        "messageId": "={{ $('Edit Fields').item.json.messageId }}",
         "labelIds": [
           "REPLACE_WITH_HIGH_PRIORITY_LABEL_ID"
         ]
@@ -239,40 +245,28 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        256,
-        -240
+        784,
+        -224
       ],
-      "id": "d566370c-5807-468f-a003-88db8c30221e",
-      "name": "Gmail - High Priority",
+      "id": "6e23abf7-d4f8-4b8a-83f1-b6470ca4687a",
+      "name": "Add label to message1",
       "credentials": {
         "gmailOAuth2": {
           "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "Gmail - Personal"
+          "name": "Gmail account"
         }
       }
     },
     {
-      "parameters": {
-        "operation": "addLabels",
-        "messageId": "={{ $('Code').item.json.messageId }}",
-        "labelIds": [
-          "REPLACE_WITH_URGENT_SUPPORT_LABEL_ID"
-        ]
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
       "position": [
-        256,
-        -384
+        784,
+        -32
       ],
-      "id": "728b25ec-5e5c-4c99-a31e-023e13a46b49",
-      "name": "Gmail - Urgent Support",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "Gmail - Personal"
-        }
-      }
+      "id": "1f37b333-5ca3-415b-9870-04d07b4a5c75",
+      "name": "No Operation, do nothing"
     },
     {
       "parameters": {
@@ -280,32 +274,32 @@
           "assignments": [
             {
               "name": "messageId",
-              "value": "={{ $('Code').item.json.messageId }}",
+              "value": "={{ $('Edit Fields').item.json.messageId }}",
               "type": "string"
             },
             {
               "name": "threadId",
-              "value": "={{ $('Code').item.json.threadId }}",
+              "value": "={{ $json.threadId }}",
               "type": "string"
             },
             {
               "name": "receivedDate",
-              "value": "={{ $('Code').item.json.receivedDate }}",
+              "value": "={{ $('Prepare Email for AI').item.json.receivedDate }}",
               "type": "string"
             },
             {
               "name": "sender",
-              "value": "={{ $('Code').item.json.sender }}",
+              "value": "={{ $('Prepare Email for AI').item.json.sender }}",
               "type": "string"
             },
             {
               "name": "senderName",
-              "value": "={{ $('Code').item.json.senderName }}",
+              "value": "={{ $('Prepare Email for AI').item.json.senderName }}",
               "type": "string"
             },
             {
               "name": "subject",
-              "value": "={{ $('Code').item.json.subject }}",
+              "value": "={{ $('Prepare Email for AI').item.json.subject }}",
               "type": "string"
             },
             {
@@ -315,32 +309,17 @@
             },
             {
               "name": "priority",
-              "value": "={{ $('Basic LLM Chain').item.json.output.priority }}",
+              "value": "={{ $('Edit Fields').item.json.priority }}",
               "type": "string"
-            },
-            {
-              "name": "sentiment",
-              "value": "={{ $('Basic LLM Chain').item.json.output.sentiment }}",
-              "type": "string"
-            },
-            {
-              "name": "department",
-              "value": "={{ $('Basic LLM Chain').item.json.output.department }}",
-              "type": "string"
-            },
-            {
-              "name": "actionRequired",
-              "value": "={{ $('Basic LLM Chain').item.json.output.actionRequired }}",
-              "type": "boolean"
             },
             {
               "name": "confidence",
-              "value": "={{ $('Basic LLM Chain').item.json.output.confidence }}",
+              "value": "={{ $('Edit Fields').item.json.confidence }}",
               "type": "number"
             },
             {
               "name": "reasoning",
-              "value": "={{ $('Basic LLM Chain').item.json.output.reasoning }}",
+              "value": "={{ $('Edit Fields').item.json.reasoning }}",
               "type": "string"
             }
           ]
@@ -350,45 +329,140 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        656,
-        -192
+        1008,
+        -320
       ],
-      "id": "224efd66-9fc2-4ad1-93d6-e2bf237ce39a",
-      "name": "Edit Fields"
+      "id": "51e57267-38bb-4b56-ba97-1b67e5a2ef6b",
+      "name": "Edit Fields1"
     },
     {
       "parameters": {
-        "operation": "append",
+        "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "REPLACE_WITH_YOUR_SHEET_ID",
-          "mode": "id"
+          "value": "REPLACE_WITH_YOUR_SPREADSHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Email Classification Log"
         },
         "sheetName": {
           "__rl": true,
-          "value": "Sheet1",
-          "mode": "name"
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
-          "value": {}
+          "value": {},
+          "matchingColumns": [
+            "messageId"
+          ],
+          "schema": [
+            {
+              "id": "messageId",
+              "displayName": "messageId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "threadId",
+              "displayName": "threadId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "receivedDate",
+              "displayName": "receivedDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sender",
+              "displayName": "sender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "senderName",
+              "displayName": "senderName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "subject",
+              "displayName": "subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "processed_date",
+              "displayName": "processed_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "confidence",
+              "displayName": "confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reasoning",
+              "displayName": "reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
         },
-        "options": {
-          "useAppend": true
-        }
+        "options": {}
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        864,
-        -192
+        1232,
+        -320
       ],
-      "id": "423cab2f-8779-4906-ab61-8a73f85cd616",
-      "name": "Append row in sheet",
+      "id": "6dac01a7-deda-4ab9-a14c-711fdd9e2d6f",
+      "name": "Append or update row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "Google Sheets - Personal"
+          "name": "Google Sheets account"
         }
       }
     }
@@ -398,18 +472,7 @@
       "main": [
         [
           {
-            "node": "Code",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code": {
-      "main": [
-        [
-          {
-            "node": "Basic LLM Chain",
+            "node": "Prepare Email for AI",
             "type": "main",
             "index": 0
           }
@@ -420,7 +483,7 @@
       "main": [
         [
           {
-            "node": "Switch",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
@@ -432,11 +495,6 @@
         [
           {
             "node": "Basic LLM Chain",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-          {
-            "node": "Structured Output Parser",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -454,76 +512,11 @@
         ]
       ]
     },
-    "Switch": {
+    "Prepare Email for AI": {
       "main": [
         [
           {
-            "node": "Gmail - Urgent Support",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Gmail - High Priority",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Gmail - Angry Customer",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Gmail - Standard Processing",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gmail - Standard Processing": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gmail - Angry Customer": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gmail - High Priority": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gmail - Urgent Support": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
+            "node": "Basic LLM Chain",
             "type": "main",
             "index": 0
           }
@@ -534,7 +527,76 @@
       "main": [
         [
           {
-            "node": "Append row in sheet",
+            "node": "Route by Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Priority": {
+      "main": [
+        [
+          {
+            "node": "Add label to message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add label to message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add label to message": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add label to message1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
             "type": "main",
             "index": 0
           }
@@ -544,7 +606,7 @@
   },
   "pinData": {},
   "meta": {
-    "templateCredsSetupCompleted": false,
-    "instanceId": "automation-exercises-template"
+    "templateCredsSetupCompleted": true,
+    "instanceId": "email-classification-exercise"
   }
 }
