@@ -55,6 +55,18 @@ Use this checklist to track your progress through the prerequisites.
 
 ---
 
+## ✅ GitHub Setup (Optional but Recommended)
+
+- [ ] Created GitHub account
+- [ ] Installed Git on computer
+- [ ] Configured Git with name and email
+- [ ] Created `n8n-workflows` repository
+- [ ] Cloned repository to local computer
+- [ ] Exported and pushed first workflow
+- [ ] Understand basic Git workflow
+
+---
+
 ## ✅ Verification Complete
 
 - [ ] Gmail node returns emails
@@ -85,6 +97,7 @@ All checked? You're ready for any exercise!
 - [OpenRouter Dashboard](https://openrouter.ai/dashboard)
 - [Google AI Studio](https://makersuite.google.com)
 - [Perplexity API](https://www.perplexity.ai/settings/api)
+- [GitHub](https://github.com)
 
 ---
 
