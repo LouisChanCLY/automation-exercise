@@ -77,9 +77,117 @@ Set up GitHub to save and back up your n8n workflow files. GitHub is like a "sav
 
 ---
 
-## Part 2: Install Git on Your Computer
+## Part 2: Choose Your Git Tool
 
-Git is the tool that connects your computer to GitHub. Think of it as the "sync engine" between your files and the cloud.
+Before proceeding, choose which tool you want to use to work with GitHub. Both accomplish the same tasks - it's just a matter of preference.
+
+### Option A: GitHub Desktop (Recommended for Beginners)
+
+**Best for**: Visual learners, beginners, anyone who prefers clicking buttons over typing commands
+
+**Pros**:
+- ✅ User-friendly visual interface
+- ✅ No command line knowledge needed
+- ✅ See your changes visually before saving
+- ✅ Built-in conflict resolution
+- ✅ Official GitHub tool
+
+**What you'll do**: Click → Select files → Write message → Click "Push"
+
+[Jump to GitHub Desktop Setup →](#part-2a-github-desktop-recommended-for-beginners)
+
+---
+
+### Option B: Command Line Git (For Those Comfortable with Terminals)
+
+**Best for**: Developers, those comfortable with terminal/command prompt, power users
+
+**Pros**:
+- ✅ More powerful and flexible
+- ✅ Works on any operating system
+- ✅ Essential skill for professional development
+- ✅ Faster for experienced users
+
+**What you'll do**: Type commands in terminal like `git add .` and `git commit -m "message"`
+
+[Jump to Command Line Git Setup →](#part-2b-command-line-git-advanced)
+
+---
+
+{: .important }
+> **Not sure which to choose?** Go with **GitHub Desktop** (Option A). You can always learn command line later. Many professional developers use GitHub Desktop for day-to-day work!
+
+---
+
+## Part 2A: GitHub Desktop (Recommended for Beginners)
+
+GitHub Desktop is a free application that makes working with Git visual and easy.
+
+### Download and Install
+
+#### For Windows
+
+1. **Download GitHub Desktop**
+   - Go to [desktop.github.com](https://desktop.github.com)
+   - Click "Download for Windows"
+   - File downloads: `GitHubDesktopSetup.exe`
+
+2. **Install**
+   - Double-click the downloaded file
+   - Installation runs automatically (no choices needed!)
+   - GitHub Desktop opens when complete
+
+3. **Sign in to GitHub**
+   - Click "Sign in to GitHub.com"
+   - Enter your GitHub username and password
+   - Click "Authorize desktop"
+   - Your browser opens → Click "Authorize"
+   - Return to GitHub Desktop
+
+#### For macOS
+
+1. **Download GitHub Desktop**
+   - Go to [desktop.github.com](https://desktop.github.com)
+   - Click "Download for macOS"
+   - File downloads: `GitHubDesktop-arm64.dmg` or `GitHubDesktop-x64.dmg`
+
+2. **Install**
+   - Open the downloaded `.dmg` file
+   - Drag GitHub Desktop to Applications folder
+   - Open Applications → Double-click GitHub Desktop
+   - Click "Open" when macOS asks for confirmation
+
+3. **Sign in to GitHub**
+   - Click "Sign in to GitHub.com"
+   - Enter your GitHub username and password
+   - Click "Authorize desktop"
+   - Your browser opens → Click "Authorize"
+   - Return to GitHub Desktop
+
+#### For Linux
+
+GitHub Desktop doesn't have an official Linux version, but you can use:
+- **GitKraken** (free for public repos): [gitkraken.com](https://www.gitkraken.com)
+- **Sublime Merge**: [sublimemerge.com](https://www.sublimemerge.com)
+- Or use [Command Line Git](#part-2b-command-line-git-advanced) instead
+
+### Configure Git
+
+After signing in, GitHub Desktop will ask you to configure Git:
+
+1. **Set your name and email**
+   - Name: Your real name or preferred name
+   - Email: Same email you used for GitHub account
+   - Click "Finish"
+
+{: .highlight }
+> **Success!** GitHub Desktop is now installed and ready. Skip ahead to [Part 3: Create a Repository](#part-3-create-a-repository-for-your-workflows).
+
+---
+
+## Part 2B: Command Line Git (Advanced)
+
+Git is the command-line tool that connects your computer to GitHub. Think of it as the "sync engine" between your files and the cloud.
 
 ### Installation by Operating System
 
@@ -176,7 +284,10 @@ Git is the tool that connects your computer to GitHub. Think of it as the "sync 
 
 ---
 
-## Part 3: Configure Git
+## Part 3: Configure Git (Command Line Users Only)
+
+{: .note }
+> **Using GitHub Desktop?** You already configured Git during installation. [Skip to Part 4 →](#part-4-create-a-repository-for-your-workflows)
 
 Tell Git who you are so your contributions are properly credited.
 
@@ -214,7 +325,7 @@ user.email=your.email@example.com
 
 A repository (or "repo") is like a project folder on GitHub.
 
-### Create Repository on GitHub
+### Method 1: Create on GitHub Website (All Users)
 
 1. **Start Repository Creation**
    - Go to [github.com](https://github.com) and sign in
@@ -242,20 +353,79 @@ A repository (or "repo") is like a project folder on GitHub.
 
 ---
 
+### Method 2: Create Using GitHub Desktop (Desktop Users)
+
+You can create a new repository directly in GitHub Desktop:
+
+1. **Open GitHub Desktop**
+
+2. **Create New Repository**
+   - Click "File" → "New repository" (or press `Ctrl+N` / `Cmd+N`)
+
+3. **Fill in Details**:
+   - **Name**: `n8n-workflows`
+   - **Description**: "My n8n automation workflow backups"
+   - **Local Path**: Choose where to save (e.g., `Documents/GitHub`)
+   - **Initialize with README**: ✅ Check this
+   - **Git Ignore**: None
+   - **License**: MIT (optional)
+
+4. **Create Repository**
+   - Click "Create repository"
+   - Your repository is created locally!
+
+5. **Publish to GitHub**
+   - Click "Publish repository" button in the top bar
+   - **Keep private**: Check this if workflows contain sensitive data
+   - Click "Publish repository"
+
+{: .highlight }
+> **Success!** Your repository is now on GitHub and on your computer. You're ready to add workflow files!
+
+---
+
 ## Part 5: Clone Repository to Your Computer
 
 "Cloning" creates a copy of your GitHub repository on your computer.
 
-### Choose a Location
+{: .note }
+> **Already created in GitHub Desktop?** If you used Method 2 above, your repository is already on your computer. [Skip to Part 6 →](#part-6-save-and-push-your-first-workflow)
 
-First, decide where to keep your workflows:
+### Option A: Clone with GitHub Desktop (Recommended)
 
-**Recommended locations:**
-- Windows: `C:\Users\[YourName]\Documents\GitHub\n8n-workflows`
-- macOS: `/Users/[YourName]/Documents/GitHub/n8n-workflows`
-- Linux: `/home/[YourName]/Documents/GitHub/n8n-workflows`
+This is the easiest method - no typing required!
 
-### Clone the Repository
+1. **Open GitHub Desktop**
+
+2. **Clone Repository**
+   - Click "File" → "Clone repository" (or press `Ctrl+Shift+O` / `Cmd+Shift+O`)
+   - Click the "GitHub.com" tab
+
+3. **Find Your Repository**
+   - Look for `your-username/n8n-workflows` in the list
+   - Click on it to select it
+
+4. **Choose Local Path**
+   - **Local Path**: Where to save on your computer
+   - **Default**: `C:\Users\[YourName]\Documents\GitHub\n8n-workflows` (Windows)
+   - **Default**: `/Users/[YourName]/Documents/GitHub/n8n-workflows` (macOS)
+   - You can click "Choose..." to pick a different location
+
+5. **Clone**
+   - Click "Clone"
+   - GitHub Desktop downloads your repository
+   - A progress bar shows the download
+
+6. **Verify**
+   - After cloning, you'll see "No local changes" in GitHub Desktop
+   - The repository is now on your computer!
+
+{: .highlight }
+> **Quick Tip**: Click "Repository" → "Show in Explorer" (Windows) or "Show in Finder" (macOS) to see your repository folder.
+
+---
+
+### Option B: Clone with Command Line (Advanced Users)
 
 1. **Get the Repository URL**
    - On your repository page on GitHub
@@ -325,8 +495,14 @@ Now for the exciting part - backing up an n8n workflow to GitHub!
 
 ### Create a Folder Structure (Optional but Recommended)
 
-Organise your workflows by exercise or project:
+Organise your workflows by exercise or project.
 
+**Using File Explorer/Finder:**
+1. Open your `n8n-workflows` folder
+2. Create new folders: `exercises/01-email-classification`, `exercises/02-cold-email-automation`
+3. Move workflow files into appropriate folders
+
+**Using Command Line:**
 ```bash
 # Navigate to your repository
 cd ~/Documents/GitHub/n8n-workflows
@@ -339,7 +515,77 @@ mkdir -p exercises/02-cold-email-automation
 mv ~/Downloads/My_workflow.json exercises/01-email-classification/workflow.json
 ```
 
-### Save Changes to Git
+---
+
+### Option A: Save and Push with GitHub Desktop (Recommended)
+
+This is the visual, beginner-friendly way to save your workflows to GitHub.
+
+#### Step-by-Step with GitHub Desktop
+
+1. **Add/Move Your Workflow File**
+   - Move your downloaded workflow JSON file into your repository folder
+   - Example: Put `workflow.json` in `n8n-workflows/exercises/01-email-classification/`
+
+2. **Open GitHub Desktop**
+   - GitHub Desktop automatically detects the new file!
+   - You'll see it listed under "Changes" on the left side
+
+3. **Review Your Changes**
+   - The left panel shows all changed files
+   - The right panel shows what was added (in green) or removed (in red)
+   - Click on a file name to see what changed
+
+4. **Write a Commit Message**
+   - Bottom-left corner, you'll see two text boxes:
+   - **Summary** (required): Brief description of changes
+     - Example: `Add email classification workflow`
+   - **Description** (optional): More details if needed
+     - Example: `First version of the email classification workflow from Exercise 1`
+
+5. **Commit to Main**
+   - Click the blue "Commit to **main**" button
+   - This saves a snapshot of your changes locally
+
+6. **Push to GitHub**
+   - After committing, you'll see "Push origin" button in the top bar
+   - Click "Push origin" to upload your changes to GitHub
+   - Wait for the progress bar to complete
+
+7. **Verify on GitHub**
+   - Click "Repository" → "View on GitHub"
+   - Your browser opens to your repository
+   - You should see your new files!
+
+{: .highlight }
+> **Visual Feedback**: GitHub Desktop shows you exactly what changed with color coding. Green = added, red = deleted, yellow = modified.
+
+#### What You See in GitHub Desktop
+
+**Changes Tab (left side)**:
+```
+✓ exercises/01-email-classification/workflow.json
+```
+
+**Summary Box (bottom-left)**:
+```
+Add email classification workflow
+[Description box - optional]
+```
+
+**Commit Button**:
+```
+[Commit to main]
+```
+
+**Push Button (after commit)**:
+```
+↑ Push origin
+```
+
+---
+
+### Option B: Save Changes with Command Line (Advanced)
 
 Now we'll "commit" (save a snapshot) of your changes:
 
@@ -390,9 +636,47 @@ Now we'll "commit" (save a snapshot) of your changes:
 
 ## Part 7: Daily Workflow
 
-Here's your routine for backing up workflows as you work:
+Here's your routine for backing up workflows as you work.
 
-### Quick Reference Commands
+### Option A: Daily Workflow with GitHub Desktop
+
+This is your simple, repeatable process for backing up workflows:
+
+**Every time you complete or update a workflow:**
+
+1. **Export from n8n**
+   - Open workflow in n8n
+   - Click ⋮ menu → Download
+   - Save JSON file
+
+2. **Move to Repository**
+   - Move/copy the file to your `n8n-workflows` folder
+   - Organize into appropriate subfolder
+
+3. **Open GitHub Desktop**
+   - GitHub Desktop shows the new/changed file automatically
+   - Review the changes in the right panel
+
+4. **Commit Changes**
+   - Write summary: e.g., "Update email classifier - added error handling"
+   - Click "Commit to main"
+
+5. **Push to GitHub**
+   - Click "Push origin" button
+   - Done! Your workflow is backed up
+
+**Visual Process:**
+```
+n8n → Download → Move to folder → GitHub Desktop detects →
+Write message → Commit → Push → ✅ Backed up!
+```
+
+{: .highlight }
+> **Time Required**: About 30 seconds once you're familiar with the process!
+
+### Option B: Daily Workflow with Command Line
+
+Quick reference commands for command-line users:
 
 ```bash
 # 1. Navigate to your repository
@@ -413,16 +697,71 @@ git commit -m "Update workflow: added error handling"
 git push origin main
 ```
 
-### Workflow Tips
+### Workflow Tips (All Users)
 
 - **Commit often**: Save after completing each exercise or making significant changes
 - **Write clear messages**: Future you will thank present you
   - ✅ Good: "Add Gmail trigger and AI classification logic"
+  - ✅ Good: "Fix: Correct OpenRouter API credential reference"
+  - ✅ Good: "Update: Increase judge score threshold to 85"
   - ❌ Bad: "Update stuff"
-- **Pull before push**: If you work on multiple computers:
-  ```bash
-  git pull origin main
-  ```
+  - ❌ Bad: "Changes"
+  - ❌ Bad: "Fixed it"
+
+- **Pull before push**: If you work on multiple computers
+  - **GitHub Desktop**: Click "Repository" → "Pull"
+  - **Command Line**: `git pull origin main`
+
+- **Review before committing**: Always check what you're about to save
+  - **GitHub Desktop**: Look at the right panel to see changes
+  - **Command Line**: Use `git diff` to see changes
+
+### Common Scenarios
+
+#### Scenario 1: Completed Exercise 1
+
+**What to commit:**
+```
+✓ exercises/01-email-classification/workflow.json
+```
+
+**Commit message:**
+```
+Add Exercise 1: Email classification workflow
+```
+
+#### Scenario 2: Fixed a Bug in Existing Workflow
+
+**What to commit:**
+```
+✓ exercises/01-email-classification/workflow.json (modified)
+```
+
+**Commit message:**
+```
+Fix: Correct Gmail credential ID in email classifier
+```
+
+#### Scenario 3: Completed Multiple Exercises
+
+**What to commit:**
+```
+✓ exercises/02-cold-email/workflow.json
+✓ exercises/03-llm-judge/workflow.json
+```
+
+**Commit message:**
+```
+Add Exercise 2 and 3 workflows
+```
+
+#### Scenario 4: Working on Multiple Computers
+
+**Before making changes:**
+1. **GitHub Desktop**: Click "Fetch origin" (top bar) then "Pull origin" if updates available
+2. **Command Line**: `git pull origin main`
+
+**This ensures you have the latest version before editing**
 
 ---
 
@@ -463,7 +802,51 @@ graph LR
 
 <div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
 
-#### "git: command not found"
+#### GitHub Desktop: "Authentication Failed"
+
+**Problem**: GitHub Desktop can't connect to your account.
+
+**Solutions**:
+1. Sign out and sign back in:
+   - "File" → "Options" (Windows) or "GitHub Desktop" → "Preferences" (macOS)
+   - "Accounts" tab → "Sign out"
+   - Sign back in with your GitHub credentials
+
+2. Check internet connection
+
+3. Try authorizing again in browser
+
+</div>
+
+<div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
+
+#### GitHub Desktop: "Push Rejected" or "Could Not Push"
+
+**Problem**: Can't upload changes to GitHub.
+
+**Solutions**:
+1. **Fetch first**: Click "Repository" → "Pull" to get latest changes
+2. If that doesn't work: Click "Repository" → "View on GitHub", check if repository exists
+3. Make sure you have write permissions to the repository
+
+</div>
+
+<div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
+
+#### GitHub Desktop: "No Changes to Commit"
+
+**Problem**: Added files but GitHub Desktop doesn't see them.
+
+**Solutions**:
+1. Make sure files are actually in the repository folder (not Downloads!)
+2. Click "Repository" → "Refresh" or restart GitHub Desktop
+3. Check if files are in .gitignore (unlikely for workflow JSONs)
+
+</div>
+
+<div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
+
+#### Command Line: "git: command not found"
 
 **Problem**: Git isn't installed or not in PATH.
 
@@ -477,24 +860,27 @@ graph LR
 
 <div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
 
-#### "Permission denied (publickey)"
+#### Command Line: "Permission denied (publickey)"
 
 **Problem**: GitHub can't verify your identity.
 
-**Solution**: Use HTTPS instead of SSH:
-```bash
-# Check your current remote URL
-git remote -v
+**Solutions**:
+1. Use HTTPS instead of SSH:
+   ```bash
+   # Check your current remote URL
+   git remote -v
 
-# If it shows git@github.com, change to HTTPS
-git remote set-url origin https://github.com/yourusername/n8n-workflows.git
-```
+   # If it shows git@github.com, change to HTTPS
+   git remote set-url origin https://github.com/yourusername/n8n-workflows.git
+   ```
+
+2. **Or switch to GitHub Desktop** - it handles authentication automatically!
 
 </div>
 
 <div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
 
-#### "Authentication failed"
+#### Command Line: "Authentication failed"
 
 **Problem**: GitHub needs your credentials.
 
@@ -507,11 +893,13 @@ git remote set-url origin https://github.com/yourusername/n8n-workflows.git
    - Copy the token (you'll only see it once!)
    - Use this token as your password when Git asks
 
+3. **Or switch to GitHub Desktop** - no tokens needed!
+
 </div>
 
 <div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
 
-#### "fatal: not a git repository"
+#### Command Line: "fatal: not a git repository"
 
 **Problem**: You're not in your repository folder.
 
@@ -528,7 +916,7 @@ git status
 
 <div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
 
-#### "Your branch is behind 'origin/main'"
+#### Command Line: "Your branch is behind 'origin/main'"
 
 **Problem**: GitHub has newer changes than your computer.
 
@@ -540,6 +928,8 @@ git pull origin main
 # Then you can push your changes
 git push origin main
 ```
+
+**GitHub Desktop Users**: Click "Repository" → "Pull"
 
 </div>
 
@@ -597,12 +987,12 @@ n8n-workflows/
 ## What You've Accomplished
 
 ✅ Created a GitHub account
-✅ Installed and configured Git
+✅ Installed and configured Git (command line) or GitHub Desktop (GUI)
 ✅ Created a repository for workflows
 ✅ Cloned repository to your computer
 ✅ Exported and committed your first workflow
 ✅ Pushed to GitHub for backup
-✅ Understand basic Git workflow
+✅ Understand basic Git workflow (visual or command-line)
 
 ---
 
@@ -630,24 +1020,44 @@ Now that GitHub is set up, you can:
 
 ## Additional Resources
 
-### Useful Links
+### Official Documentation
 
-- [GitHub Docs](https://docs.github.com) - Official documentation
+**GitHub Desktop Users:**
+- [GitHub Desktop Docs](https://docs.github.com/en/desktop) - Official GitHub Desktop documentation
+- [GitHub Desktop Guides](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop) - Step-by-step tutorials
+
+**Command Line Users:**
+- [GitHub Docs](https://docs.github.com) - Official Git/GitHub documentation
 - [Git Cheat Sheet](https://education.github.com/git-cheat-sheet-education.pdf) - Quick reference PDF
 - [Visual Git Guide](https://marklodato.github.io/visual-git-guide/index-en.html) - Diagrams explaining Git concepts
 
 ### Video Tutorials (Optional)
 
+**For GitHub Desktop:**
+- [GitHub Desktop Tutorial](https://www.youtube.com/watch?v=8Dd7KRpKeaE) - 15 minute walkthrough
+- [GitHub Desktop for Beginners](https://www.youtube.com/watch?v=77W2JSL7-r8) - Complete guide
+
+**For Command Line:**
 - [Git & GitHub for Beginners](https://www.youtube.com/watch?v=RGOj5yH7evk) - 1 hour crash course
-- [GitHub Desktop Tutorial](https://www.youtube.com/watch?v=8Dd7KRpKeaE) - GUI alternative to command line
+- [Git Command Line Basics](https://www.youtube.com/watch?v=HVsySz-h9r4) - 30 minute tutorial
 
-### Alternative Tools
+### Other Git GUI Tools
 
-If you prefer a visual interface instead of command line:
+If you want to try alternatives to GitHub Desktop:
 
-- **[GitHub Desktop](https://desktop.github.com/)** - Official GUI for Git (Windows/macOS)
-- **[GitKraken](https://www.gitkraken.com/)** - Feature-rich Git client (all platforms)
+- **[GitKraken](https://www.gitkraken.com/)** - Feature-rich Git client (Windows/macOS/Linux) - Free for public repos
 - **[Sourcetree](https://www.sourcetreeapp.com/)** - Free Git GUI (Windows/macOS)
+- **[Tower](https://www.git-tower.com/)** - Professional Git client (Windows/macOS) - Paid
+- **[Fork](https://git-fork.com/)** - Fast and friendly Git client (Windows/macOS) - Free
+
+### Quick Comparison
+
+| Tool | Best For | Price | Platforms |
+|------|----------|-------|-----------|
+| **GitHub Desktop** | Beginners, GitHub users | Free | Windows, macOS |
+| **Command Line** | Advanced users, automation | Free | All |
+| **GitKraken** | Visual workflows, teams | Free/Paid | All |
+| **VS Code** | Developers using VS Code | Free | All |
 
 ---
 
