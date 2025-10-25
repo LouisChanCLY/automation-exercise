@@ -1,0 +1,419 @@
+{
+  "name": "LLM as a Judge - Quality Control",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "topic",
+              "name": "topic",
+              "value": "Write a product description for wireless noise-cancelling headphones",
+              "type": "string"
+            },
+            {
+              "id": "target_audience",
+              "name": "target_audience",
+              "value": "Remote workers, ages 25-45",
+              "type": "string"
+            },
+            {
+              "id": "required_length",
+              "name": "required_length",
+              "value": 150,
+              "type": "number"
+            },
+            {
+              "id": "pass_threshold",
+              "name": "pass_threshold",
+              "value": 80,
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "id": "manual-trigger-01",
+      "name": "Manual Trigger"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Initialize tracking variables for iteration loop\nconst inputData = $input.first().json;\n\nreturn [{\n  json: {\n    // User inputs\n    topic: inputData.topic,\n    target_audience: inputData.target_audience,\n    required_length: inputData.required_length || 150,\n    pass_threshold: inputData.pass_threshold || 80,\n\n    // Iteration tracking\n    iteration: 0,\n    max_iterations: 5,\n\n    // Content tracking\n    current_content: \"\",\n    previous_feedback: \"\",\n\n    // Scoring history\n    score_history: [],\n    feedback_history: [],\n\n    // Status\n    passed: false,\n    final_score: 0\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300],
+      "id": "init-variables-01",
+      "name": "Initialize Variables"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert content creator. Generate high-quality content based on these requirements:\n\nTOPIC: {{ $json.topic }}\nTARGET AUDIENCE: {{ $json.target_audience }}\nREQUIRED LENGTH: {{ $json.required_length }} words\n\n{{ $json.iteration === 0 ? \n  \"Create compelling, original content that meets all requirements.\" \n  : \n  \"PREVIOUS ATTEMPT HAD ISSUES. Improve based on this feedback:\\n\\n\" + $json.previous_feedback \n}}\n\nGenerate ONLY the content itself, no meta-commentary.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [680, 300],
+      "id": "generator-llm-01",
+      "name": "Generator LLM"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-3.5-sonnet",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [680, 480],
+      "id": "openrouter-generator-01",
+      "name": "OpenRouter Generator Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "OpenRouter API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a strict quality evaluator. Evaluate this content objectively against the criteria below.\n\nCONTENT TO EVALUATE:\n{{ $('Generator LLM').item.json.output }}\n\nREQUIREMENTS:\n- Topic: {{ $('Initialize Variables').item.json.topic }}\n- Target Audience: {{ $('Initialize Variables').item.json.target_audience }}\n- Required Length: {{ $('Initialize Variables').item.json.required_length }} words\n\nEVALUATION CRITERIA (score each 0-100):\n\n1. ACCURACY (25% weight):\n   - Factually correct information\n   - No hallucinations or false claims\n   - Verifiable statements\n\n2. CLARITY (25% weight):\n   - Easy to understand\n   - Well-structured sentences\n   - Logical flow\n   - Appropriate vocabulary\n\n3. COMPLETENESS (20% weight):\n   - Covers all required points\n   - Includes necessary details\n   - Meets length requirement\n   - Addresses full topic\n\n4. TONE (15% weight):\n   - Matches target audience\n   - Appropriate formality\n   - Consistent voice\n\n5. CREATIVITY (15% weight):\n   - Engaging and interesting\n   - Original angles\n   - Vivid examples\n\nSCORING:\n- Calculate weighted average for overall_score\n- Set pass = true if overall_score >= {{ $('Initialize Variables').item.json.pass_threshold }}\n- Provide specific, actionable improvements\n- Be strict but fair\n\nEvaluate now and return structured JSON.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [900, 300],
+      "id": "judge-llm-01",
+      "name": "Judge LLM"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [900, 480],
+      "id": "openrouter-judge-01",
+      "name": "OpenRouter Judge Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "OpenRouter API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"overall_score\": {\n      \"type\": \"number\",\n      \"description\": \"Overall quality score from 0-100\"\n    },\n    \"pass\": {\n      \"type\": \"boolean\",\n      \"description\": \"Whether content meets quality standards\"\n    },\n    \"criteria_scores\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"accuracy\": {\"type\": \"number\"},\n        \"clarity\": {\"type\": \"number\"},\n        \"completeness\": {\"type\": \"number\"},\n        \"tone\": {\"type\": \"number\"},\n        \"creativity\": {\"type\": \"number\"}\n      }\n    },\n    \"feedback\": {\n      \"type\": \"string\",\n      \"description\": \"Summary of strengths and weaknesses\"\n    },\n    \"specific_improvements\": {\n      \"type\": \"array\",\n      \"items\": {\"type\": \"string\"},\n      \"description\": \"List of specific improvements needed\"\n    }\n  },\n  \"required\": [\"overall_score\", \"pass\", \"criteria_scores\", \"feedback\", \"specific_improvements\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [900, 660],
+      "id": "structured-parser-01",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Parse judge output and merge with existing data\nconst previousData = $('Initialize Variables').item.json;\nconst generatorOutput = $('Generator LLM').item.json.output;\nconst judgeOutput = $input.first().json.output;\n\n// Increment iteration counter\nconst currentIteration = previousData.iteration + 1;\n\n// Update score and feedback history\nconst scoreHistory = [...previousData.score_history, judgeOutput.overall_score];\nconst feedbackHistory = [...previousData.feedback_history, judgeOutput.feedback];\n\nreturn [{\n  json: {\n    // Preserve original inputs\n    topic: previousData.topic,\n    target_audience: previousData.target_audience,\n    required_length: previousData.required_length,\n    pass_threshold: previousData.pass_threshold,\n    max_iterations: previousData.max_iterations,\n\n    // Update iteration state\n    iteration: currentIteration,\n\n    // Current content and feedback\n    current_content: generatorOutput,\n    previous_feedback: judgeOutput.specific_improvements.join(\". \"),\n\n    // Latest judge evaluation\n    final_score: judgeOutput.overall_score,\n    passed: judgeOutput.pass,\n    criteria_scores: judgeOutput.criteria_scores,\n    current_feedback: judgeOutput.feedback,\n\n    // History tracking\n    score_history: scoreHistory,\n    feedback_history: feedbackHistory,\n\n    // For logging\n    all_scores: scoreHistory.join(\", \"),\n    all_feedback: feedbackHistory.join(\" | \")\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300],
+      "id": "parse-judge-01",
+      "name": "Parse Judge Output"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "combineOperation": "any"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.passed && $json.final_score >= $json.pass_threshold }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            },
+            {
+              "leftValue": "={{ $json.iteration }}",
+              "rightValue": "={{ $json.max_iterations }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 300],
+      "id": "quality-check-01",
+      "name": "Quality Check"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Prepare for next iteration\nconst data = $input.first().json;\n\nreturn [{\n  json: {\n    // Pass through everything\n    ...data,\n\n    // Log current attempt\n    loop_reason: `Iteration ${data.iteration}: Score ${data.final_score} < ${data.pass_threshold}. Feedback: ${data.current_feedback}`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 520],
+      "id": "loop-controller-01",
+      "name": "Loop Controller"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{ $json.passed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1560, 200],
+      "id": "success-check-01",
+      "name": "Success or Max Iterations"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Format successful result for logging\nconst data = $input.first().json;\n\nreturn [{\n  json: {\n    timestamp: new Date().toISOString(),\n    topic: data.topic,\n    target_audience: data.target_audience,\n    iteration_count: data.iteration,\n    final_score: data.final_score,\n    passed: true,\n    final_content: data.current_content,\n    all_scores: data.all_scores,\n    all_feedback: data.all_feedback,\n    total_iterations: data.iteration,\n    status: \"SUCCESS\",\n    criteria_breakdown: JSON.stringify(data.criteria_scores)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 100],
+      "id": "format-success-01",
+      "name": "Format Success"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Format failure result (best attempt after max iterations)\nconst data = $input.first().json;\n\nreturn [{\n  json: {\n    timestamp: new Date().toISOString(),\n    topic: data.topic,\n    target_audience: data.target_audience,\n    iteration_count: data.iteration,\n    final_score: data.final_score,\n    passed: false,\n    final_content: data.current_content,\n    all_scores: data.all_scores,\n    all_feedback: data.all_feedback,\n    total_iterations: data.iteration,\n    status: \"MAX_ITERATIONS_REACHED\",\n    criteria_breakdown: JSON.stringify(data.criteria_scores),\n    note: `Best attempt after ${data.max_iterations} iterations. Final score: ${data.final_score}/${data.pass_threshold}`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 300],
+      "id": "format-failure-01",
+      "name": "Format Failure"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [2000, 200],
+      "id": "log-sheets-01",
+      "name": "Log to Quality Tracker",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Initialize Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Initialize Variables": {
+      "main": [
+        [
+          {
+            "node": "Generator LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generator LLM": {
+      "main": [
+        [
+          {
+            "node": "Judge LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Generator Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generator LLM",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Judge LLM": {
+      "main": [
+        [
+          {
+            "node": "Parse Judge Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Judge Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Judge LLM",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Judge LLM",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Judge Output": {
+      "main": [
+        [
+          {
+            "node": "Quality Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quality Check": {
+      "main": [
+        [
+          {
+            "node": "Success or Max Iterations",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Controller",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Controller": {
+      "main": [
+        [
+          {
+            "node": "Generator LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success or Max Iterations": {
+      "main": [
+        [
+          {
+            "node": "Format Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Success": {
+      "main": [
+        [
+          {
+            "node": "Log to Quality Tracker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Failure": {
+      "main": [
+        [
+          {
+            "node": "Log to Quality Tracker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-15T10:00:00.000Z",
+  "versionId": "1"
+}
