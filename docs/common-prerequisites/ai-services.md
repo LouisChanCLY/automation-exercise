@@ -59,26 +59,54 @@ Access multiple AI models with one API key. Perfect for comparing different mode
 
 ### Why Gemini?
 
-Google's Gemini offers generous free quotas perfect for AI agents and complex tasks.
+Google's Gemini offers generous free quotas perfect for AI agents, complex reasoning tasks, and iterative workflows.
 
 ### Generate API Key
 
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Sign in with your Google account
-3. Click "Get API Key"
-4. Select your `n8n-automation` project (from Google setup)
-5. Click "Generate API Key"
-6. Copy and save securely
+1. **Go to Google AI Studio**
+   - Visit [ai.google.dev](https://ai.google.dev/)
+   - Click **Get API key** in the top-right corner
+
+2. **Sign In**
+   - Use your Google account
+   - If prompted, accept terms of service
+
+3. **Create API Key**
+   - Click **Create API key**
+   - Option 1: Select existing Google Cloud project (recommended if you completed Google setup)
+   - Option 2: Click **Create API key in new project** (simpler, but creates separate project)
+
+4. **Copy and Save**
+   - Your API key will start with `AIza...`
+   - Copy the key immediately (you won't be able to view it again)
+   - Store securely in your password manager
+
+5. **Optional: Test Your Key**
+   ```bash
+   curl -H 'Content-Type: application/json' \
+        -d '{"contents":[{"parts":[{"text":"Hello!"}]}]}' \
+        -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY'
+   ```
 
 {: .highlight }
-> **Free Limits**: 60 requests/minute, 1 million tokens/month - plenty for all exercises!
+> **Free Limits**: 60 requests/minute, 1 million tokens/month, 1,500 requests/day - plenty for all exercises!
 
 ### When to Use Gemini
 
-- AI Agents (Exercise 2+)
-- Complex reasoning tasks
-- Multi-step workflows
+- AI Agents with complex reasoning
+- Iterative workflows with feedback loops
+- Multi-step content generation
+- LLM as a Judge patterns
 - When you need consistent, free performance
+
+### Gemini vs OpenRouter
+
+| Feature | Google Gemini | OpenRouter |
+|---------|--------------|------------|
+| **Free Tier** | 1M tokens/month | $1 credit (~100K tokens) |
+| **Setup** | Direct API key | Account + payment method |
+| **Best For** | Learning, prototyping, AI agents | Production, model comparison |
+| **Quota Reset** | Monthly | One-time credit |
 
 ---
 
@@ -137,10 +165,12 @@ Real-time web search capabilities for your AI agents. Essential for research tas
 | Need | Use This Service | Why |
 |------|------------------|-----|
 | Email classification | OpenRouter (Gemma) | Free, fast, simple |
-| AI agents | Google Gemini | Free tier, powerful |
-| Web research | Perplexity | Real-time data |
+| Content generation | OpenRouter or Gemini | Flexible options |
+| AI agents | Google Gemini | Free tier, powerful, consistent |
+| Web research | Perplexity | Real-time data access |
 | Complex reasoning | Gemini or Claude | Better understanding |
-| Quick tests | Free models | No cost |
+| Iterative workflows | Google Gemini | Good for feedback loops |
+| Quick tests | Free models | No cost, fast iteration |
 
 ---
 
