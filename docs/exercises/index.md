@@ -5,9 +5,9 @@ nav_order: 2
 has_children: true
 ---
 
-# Complete Exercise Catalogue
+# Exercises
 
-Master AI automation through 30 progressive hands-on exercises, from basic email classification to advanced multi-modal AI systems.
+30 progressive hands-on exercises covering AI automation, from basic email classification to advanced multi-modal AI systems.
 
 ## Exercise Capabilities Matrix
 
@@ -306,34 +306,26 @@ Build autonomous customer experience with multi-agent systems.
 Create multi-modal support across all communication channels.
 **AI Models**: GPT-4o, Whisper-v3, GPT-4o-Vision, Claude Sonnet | **Key Concept**: Multi-Modal Support
 
-## Learning Path Recommendations
+## Learning Paths
 
-### For Beginners
+**Beginners**: Start with exercises 1, 3, 9, 13, 16 to build foundational skills.
 
-Start with exercises 1, 3, 9, 13, 16 to build foundational skills.
+**Intermediate**: Progress through exercises 2, 4, 6, 7, 8, 10, 12, 15, 17, 19, 20.
 
-### For Intermediate Learners
+**Advanced**: Work through exercises 5, 11, 14, 18, 21, 22, 23, 24.
 
-Progress through exercises 2, 4, 6, 7, 8, 10, 12, 15, 17, 19, 20.
+**Expert**: Complete exercises 25, 26, 27, 28, 29, 30 for multi-modal AI systems.
 
-### For Advanced Practitioners
+## Recommended Sequences
 
-Challenge yourself with exercises 5, 11, 14, 18, 21, 22, 23, 24.
+Exercise 1 is the starting point. Choose a path based on your interests:
 
-### For Experts
-
-Master exercises 25, 26, 27, 28, 29, 30 for cutting-edge AI automation.
-
-## Prerequisites Map
-
-Most exercises build on previous knowledge. Exercise 1 is the only true starting point, with multiple learning paths branching from there based on your interests:
-
-- **Support & Service Path**: 1 → 2 → 12 → 29 → 30
-- **Content Creation Path**: 1 → 3 → 4 → 5 → 6 → 27
-- **Workflow Orchestration Path**: 1 → 3 → 4 → (advanced multi-workflow systems)
-- **Visual AI Path**: 1 → 16 → 17 → 18 → 22 → 25
-- **Audio Processing Path**: 3 → 7 → 19 → 20 → 21 → 26
-- **Enterprise Integration Path**: 2 → 13 → 14 → 15 → 24
+- **Support & Service**: 1 → 2 → 12 → 29 → 30
+- **Content Creation**: 1 → 3 → 4 → 5 → 6 → 27
+- **Workflow Orchestration**: 1 → 3 → 4 → (advanced multi-workflow systems)
+- **Visual AI**: 1 → 16 → 17 → 18 → 22 → 25
+- **Audio Processing**: 3 → 7 → 19 → 20 → 21 → 26
+- **Enterprise Integration**: 2 → 13 → 14 → 15 → 24
 
 ---
 
