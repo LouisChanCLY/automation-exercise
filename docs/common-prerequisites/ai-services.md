@@ -119,23 +119,32 @@ Real-time web search capabilities for your AI agents. Essential for research tas
 ### Student Access (Recommended)
 
 {: .highlight }
-> **Students Get 1 Year Free!** If you have a `.edu` email address, you can get Perplexity Pro for free for one year, which includes API credits and unlimited searches.
+> **Students Get 12 Months Free!** Students worldwide can get Perplexity Pro for free for 12 months (worth $240), which includes API credits, unlimited searches, and access to the Comet browser.
 
 **To claim your free student access:**
 
-1. Visit [Perplexity Pro Student Program](https://www.perplexity.ai/pro?id=student)
-2. Sign up with your `.edu` email address
-3. Verify your student status
-4. Get instant access to Perplexity Pro (worth $200/year)
-5. Includes API access with enhanced credits
+1. Visit [Perplexity Student Program](https://www.perplexity.ai/grow/comet/students)
+2. Click to verify your student status
+3. Verify using one of these methods:
+   - **Student email** (`.edu` or university email address)
+   - **Student ID card** or documentation upload
+   - Verification is handled through SheerID
+4. Get instant access to 12 months of Perplexity Pro
+5. Bonus: Skip the waitlist for Comet browser
 
-**Benefits for Students:**
+**What's Included for Students:**
+- **12 months of Perplexity Pro** ($240 value)
 - Unlimited Quick Searches
 - 600+ Pro Searches per day
 - Access to advanced AI models (GPT-4, Claude, etc.)
-- API access with enhanced credits
+- **$5/month in API credits** (automatically included)
 - File upload and analysis
-- $5/month in API credits (automatically included)
+- Access to Comet browser (AI-powered browser built for students)
+
+**Eligibility:**
+- Available to students globally (US, UK, and international)
+- Must verify student status through student email or documentation
+- UK students and international students can verify with university email or ID
 
 ### Get Your API Key
 
