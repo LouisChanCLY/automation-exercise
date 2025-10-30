@@ -166,6 +166,9 @@ The email must:
 6. Maintain a warm but professional tone
 ```
 
+{: .highlight }
+> **Pro Tip**: Use success criteria to enforce **brand guidelines**, **tone of voice requirements**, and **company standards**. The judge will consistently apply these criteria to every piece of content, reducing bias and increasing reliability. Examples: "Must match our friendly, approachable brand voice", "Use our standard email signature format", "Follow AP style guide rules".
+
 ---
 
 ## Step 3: Add Initialize Variables Node

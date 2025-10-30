@@ -85,8 +85,8 @@ Use multiple judge LLMs with different perspectives, then aggregate their scores
 
 ### Real-World Application
 
-- **Balanced Evaluation**: Prevent single model bias
-- **Multi-Stakeholder Review**: Different judges represent different stakeholders (technical, marketing, legal)
+- **Balanced Evaluation**: Reduce bias by using multiple models with different perspectives, increasing reliability and consistency
+- **Multi-Stakeholder Review**: Different judges represent different stakeholders (technical for accuracy, marketing for brand guidelines and tone of voice, legal for compliance)
 - **Confidence Scoring**: High agreement = high confidence, disagreement = needs human review
 
 ### Implementation Steps
@@ -101,7 +101,7 @@ Use multiple judge LLMs with different perspectives, then aggregate their scores
    - Each judge uses specialized criteria
    - Technical: Accuracy, clarity, completeness
    - Creative: Engagement, originality, emotional appeal
-   - Brand: Tone, messaging, compliance
+   - Brand: Tone of voice, brand guidelines, messaging consistency, company standards compliance
 
 3. **Aggregate Scores**:
    - Collect all judge outputs
