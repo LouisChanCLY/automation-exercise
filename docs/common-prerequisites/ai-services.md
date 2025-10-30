@@ -116,18 +116,39 @@ Google's Gemini offers generous free quotas perfect for AI agents, complex reaso
 
 Real-time web search capabilities for your AI agents. Essential for research tasks.
 
+### Student Access (Recommended)
+
+{: .highlight }
+> **Students Get 1 Year Free!** If you have a `.edu` email address, you can get Perplexity Pro for free for one year, which includes API credits and unlimited searches.
+
+**To claim your free student access:**
+
+1. Visit [Perplexity Pro Student Program](https://www.perplexity.ai/pro?id=student)
+2. Sign up with your `.edu` email address
+3. Verify your student status
+4. Get instant access to Perplexity Pro (worth $200/year)
+5. Includes API access with enhanced credits
+
+**Benefits for Students:**
+- Unlimited Quick Searches
+- 600+ Pro Searches per day
+- Access to advanced AI models (GPT-4, Claude, etc.)
+- API access with enhanced credits
+- File upload and analysis
+- $5/month in API credits (automatically included)
+
 ### Get Your API Key
 
 1. Go to [Perplexity AI](https://www.perplexity.ai/)
 2. Navigate to [API Settings](https://www.perplexity.ai/settings/api)
-3. Sign up for API access
+3. Sign up for API access (use your student account if eligible)
 4. Generate API key:
    - Click "Generate New Key"
    - Name: `n8n-research`
    - Copy and save
 
 {: .highlight }
-> **Monthly Credits**: $5 free monthly (~1000 searches) - resets each month!
+> **Monthly Credits**: $5 free monthly (~1000 searches) - resets each month! Students get this automatically with Pro access.
 
 ### Available Models
 
