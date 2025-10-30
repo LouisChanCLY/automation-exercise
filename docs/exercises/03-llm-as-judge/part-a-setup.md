@@ -21,324 +21,401 @@ nav_order: 2
 
 ## Overview
 
-In this section, you'll prepare your environment for the LLM as a Judge workflow. This includes verifying your API credentials and creating a Google Sheet to track content generation iterations.
+In this section, you'll prepare your environment for the LLM as a Judge workflow. This includes setting up Google Gemini API credentials and understanding the quality control framework.
 
 **Time Required**: 15 minutes
 
 ---
 
-## Step 1: Verify Prerequisites
+## Step 1: Set Up Google Gemini API
 
-### Required Credentials
+### Why Google Gemini?
 
-Before starting, ensure you have these credentials already configured in n8n:
+For this exercise, we'll use Google Gemini for both the generator and judge AI models because:
+- **Free tier available**: Generous free quota for learning and testing
+- **Fast responses**: Quick iteration cycles
+- **Good quality**: Reliable content generation and evaluation
+- **Easy setup**: Simple API key authentication
 
-| Service | Credential Type | Setup Guide |
-|---------|----------------|-------------|
-| **OpenRouter** | API Key | [AI Services Setup](../../common-prerequisites/ai-services) |
-| **Google Sheets** | OAuth2 | [Google Setup](../../common-prerequisites/google-setup) |
+### Get Your Gemini API Key
 
-### Check Your Credentials in n8n
+1. **Go to Google AI Studio**
+   - Visit [ai.google.dev](https://ai.google.dev/)
+   - Click **Get API key** in the top-right corner
+   - Sign in with your Google account if prompted
 
-1. Open your n8n instance
-2. Click **Settings** (gear icon, bottom-left)
-3. Select **Credentials**
-4. Verify you see:
-   - **OpenRouter API** credential
-   - **Google Sheets OAuth2** credential
+2. **Create API Key**
+   - Click **Create API key**
+   - Select an existing Google Cloud project or create a new one
+   - Copy the API key (starts with `AI...`)
 
-{: .important }
-> **Don't have these?** Complete the [Common Prerequisites](../../common-prerequisites/) first. These are required for this exercise.
+   {: .warning }
+   > **Important**: Save this API key securely. You won't be able to view it again.
 
----
+3. **Test Your API Key (Optional)**
 
-## Step 2: Create Google Sheet for Logging
-
-### Why We Need This Sheet
-
-This spreadsheet will track:
-- All content generation attempts
-- Quality scores from each iteration
-- Feedback provided by the judge
-- Final approved content
-- Success/failure status
-- Timestamp and iteration count
-
-### Create the Sheet
-
-1. **Open Google Sheets**
-   - Go to [sheets.google.com](https://sheets.google.com)
-   - Click "Blank" to create new spreadsheet
-
-2. **Name Your Sheet**
-   - Click "Untitled spreadsheet" at the top
-   - Rename to: `LLM Judge Quality Log`
-
-3. **Create Column Headers**
-
-   In **Row 1**, enter these column headers:
-
-   | A | B | C | D | E | F | G | H | I | J |
-   |---|---|---|---|---|---|---|---|---|---|
-   | timestamp | topic | target_audience | iteration_count | final_score | passed | final_content | all_scores | all_feedback | total_iterations |
-
-4. **Format Headers**
-   - Select Row 1
-   - Make it **bold** (Ctrl/Cmd + B)
-   - Set background color to light gray (optional)
-   - Click **View** → **Freeze** → **1 row** (keeps headers visible when scrolling)
-
-5. **Set Column Widths**
-   - Column A (timestamp): 180px
-   - Column B (topic): 200px
-   - Column C (target_audience): 150px
-   - Column D (iteration_count): 120px
-   - Column E (final_score): 100px
-   - Column F (passed): 80px
-   - Column G (final_content): 400px
-   - Column H (all_scores): 150px
-   - Column I (all_feedback): 300px
-   - Column J (total_iterations): 120px
-
-6. **Save the Sheet ID**
-
-   Copy the Spreadsheet ID from the URL:
-   ```
-   https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit
+   You can test your key using curl:
+   ```bash
+   curl -H 'Content-Type: application/json' \
+        -d '{"contents":[{"parts":[{"text":"Hello!"}]}]}' \
+        -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY'
    ```
 
-   **Example**:
-   ```
-   https://docs.google.com/spreadsheets/d/1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P/edit
-   ```
+   Replace `YOUR_API_KEY` with your actual key. You should see a JSON response with generated text.
 
-   The ID is: `1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P`
+### Add Gemini Credentials to n8n
 
-   {: .highlight }
-   > **Save this ID**: You'll need it when building the workflow in Part B.
+1. **Open n8n**
+   - Launch your n8n instance
+   - Log in if required
 
----
+2. **Add Gemini Credential**
+   - Click **Settings** (gear icon, bottom-left)
+   - Select **Credentials**
+   - Click **Add Credential**
+   - Search for **Google Palm API** (used for Gemini)
+   - Click to select
 
-## Step 3: Understand the Data Schema
+3. **Configure Credential**
+   - **Name**: `Main Gemini` (or any name you prefer)
+   - **API Key**: Paste your Gemini API key
+   - Click **Save**
 
-### What Gets Logged
-
-Each successful or failed generation run creates one row with:
-
-| Column | Data Type | Description | Example |
-|--------|-----------|-------------|---------|
-| **timestamp** | DateTime | When the workflow completed | `2025-01-15T10:30:45Z` |
-| **topic** | String | Content topic provided as input | `"Write a blog post about remote work productivity"` |
-| **target_audience** | String | Intended audience | `"Remote workers, 25-45 years old"` |
-| **iteration_count** | Number | How many times content was regenerated | `3` |
-| **final_score** | Number | Quality score of final content (0-100) | `85` |
-| **passed** | Boolean | Whether quality threshold was met | `TRUE` |
-| **final_content** | Text | The approved or best-attempt content | `"Remote work has transformed..."` |
-| **all_scores** | Array | Scores from each iteration | `[65, 78, 85]` |
-| **all_feedback** | Array | Feedback from each iteration | `["Add examples", "Improve conclusion", "Good!"]` |
-| **total_iterations** | Number | Total attempts made (same as iteration_count) | `3` |
-
-### Example Row
-
-After a successful run:
-
-```
-timestamp: 2025-01-15T14:22:10Z
-topic: Product description for wireless headphones
-target_audience: Remote workers, 25-45
-iteration_count: 2
-final_score: 88
-passed: TRUE
-final_content: "Experience studio-quality sound while working from anywhere..."
-all_scores: [72, 88]
-all_feedback: ["Add battery life details", "Perfect!"]
-total_iterations: 2
-```
-
----
-
-## Step 4: Understanding the Quality Criteria
-
-### Default Evaluation Framework
-
-The judge LLM will evaluate generated content using these criteria:
-
-#### 1. Accuracy (25% weight)
-- Content is factually correct
-- No hallucinated information
-- Claims are verifiable
-- Data is realistic
-
-#### 2. Clarity (25% weight)
-- Easy to understand
-- Well-structured sentences
-- Logical flow
-- Appropriate vocabulary for audience
-
-#### 3. Completeness (20% weight)
-- Covers all required points
-- Includes necessary details
-- Addresses the full topic
-- No missing critical information
-
-#### 4. Tone (15% weight)
-- Matches target audience
-- Appropriate formality level
-- Consistent voice
-- Brand-aligned (if specified)
-
-#### 5. Creativity (15% weight)
-- Engaging and interesting
-- Original angles
-- Vivid examples
-- Memorable phrasing
-
-### Scoring System
-
-- **Each criterion**: Scored 0-100
-- **Overall score**: Weighted average
-- **Pass threshold**: 80 or higher
-- **Maximum iterations**: 5 attempts
-
-### Customization (Optional)
-
-You can modify these criteria in Part B when building the judge prompt. Common variations:
-
-**For Technical Documentation**:
-- Replace "Creativity" with "Technical Accuracy"
-- Increase "Clarity" weight to 30%
-- Add "Code Examples" criterion
-
-**For Marketing Copy**:
-- Increase "Creativity" to 25%
-- Add "Call-to-Action Strength" criterion
-- Add "Emotional Appeal" metric
-
-**For Customer Service**:
-- Add "Empathy" criterion (20%)
-- Increase "Tone" to 25%
-- Add "Solution Provided" check
-
----
-
-## Step 5: Plan Your First Test Case
-
-### Choose a Content Type
-
-For your first test, pick something simple but meaningful:
-
-**Recommended Options**:
-
-1. **Product Description**
-   - Topic: "Noise-cancelling headphones"
-   - Audience: "Remote workers"
-   - Length: 150-200 words
-
-2. **Email Subject Lines**
-   - Topic: "Promoting a productivity webinar"
-   - Audience: "Busy professionals"
-   - Length: 5-10 words
-
-3. **Blog Post Introduction**
-   - Topic: "Benefits of automation"
-   - Audience: "Small business owners"
-   - Length: 100-150 words
-
-4. **Social Media Post**
-   - Topic: "Company culture highlight"
-   - Audience: "Job seekers, 22-35"
-   - Length: 280 characters (Twitter/X)
+4. **Test Connection** (Optional)
+   - In n8n, create a test workflow
+   - Add an AI Agent node
+   - Add Google Gemini Model sub-node
+   - Select your credential
+   - Test with a simple prompt
 
 {: .highlight }
-> **Start Simple**: Pick option #1 or #2 for your first run. You can test others after mastering the basics.
-
-### Define Your Success Criteria
-
-Write down what "good" looks like for your chosen content:
-
-**Example for Product Description**:
-- ✅ Mentions 3+ key features
-- ✅ Includes emotional benefit ("focus better", "enjoy music")
-- ✅ Professional but friendly tone
-- ✅ Ends with subtle call-to-action
-- ✅ 150-200 words
+> **Credential Saved**: You can now use this credential in any n8n workflow that needs Google Gemini.
 
 ---
 
-## Step 6: Optional - Install Workflow Template
+## Step 2: Understand the Workflow Architecture
 
-### Quick Start Option
+### What You're Building
 
-If you want to see the finished workflow before building:
+```mermaid
+graph LR
+    A[Web Form] -->|Submit Task| B[Generator AI]
+    B -->|Create Content| C[Judge AI]
+    C -->|Evaluate| D{Pass?}
+    D -->|No| E[Feedback Loop]
+    E --> B
+    D -->|Yes| F[Return Result]
 
-1. Download the template: [llm-judge-workflow.json](./downloads/llm-judge-workflow.json)
-2. In n8n, click **Workflows** → **Import from File**
-3. Select the downloaded JSON file
-4. **Important**: Replace placeholder credential IDs and Sheet ID before activating
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#ffe0b2
+    style D fill:#f3e5f5
+    style F fill:#c8e6c9
+```
 
-### Or Build From Scratch (Recommended)
+### How It Works
 
-Part B will guide you through building each node step-by-step. This approach helps you understand the logic and customize for your needs.
+1. **User submits a web form** with:
+   - Task description (what to generate)
+   - Instructions (how to do it)
+   - Success criteria (how to measure quality)
+
+2. **Generator AI** creates content based on task and instructions
+
+3. **Judge AI** evaluates content against success criteria:
+   - Returns `passed: true` if quality standards met
+   - Returns `passed: false` with detailed feedback if not
+
+4. **Decision Logic**:
+   - If **passed**: Return approved content to user via form
+   - If **not passed**: Feed feedback back to generator, retry (up to 10 times)
+   - If **max retries reached**: Return best attempt with failure status
+
+### Key Benefits
+
+- **No manual review needed**: Judge AI automates quality control
+- **Self-improving**: Each iteration incorporates feedback
+- **Transparent**: Returns status, feedback, and iteration count
+- **Cost-controlled**: Maximum 10 iterations prevents runaway costs
+
+---
+
+## Step 3: Understanding Quality Evaluation
+
+### The Judge's Role
+
+The judge AI uses an "EXTREMELY STRICT" evaluation approach:
+
+```
+"You are an EXTREMELY STRICT quality judge with ZERO tolerance for mediocrity.
+Evaluate the following output with RUTHLESS scrutiny."
+```
+
+This ensures high-quality outputs by:
+- **Failing mediocre content**: Forces generator to improve
+- **Providing specific feedback**: Tells exactly what's wrong
+- **Being consistent**: Uses structured output (passed: boolean, feedback: string)
+
+### Evaluation Output Format
+
+The judge returns structured JSON:
+
+```json
+{
+  "passed": false,
+  "feedback": "Missing specific lunch location. Word count is 175 but should be 100-150. Greeting should be 'Dear' not 'Hi'."
+}
+```
+
+### Example Evaluation Scenarios
+
+**Scenario 1: First attempt fails**
+```json
+{
+  "passed": false,
+  "feedback": "Email lacks specific date and time for lunch invitation. Needs at least 2 specific contributions mentioned. Currently only mentions 'great work' generically."
+}
+```
+
+**Scenario 2: Second attempt passes**
+```json
+{
+  "passed": true,
+  "feedback": "Excellent! Meets all criteria. Specific contributions mentioned (database optimization, UI redesign). Clear lunch details (Friday, 12:30 PM, Cafe Roma). Word count perfect (145 words). Professional yet warm tone maintained."
+}
+```
+
+---
+
+## Step 4: Planning Your Success Criteria
+
+### Writing Effective Success Criteria
+
+The quality of your results depends heavily on how you define success criteria. Here's how to write them effectively:
+
+#### ❌ Too Vague
+
+```
+The email should be good and professional.
+```
+
+**Problem**: "Good" is subjective. Judge won't know what to look for.
+
+#### ✅ Specific and Measurable
+
+```
+The email must:
+1. Have proper greeting ("Dear [Name]")
+2. Mention at least 2 specific contributions
+3. Include lunch invitation with date, time, and location
+4. Be 100-150 words
+5. Have no grammatical errors
+6. Maintain professional yet warm tone
+```
+
+**Better**: Each criterion is specific, measurable, and verifiable.
+
+### Success Criteria Template
+
+Use this template for any content type:
+
+```
+The [content type] must:
+1. [Structural requirement] - e.g., "Include title and introduction"
+2. [Content requirement] - e.g., "Mention X, Y, and Z"
+3. [Length requirement] - e.g., "Be exactly 280 characters"
+4. [Quality requirement] - e.g., "Use active voice throughout"
+5. [Tone requirement] - e.g., "Maintain casual, friendly tone"
+6. [Format requirement] - e.g., "End with call-to-action"
+7. [Technical requirement] - e.g., "Zero spelling/grammar errors"
+```
+
+### Examples for Different Content Types
+
+**Product Description**
+```
+Must include:
+- At least 3 key features
+- 1-2 emotional benefits
+- Target audience pain point addressed
+- Subtle call-to-action
+- 150-200 words
+- Professional but approachable tone
+```
+
+**Social Media Post**
+```
+Must include:
+- Hook in first sentence
+- Clear value proposition
+- 1-2 relevant hashtags
+- Call-to-action or question
+- Under 280 characters
+- Conversational tone
+```
+
+**Email Subject Line**
+```
+Must be:
+- 5-10 words maximum
+- Include benefit or curiosity gap
+- No clickbait language
+- Personalized if possible
+- Action-oriented
+```
+
+---
+
+## Step 5: Understanding Iteration Limits
+
+### Why Max 10 Retries?
+
+The workflow has a maximum of 10 iterations to:
+
+1. **Control Costs**: Each API call costs money (even on free tier, quota is limited)
+2. **Prevent Infinite Loops**: If criteria are impossible, workflow should fail gracefully
+3. **Force Better Prompts**: Repeated failures indicate criteria or instructions need improvement
+4. **Practical Limits**: If 10 attempts fail, manual intervention is needed
+
+### Typical Iteration Patterns
+
+**Most tasks**: 2-4 iterations
+```
+Iteration 1: Failed - Missing details
+Iteration 2: Failed - Wrong tone
+Iteration 3: Passed ✅
+```
+
+**Complex tasks**: 5-7 iterations
+```
+Iteration 1-3: Missing various criteria
+Iteration 4-5: Improvements but still failing
+Iteration 6: Passed ✅
+```
+
+**Impossible tasks**: All 10 iterations fail ⚠️
+```
+Iteration 1-10: Never passes
+→ Indicates criteria too strict or instructions unclear
+→ Manual review needed
+```
+
+### Adjusting Max Retries
+
+You can modify the `max_retries` value in the workflow:
+
+- **Lower (5)**: Faster failure, less cost, forces better inputs
+- **Higher (15-20)**: More chances to pass, higher cost, useful for very complex tasks
+
+---
+
+## Step 6: Prepare Your First Test Task
+
+### Recommended First Test
+
+For your first workflow run, use this example task:
+
+**Task Description:**
+```
+Draft an email to a colleague thanking them for their help on a project and inviting them to a celebration lunch.
+```
+
+**How to Do It (Instructions):**
+```
+Write a professional yet friendly email that:
+1. Opens with a warm greeting
+2. Expresses genuine appreciation for their specific contributions
+3. Mentions the project success
+4. Extends a lunch invitation with details
+5. Closes politely
+6. Keep it 100-150 words
+```
+
+**Success Criteria (How to Measure):**
+```
+The email must:
+1. Have proper greeting and closing
+2. Mention at least 2 specific contributions
+3. Include clear lunch invitation with date/time/place
+4. Be 100-150 words
+5. Be grammatically perfect
+6. Maintain a warm but professional tone
+```
+
+### Why This Example Works
+
+- **Simple structure**: Email is familiar format
+- **Clear criteria**: Easy to verify success
+- **Specific requirements**: Judge can evaluate objectively
+- **Moderate difficulty**: Should pass in 2-4 iterations
+- **Real-world applicable**: Practical use case
 
 ---
 
 ## Step 7: Setup Checklist
 
-Before moving to Part B, verify:
+Before moving to Part B, verify you have:
 
-- ✅ n8n is open and accessible
-- ✅ OpenRouter credential exists in n8n
-- ✅ Google Sheets OAuth2 credential exists in n8n
-- ✅ Google Sheet created with proper column headers
-- ✅ Spreadsheet ID saved for reference
-- ✅ Test content topic chosen
-- ✅ Success criteria defined
+- ✅ Google Gemini API key obtained
+- ✅ Gemini credential added to n8n
+- ✅ Understand workflow architecture (form → generate → judge → loop/return)
+- ✅ Understand quality evaluation approach (strict judge, structured output)
+- ✅ Prepared test task with clear success criteria
+- ✅ n8n instance is open and ready
 
 ---
 
 ## Troubleshooting
 
-### "I don't have OpenRouter credentials"
+### "Can't get Gemini API key"
 
-**Solution**: Follow the [AI Services Setup](../../common-prerequisites/ai-services#openrouter-setup) guide to create account and get API key.
+**Solutions**:
+1. Ensure you're signed in to a Google account
+2. Try visiting [makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey) directly
+3. Check if Google AI is available in your region
+4. Create a Google Cloud project first if required
 
-### "Google Sheets OAuth not working"
+### "Credential test fails in n8n"
 
-**Solution**:
-1. Ensure you completed [Google Cloud Setup](../../common-prerequisites/google-setup)
-2. Check Google Sheets API is enabled in Cloud Console
-3. Re-authenticate the credential in n8n
+**Solutions**:
+1. Verify API key is copied correctly (no extra spaces)
+2. Ensure API key starts with `AI`
+3. Check your Gemini API quota hasn't been exhausted
+4. Try generating a new API key
+5. Verify Google Generative AI API is enabled in your Google Cloud project
 
-### "Can I use a different LLM provider?"
+### "Can I use a different AI provider?"
 
 **Yes!** You can substitute:
-- **Anthropic Claude** - Direct API or via OpenRouter
+- **OpenRouter** - Provides access to multiple models (GPT-4, Claude, etc.)
+- **Anthropic Claude** - Direct API
 - **OpenAI GPT-4** - Direct API
-- **Google Gemini** - Via Google AI Studio
-- **Local models** - Ollama with supported models
+- **Local models** - Ollama with compatible models
 
-You'll need to adjust node configurations in Part B accordingly.
+You'll need to:
+1. Update the AI model nodes in the workflow
+2. Configure appropriate credentials
+3. Adjust prompts if needed for the specific model
 
-### "Can I use a different logging destination?"
+### "Do I need Google Sheets?"
 
-**Yes!** Instead of Google Sheets, you can use:
-- **Airtable** - Similar spreadsheet interface
-- **PostgreSQL** - For production systems
-- **MongoDB** - For JSON-native storage
-- **Webhook** - Send to any API endpoint
-- **Local File** - CSV or JSON file
+**No!** The new workflow uses **Form Trigger** with `responseMode: lastNode`, which means:
+- Results are returned directly to the web form
+- No external storage needed
+- Users see output immediately in browser
+- Simpler setup, fewer dependencies
 
-Part B shows Google Sheets, but the logic transfers to other destinations.
+If you want to log results for analytics, you can add a Google Sheets node at the end (optional).
 
 ---
 
 ## What You've Accomplished
 
-✅ Verified all required credentials
-✅ Created structured logging sheet
-✅ Understood quality evaluation framework
-✅ Planned first test content
-✅ Ready to build the workflow
+✅ Set up Google Gemini API credentials
+✅ Understood the quality control workflow architecture
+✅ Learned how to write effective success criteria
+✅ Prepared a test task for your first run
+✅ Ready to build the workflow in n8n
 
 ---
 

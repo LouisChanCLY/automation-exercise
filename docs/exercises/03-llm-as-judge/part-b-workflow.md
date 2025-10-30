@@ -33,23 +33,25 @@ In this section, you'll build the complete LLM as a Judge workflow from scratch.
 
 ```mermaid
 graph TB
-    Start[1. Manual Trigger] --> Init[2. Initialize Variables]
-    Init --> Gen[3. Generator LLM]
-    Gen --> Judge[4. Judge LLM]
+    Start[1. Form Trigger] --> Init[2. Initialize Variables]
+    Init --> Gen[3. AI Generator Agent]
+    Gen --> Judge[4. LLM Judge Agent]
     Judge --> Parse[5. Parse Judge Output]
-    Parse --> Check{6. Pass & Score >= 80?}
-    Check -->|No & iterations < 5| Loop[7. Loop Back]
-    Loop --> Gen
-    Check -->|Yes| Format[8. Format Success]
-    Check -->|No & iterations >= 5| Fail[9. Format Failure]
-    Format --> Log[10. Log to Sheets]
-    Fail --> Log
+    Parse --> Merge[6. Merge Results]
+    Merge --> Check{7. Pass?}
+    Check -->|Yes| Success[8. Mark Success]
+    Check -->|No| Retry[9. Increment Retry]
+    Retry --> MaxCheck{10. Max Retries?}
+    MaxCheck -->|Yes| Fail[11. Mark Failure]
+    MaxCheck -->|No| Init
+    Success --> Output[12. Final Output]
+    Fail --> Output
 
     style Start fill:#e1f5fe
     style Gen fill:#fff3e0
     style Judge fill:#ffe0b2
     style Check fill:#f3e5f5
-    style Format fill:#c8e6c9
+    style Success fill:#c8e6c9
     style Fail fill:#ffcdd2
 ```
 
@@ -57,16 +59,40 @@ graph TB
 
 | # | Node Name | Type | Purpose |
 |---|-----------|------|---------|
-| 1 | Manual Trigger | Trigger | Start workflow with input data |
-| 2 | Initialize Variables | Code | Set up loop counter, score history |
-| 3 | Generator LLM | LLM Chain | Create/improve content based on feedback |
-| 4 | Judge LLM | LLM Chain | Evaluate content quality |
-| 5 | Parse Judge Output | Code | Extract score, feedback, pass/fail |
-| 6 | Quality Check | IF | Decide whether to iterate or finish |
-| 7 | Loop Controller | Code | Increment counter, prepare next iteration |
-| 8 | Format Success | Code | Package final approved content |
-| 9 | Format Failure | Code | Package best attempt after max iterations |
-| 10 | Log Results | Google Sheets | Save all data for analysis |
+| 1 | Form Trigger | Form Trigger | Collect task, instructions, and success criteria |
+| 2 | Initialize Variables | Edit Fields (Set) | Set up loop counter and tracking variables |
+| 3 | AI Generator Agent | AI Agent | Create/improve content based on instructions |
+| 4 | LLM Judge Agent | AI Agent | Evaluate content against success criteria |
+| 5 | Parse Judge Output | Structured Output Parser | Extract passed/failed status and feedback |
+| 6 | Merge Results | Edit Fields (Set) | Combine evaluation with generated output |
+| 7 | Check Pass/Fail | IF | Decide whether content passes quality check |
+| 8 | Mark Success | Edit Fields (Set) | Set status to "success" |
+| 9 | Increment Retry | Edit Fields (Set) | Increment counter and update feedback |
+| 10 | Max Retries Check | IF | Check if max retries reached |
+| 11 | Mark Failure | Edit Fields (Set) | Set status to "failed" |
+| 12 | Final Output | Edit Fields (Set) | Format and return final results |
+
+---
+
+## Quick Start: Import the Workflow
+
+### Option 1: Import Pre-built Workflow (Recommended)
+
+The fastest way to complete this exercise is to import the pre-built workflow:
+
+1. **Download** the workflow file: [llm-judge-workflow.json](./downloads/llm-judge-workflow.json)
+2. Open n8n and click **Import from File**
+3. Select the downloaded JSON file
+4. **Update credentials**:
+   - Configure Google Gemini API credentials (see [Part A: Setup](./part-a-setup))
+5. **Test the workflow** by clicking the Form Trigger URL
+
+{: .highlight }
+> **Note**: You'll still need to set up Google Gemini credentials as described in Part A.
+
+### Option 2: Build from Scratch
+
+Follow the detailed instructions below to build the workflow step-by-step and learn how each component works.
 
 ---
 
@@ -79,33 +105,66 @@ graph TB
 
 ---
 
-## Step 2: Add Manual Trigger
+## Step 2: Add Form Trigger
 
 ### Purpose
 
-The Manual Trigger lets you start the workflow with custom input (topic, audience, criteria).
+The Form Trigger creates a web form where users can submit tasks for AI generation with quality control.
 
 ### Configuration
 
 1. Click **+ Add node** or press `Tab`
-2. Search for **Manual Trigger**
+2. Search for **Form Trigger**
 3. Click to add
 
-4. **Configure Fields**:
-   - Click **Add Field**
-   - Add these fields:
+4. **Configure the form**:
+   - **Form Title**: `Task Submission Form`
+   - **Form Description**: `Submit a task for AI generation with quality control`
 
-   | Field Name | Type | Description | Example Value |
-   |------------|------|-------------|---------------|
-   | `topic` | String | What content to generate | `Write a product description for wireless headphones` |
-   | `target_audience` | String | Who the content is for | `Remote workers, 25-45 years old` |
-   | `required_length` | Number | Target word count | `150` |
-   | `pass_threshold` | Number | Minimum score to pass (0-100) | `80` |
+5. **Add Form Fields**:
+   Click **Add Field** three times and configure:
 
-5. Click **Execute Node** to test with sample values
+   | Field Label | Field Type | Required |
+   |-------------|------------|----------|
+   | Task Description | Textarea | Yes |
+   | How to Do It (Instructions) | Textarea | Yes |
+   | Success Criteria (How to Measure) | Textarea | Yes |
+
+6. **Response Mode**: Set to `Last Node` (returns the final output to the form)
+
+7. Click **Test step** to get the form URL
 
 {: .highlight }
-> **Pro Tip**: These fields make your workflow reusable for any content type!
+> **Pro Tip**: Copy the form URL - you'll use this to submit test tasks!
+
+### Example Form Input
+
+**Task Description:**
+```
+Draft an email to a colleague thanking them for their help on a project and inviting them to a celebration lunch.
+```
+
+**How to Do It (Instructions):**
+```
+Write a professional yet friendly email that:
+1. Opens with a warm greeting
+2. Expresses genuine appreciation for their specific contributions
+3. Mentions the project success
+4. Extends a lunch invitation with details
+5. Closes politely
+6. Keep it 100-150 words
+```
+
+**Success Criteria (How to Measure):**
+```
+The email must:
+1. Have proper greeting and closing
+2. Mention at least 2 specific contributions
+3. Include clear lunch invitation with date/time/place
+4. Be 100-150 words
+5. Be grammatically perfect
+6. Maintain a warm but professional tone
+```
 
 ---
 
@@ -113,552 +172,338 @@ The Manual Trigger lets you start the workflow with custom input (topic, audienc
 
 ### Purpose
 
-Set up tracking variables for the iteration loop (counter, scores, feedback history).
+Set up tracking variables for the iteration loop (retry counter, max retries, feedback).
 
 ### Configuration
 
-1. Add **Code** node (connect to Manual Trigger)
+1. Add **Edit Fields (Set)** node (connect to Form Trigger)
 2. Rename to: `Initialize Variables`
 
-3. **Paste this code**:
+3. **Configure Assignments**:
 
-```javascript
-// Initialize tracking variables for iteration loop
-const inputData = $input.first().json;
-
-return [{
-  json: {
-    // User inputs
-    topic: inputData.topic,
-    target_audience: inputData.target_audience,
-    required_length: inputData.required_length || 150,
-    pass_threshold: inputData.pass_threshold || 80,
-
-    // Iteration tracking
-    iteration: 0,
-    max_iterations: 5,
-
-    // Content tracking
-    current_content: "",
-    previous_feedback: "",
-
-    // Scoring history
-    score_history: [],
-    feedback_history: [],
-
-    // Status
-    passed: false,
-    final_score: 0
-  }
-}];
-```
+   | Field Name | Type | Value | Purpose |
+   |------------|------|-------|---------|
+   | retry_count | Number | `={{ $json.retry_count \|\| 0 }}` | Current attempt number |
+   | max_retries | Number | `=10` | Maximum allowed attempts |
+   | previous_feedback | String | `={{ $json.previous_feedback \|\| null }}` | Feedback from judge |
+   | ai_output | String | `={{ $json.ai_output \|\| null }}` | Generated content |
 
 4. Click **Test step**
 
-**Expected Output**: JSON object with all variables initialized.
+**Expected Output**: JSON object with initialized variables.
 
 ---
 
-## Step 4: Add Generator LLM Chain
+## Step 4: Add AI Generator Agent
 
 ### Purpose
 
-The Generator LLM creates content based on the topic. On first iteration, it generates fresh content. On subsequent iterations, it improves based on judge feedback.
+The Generator creates content based on the task and instructions. On subsequent iterations, it improves based on judge feedback.
 
 ### Configuration
 
-1. Add **LLM Chain** node
-2. Rename to: `Generator LLM`
+1. Add **AI Agent** node (after Initialize Variables)
+2. Rename to: `AI Agent - Generator`
 
-3. **Configure Model**:
-   - Add sub-node: **OpenRouter Chat Model**
-   - Model: `anthropic/claude-3.5-sonnet` (or `openai/gpt-4o`)
-   - Credential: Select your OpenRouter credential
+3. **Configure Model Sub-node**:
+   - Click on the node to open configuration
+   - Add a **Google Gemini Model** sub-node
+   - Connect it to the AI Agent
+   - Select your Google Gemini credential
 
 4. **Configure Prompt**:
 
-Click on the LLM Chain node and set **Prompt** to:
-
 ```
-You are an expert content creator. Generate high-quality content based on these requirements:
+=Task: {{ $('Form Trigger').item.json['Task Description'] }}
 
-TOPIC: {{ $json.topic }}
-TARGET AUDIENCE: {{ $json.target_audience }}
-REQUIRED LENGTH: {{ $json.required_length }} words
+Instructions: {{ $('Form Trigger').item.json['How to Do It (Instructions)'] }}
 
-{{ $json.iteration === 0 ?
-  "Create compelling, original content that meets all requirements."
-  :
-  "PREVIOUS ATTEMPT HAD ISSUES. Improve based on this feedback:\n\n" + $json.previous_feedback
-}}
+{{ $json.previous_feedback ? 'Previous Feedback: ' + $json.previous_feedback : '' }}
 
-Generate ONLY the content itself, no meta-commentary.
+Please generate the output according to the task description and instructions. Ensure it meets the success criteria{{ $json.previous_feedback ? ' and addresses the feedback provided' : '' }}.
 ```
 
 **How it works**:
-- **First iteration** (`iteration === 0`): Fresh generation
-- **Later iterations**: Incorporates feedback from judge
+- **First iteration**: Generates fresh content based on task and instructions
+- **Later iterations**: Incorporates previous feedback from the judge
 
 5. Click **Test step**
 
-**Expected Output**: Generated content text.
+**Expected Output**: Generated content text in the `output` field.
 
 ---
 
-## Step 5: Add Judge LLM Chain
+## Step 5: Add LLM Judge Agent
 
 ### Purpose
 
-The Judge LLM evaluates content quality against criteria and provides structured feedback.
+The Judge evaluates content quality against success criteria and provides strict, structured feedback.
 
 ### Configuration
 
-1. Add **LLM Chain** node (after Generator)
-2. Rename to: `Judge LLM`
+1. Add **AI Agent** node (after AI Generator)
+2. Rename to: `LLM Judge`
 
-3. **Configure Model**:
-   - Add sub-node: **OpenRouter Chat Model**
-   - Model: `openai/gpt-4o-mini` (cheaper model is fine for judging)
-   - Credential: Select your OpenRouter credential
+3. **Configure Model Sub-node**:
+   - Add a **Google Gemini Judge Model** sub-node
+   - Connect it to the LLM Judge
+   - Select your Google Gemini credential
+   - **Enable Output Parser**: Check the box
 
 4. **Add Structured Output Parser**:
    - Add sub-node: **Structured Output Parser**
-   - Schema Type: **From JSON Schema**
-   - Paste this schema:
+   - **Schema Type**: `Manual`
+   - **Input Schema**:
 
 ```json
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "overall_score": {
-      "type": "number",
-      "description": "Overall quality score from 0-100"
-    },
-    "pass": {
+    "passed": {
       "type": "boolean",
-      "description": "Whether content meets quality standards"
-    },
-    "criteria_scores": {
-      "type": "object",
-      "properties": {
-        "accuracy": {"type": "number"},
-        "clarity": {"type": "number"},
-        "completeness": {"type": "number"},
-        "tone": {"type": "number"},
-        "creativity": {"type": "number"}
-      }
+      "description": "Whether the output meets the success criteria"
     },
     "feedback": {
       "type": "string",
-      "description": "Summary of strengths and weaknesses"
-    },
-    "specific_improvements": {
-      "type": "array",
-      "items": {"type": "string"},
-      "description": "List of specific improvements needed"
+      "description": "Detailed feedback on what needs improvement"
     }
   },
-  "required": ["overall_score", "pass", "criteria_scores", "feedback", "specific_improvements"]
+  "required": ["passed", "feedback"]
 }
 ```
+
+   - **Auto-Fix**: Enable
 
 5. **Configure Judge Prompt**:
 
 ```
-You are a strict quality evaluator. Evaluate this content objectively against the criteria below.
+=You are an EXTREMELY STRICT quality judge with ZERO tolerance for mediocrity. Evaluate the following output with RUTHLESS scrutiny.
 
-CONTENT TO EVALUATE:
-{{ $('Generator LLM').item.json.output }}
+Task: {{ $('Form Trigger').item.json['Task Description'] }}
 
-REQUIREMENTS:
-- Topic: {{ $('Initialize Variables').item.json.topic }}
-- Target Audience: {{ $('Initialize Variables').item.json.target_audience }}
-- Required Length: {{ $('Initialize Variables').item.json.required_length }} words
+Success Criteria: {{ $('Form Trigger').item.json['Success Criteria (How to Measure)'] }}
 
-EVALUATION CRITERIA (score each 0-100):
-
-1. ACCURACY (25% weight):
-   - Factually correct information
-   - No hallucinations or false claims
-   - Verifiable statements
-
-2. CLARITY (25% weight):
-   - Easy to understand
-   - Well-structured sentences
-   - Logical flow
-   - Appropriate vocabulary
-
-3. COMPLETENESS (20% weight):
-   - Covers all required points
-   - Includes necessary details
-   - Meets length requirement
-   - Addresses full topic
-
-4. TONE (15% weight):
-   - Matches target audience
-   - Appropriate formality
-   - Consistent voice
-
-5. CREATIVITY (15% weight):
-   - Engaging and interesting
-   - Original angles
-   - Vivid examples
-
-SCORING:
-- Calculate weighted average for overall_score
-- Set pass = true if overall_score >= {{ $('Initialize Variables').item.json.pass_threshold }}
-- Provide specific, actionable improvements
-- Be strict but fair
-
-Evaluate now and return structured JSON.
+Generated Output: {{ $json.output }}
 ```
+
+**Why this prompt works**:
+- **Extremely strict**: Ensures high-quality output
+- **Zero tolerance**: Prevents accepting mediocre results
+- **Ruthless scrutiny**: Forces careful evaluation
+- **Structured output**: Returns consistent JSON format
 
 6. Click **Test step**
 
-**Expected Output**: Structured JSON with scores, pass/fail, and feedback.
+**Expected Output**: Structured JSON with `passed` (boolean) and `feedback` (string).
 
 ---
 
-## Step 6: Add Parse Judge Output Node
+## Step 6: Add Merge Results Node
 
 ### Purpose
 
-Extract the judge's evaluation into clean variables for decision logic.
+Combine the judge's evaluation with the generator's output and tracking variables.
 
 ### Configuration
 
-1. Add **Code** node (after Judge LLM)
-2. Rename to: `Parse Judge Output`
+1. Add **Edit Fields (Set)** node (after LLM Judge)
+2. Rename to: `Merge Results`
 
-3. **Paste this code**:
+3. **Configure Assignments**:
 
-```javascript
-// Parse judge output and merge with existing data
-const previousData = $('Initialize Variables').item.json;
-const generatorOutput = $('Generator LLM').item.json.output;
-const judgeOutput = $input.first().json.output;
-
-// Increment iteration counter
-const currentIteration = previousData.iteration + 1;
-
-// Update score and feedback history
-const scoreHistory = [...previousData.score_history, judgeOutput.overall_score];
-const feedbackHistory = [...previousData.feedback_history, judgeOutput.feedback];
-
-return [{
-  json: {
-    // Preserve original inputs
-    topic: previousData.topic,
-    target_audience: previousData.target_audience,
-    required_length: previousData.required_length,
-    pass_threshold: previousData.pass_threshold,
-    max_iterations: previousData.max_iterations,
-
-    // Update iteration state
-    iteration: currentIteration,
-
-    // Current content and feedback
-    current_content: generatorOutput,
-    previous_feedback: judgeOutput.specific_improvements.join(". "),
-
-    // Latest judge evaluation
-    final_score: judgeOutput.overall_score,
-    passed: judgeOutput.pass,
-    criteria_scores: judgeOutput.criteria_scores,
-    current_feedback: judgeOutput.feedback,
-
-    // History tracking
-    score_history: scoreHistory,
-    feedback_history: feedbackHistory,
-
-    // For logging
-    all_scores: scoreHistory.join(", "),
-    all_feedback: feedbackHistory.join(" | ")
-  }
-}];
-```
+   | Field Name | Type | Value |
+   |------------|------|-------|
+   | evaluation_result | Boolean | `={{ $json.output.passed }}` |
+   | feedback | String | `={{ $json.output.feedback }}` |
+   | output | String | `={{ $('AI Agent - Generator').item.json.output }}` |
+   | max_retries | Number | `={{ $('Initialize Variables').item.json.max_retries }}` |
+   | retry_count | Number | `={{ $('Initialize Variables').item.json.retry_count }}` |
 
 4. Click **Test step**
 
-**Expected Output**: Combined object with iteration tracking and judge results.
+**Expected Output**: Combined object with evaluation results and generated content.
 
 ---
 
-## Step 7: Add Quality Check (IF Node)
+## Step 7: Add Check Pass/Fail Node
 
 ### Purpose
 
-Decision point: Should we accept the content, iterate again, or give up after max iterations?
+Decision point: Did the content pass the quality check?
 
 ### Configuration
 
-1. Add **IF** node (after Parse Judge Output)
-2. Rename to: `Quality Check`
+1. Add **IF** node (after Merge Results)
+2. Rename to: `Check Pass/Fail`
 
-3. **Configure Conditions**:
+3. **Configure Condition**:
+   - **Left Value**: `={{ $json.evaluation_result }}`
+   - **Operation**: `equals`
+   - **Right Value**: `true`
 
-   **Condition 1 - Content Passed**:
-   - Value 1: `{{ $json.passed }}`
-   - Operation: `equals`
-   - Value 2: `true`
-
-   **AND**
-
-   - Value 1: `{{ $json.final_score }}`
-   - Operation: `>= (greater than or equal)`
-   - Value 2: `{{ $json.pass_threshold }}`
-
-   **Condition 2 - Max Iterations Reached**:
-   - Value 1: `{{ $json.iteration }}`
-   - Operation: `>= (greater than or equal)`
-   - Value 2: `{{ $json.max_iterations }}`
-
-4. **Output Routing**:
-   - **True** branch: Content passed OR max iterations reached (stop iterating)
-   - **False** branch: Content failed AND under max iterations (loop again)
+**Output Routing**:
+- **True** branch: Content passed - go to success path
+- **False** branch: Content failed - go to retry path
 
 ---
 
-## Step 8: Add Loop Controller Node
+## Step 8: Add Mark Success Node
 
 ### Purpose
 
-When quality check fails, prepare variables for next iteration and loop back to Generator.
+When content passes, set status to "success".
 
 ### Configuration
 
-1. Connect **IF (false)** output to new **Code** node
-2. Rename to: `Loop Controller`
+1. Connect **Check Pass/Fail (true)** to new **Edit Fields (Set)** node
+2. Rename to: `Mark Success`
 
-3. **Paste this code**:
+3. **Configure Assignments**:
+   - **Field Name**: `status`
+   - **Type**: String
+   - **Value**: `success`
 
-```javascript
-// Prepare for next iteration
-const data = $input.first().json;
+4. **Enable**: `Include Other Fields` (passes all previous data through)
 
-return [{
-  json: {
-    // Pass through everything
-    ...data,
+---
 
-    // Update iteration state for next loop
-    iteration: data.iteration,  // Already incremented in Parse node
+## Step 9: Add Increment Retry Node
 
-    // Log current attempt
-    loop_reason: `Iteration ${data.iteration}: Score ${data.final_score} < ${data.pass_threshold}. Feedback: ${data.current_feedback}`
-  }
-}];
-```
+### Purpose
+
+When content fails, increment the retry counter and save feedback for the next attempt.
+
+### Configuration
+
+1. Connect **Check Pass/Fail (false)** to new **Edit Fields (Set)** node
+2. Rename to: `Increment Retry`
+
+3. **Configure Assignments**:
+
+   | Field Name | Type | Value |
+   |------------|------|-------|
+   | retry_count | Number | `={{ ($json.retry_count \|\| 0) + 1 }}` |
+   | previous_feedback | String | `={{ $json.feedback }}` |
+
+4. **Enable**: `Include Other Fields`
+
+---
+
+## Step 10: Add Max Retries Check Node
+
+### Purpose
+
+After incrementing retry count, check if we've hit the maximum allowed retries.
+
+### Configuration
+
+1. Add **IF** node (after Increment Retry)
+2. Rename to: `Max Retries Check`
+
+3. **Configure Condition**:
+   - **Left Value**: `={{ $json.retry_count >= $json.max_retries }}`
+   - **Operation**: `is true`
+
+**Output Routing**:
+- **True** branch: Max retries reached - go to failure path
+- **False** branch: Can retry - loop back to Initialize Variables
 
 4. **Create Loop Connection**:
-   - Drag connection from **Loop Controller** output back to **Generator LLM** input
+   - Drag connection from **Max Retries Check (false)** output back to **Initialize Variables** input
    - This creates the iteration loop!
 
 ---
 
-## Step 9: Add Split for Success/Failure
-
-After the **IF (true)** output, we need to handle two cases:
-1. Content passed quality check
-2. Max iterations reached (failure)
-
-### Configuration
-
-1. Add another **IF** node after the first one (true branch)
-2. Rename to: `Success or Max Iterations`
-
-3. **Configure Condition**:
-   - Value 1: `{{ $json.passed }}`
-   - Operation: `equals`
-   - Value 2: `true`
-
-**Outputs**:
-- **True**: Content passed - Success!
-- **False**: Max iterations reached - Failure
-
----
-
-## Step 10: Add Format Success Node
+## Step 11: Add Mark Failure Node
 
 ### Purpose
 
-Package successful results for logging.
+When max retries reached without passing, set status to "failed".
 
 ### Configuration
 
-1. Connect **Success or Max Iterations (true)** to new **Code** node
-2. Rename to: `Format Success`
+1. Connect **Max Retries Check (true)** to new **Edit Fields (Set)** node
+2. Rename to: `Mark Failure`
 
-3. **Paste this code**:
+3. **Configure Assignments**:
+   - **Field Name**: `status`
+   - **Type**: String
+   - **Value**: `failed`
 
-```javascript
-// Format successful result for logging
-const data = $input.first().json;
-
-return [{
-  json: {
-    timestamp: new Date().toISOString(),
-    topic: data.topic,
-    target_audience: data.target_audience,
-    iteration_count: data.iteration,
-    final_score: data.final_score,
-    passed: true,
-    final_content: data.current_content,
-    all_scores: data.all_scores,
-    all_feedback: data.all_feedback,
-    total_iterations: data.iteration,
-    status: "SUCCESS",
-    criteria_breakdown: JSON.stringify(data.criteria_scores)
-  }
-}];
-```
+4. **Enable**: `Include Other Fields`
 
 ---
 
-## Step 11: Add Format Failure Node
+## Step 12: Add Final Output Node
 
 ### Purpose
 
-Package failure results (max iterations reached but quality not met).
+Format and return the final results (success or failure) back to the form.
 
 ### Configuration
 
-1. Connect **Success or Max Iterations (false)** to new **Code** node
-2. Rename to: `Format Failure`
+1. Add **Edit Fields (Set)** node
+2. Connect BOTH **Mark Success** and **Mark Failure** to this node
+3. Rename to: `Final Output`
 
-3. **Paste this code**:
+4. **Configure Assignments**:
 
-```javascript
-// Format failure result (best attempt after max iterations)
-const data = $input.first().json;
+   | Field Name | Type | Value |
+   |------------|------|-------|
+   | status | String | `={{ $json.status }}` |
+   | evaluation_result | Boolean | `={{ $json.evaluation_result }}` |
+   | feedback | String | `={{ $json.feedback }}` |
+   | output | String | `={{ $json.output }}` |
+   | retry_count | Number | `={{ $json.retry_count }}` |
 
-return [{
-  json: {
-    timestamp: new Date().toISOString(),
-    topic: data.topic,
-    target_audience: data.target_audience,
-    iteration_count: data.iteration,
-    final_score: data.final_score,
-    passed: false,
-    final_content: data.current_content,
-    all_scores: data.all_scores,
-    all_feedback: data.all_feedback,
-    total_iterations: data.iteration,
-    status: "MAX_ITERATIONS_REACHED",
-    criteria_breakdown: JSON.stringify(data.criteria_scores),
-    note: `Best attempt after ${data.max_iterations} iterations. Final score: ${data.final_score}/${data.pass_threshold}`
-  }
-}];
-```
-
----
-
-## Step 12: Add Google Sheets Logger
-
-### Purpose
-
-Log all results (success and failure) to your tracking spreadsheet.
-
-### Configuration
-
-1. Add **Google Sheets** node
-2. Connect BOTH **Format Success** and **Format Failure** to this node
-3. Rename to: `Log to Quality Tracker`
-
-4. **Configure Operation**:
-   - Operation: `Append or Update`
-   - Document: Select `LLM Judge Quality Log` (or paste your Spreadsheet ID)
-   - Sheet: `Sheet1`
-
-5. **Column Mapping**:
-   - Mapping Mode: `Auto-map Input Data`
-   - This automatically maps all fields from Format nodes to sheet columns
-
-6. **Credential**: Select your Google Sheets OAuth2 credential
+**Expected Output**: Final formatted results showing status, output, feedback, and retry count.
 
 ---
 
 ## Step 13: Test the Complete Workflow
 
+### Activate the Workflow
+
+1. Click **Activate** toggle in the top-right corner
+2. Copy the **Form URL** from the Form Trigger node
+
 ### First Test Run
 
-1. **Go back to Manual Trigger**
-2. **Set test values**:
-   ```
-   topic: "Write a product description for wireless noise-cancelling headphones"
-   target_audience: "Remote workers, ages 25-45"
-   required_length: 150
-   pass_threshold: 80
-   ```
+1. **Open the form URL** in a new browser tab
+2. **Fill in the form** with the example task (see Step 2)
+3. **Submit the form**
 
-3. **Click "Execute Workflow"**
-
-4. **Watch the execution**:
+4. **Watch the execution** in n8n:
    - Generator creates first draft
    - Judge evaluates
-   - If score < 80: Loop back for iteration 2
-   - Repeat until pass or max iterations
-   - Log final result to Google Sheets
+   - If failed: Loop back for iteration 2
+   - Repeat until pass or max retries (10)
+   - Return final result to form
 
-5. **Check Google Sheets**:
-   - Open your `LLM Judge Quality Log` sheet
-   - Verify new row appeared
-   - Check scores across iterations
-   - Read final content
+5. **Check the results**:
+   - You should see the final output in the form
+   - Check the status (success/failed)
+   - Read the generated content
+   - Review feedback and retry count
 
 ### Expected Behavior
 
 **Scenario 1: Success in 2-3 iterations**
 ```
-Iteration 1: Score 65 → Feedback: "Add battery life, improve tone"
-Iteration 2: Score 78 → Feedback: "Strengthen call-to-action"
-Iteration 3: Score 85 → PASS! ✅
+Iteration 1: Failed → Feedback: "Missing specific lunch details"
+Iteration 2: Failed → Feedback: "Word count too high (175 words)"
+Iteration 3: Passed! ✅
+Status: success
+Retry Count: 3
 ```
 
 **Scenario 2: Max iterations reached**
 ```
-Iteration 1-5: Scores 60, 68, 72, 75, 78
-Max iterations reached. Logged best attempt (78/100) ⚠️
+Iteration 1-10: All failed for various reasons
+Status: failed
+Retry Count: 10
+Final feedback: "Best attempt after 10 iterations"
 ```
-
----
-
-## Step 14: Optimize and Tune
-
-### Adjust Quality Threshold
-
-If too many runs are failing:
-- Lower `pass_threshold` from 80 to 75
-- Or increase `max_iterations` from 5 to 7
-
-### Improve Judge Prompts
-
-Make evaluation criteria more specific:
-- Add examples of good vs bad content
-- Define exact requirements for each criterion
-- Calibrate scoring (70-80 is good, 80-90 is great, 90+ is exceptional)
-
-### Try Different Models
-
-**For Generation**:
-- **Creative content**: Claude 3.5 Sonnet, GPT-4o
-- **Factual content**: GPT-4 Turbo, Gemini Pro
-- **Fast iteration**: GPT-4o-mini, Gemini Flash
-
-**For Judging**:
-- **Strict evaluation**: GPT-4o, Claude 3.5 Sonnet
-- **Cost-effective**: GPT-4o-mini, Gemini Flash
-- **Balanced**: Claude 3 Haiku
-
----
-
-## Step 15: Save and Activate
-
-1. **Save Workflow**: Ctrl/Cmd + S
-2. **Test Multiple Times**: Try different topics
-3. **Review Results**: Check patterns in Google Sheets
-4. **Fine-tune**: Adjust thresholds and prompts based on results
 
 ---
 
@@ -668,34 +513,63 @@ Make evaluation criteria more specific:
 
 **Success Path**:
 ```
-Manual Trigger → Initialize → Generator → Judge → Parse
-→ Quality Check (PASS) → Success Split (TRUE)
-→ Format Success → Log to Sheets ✅
+Form → Initialize → Generator → Judge → Merge → Check (PASS)
+→ Mark Success → Final Output → Return to Form ✅
 ```
 
 **Iteration Path**:
 ```
-Manual Trigger → Initialize → Generator → Judge → Parse
-→ Quality Check (FAIL & <5 iterations) → Loop Controller
-→ [back to Generator with feedback] → ... → Eventually Success or Max Iterations
+Form → Initialize → Generator → Judge → Merge → Check (FAIL)
+→ Increment Retry → Max Check (< 10)
+→ [Loop back to Initialize with feedback]
+→ ... → Eventually Success or Failure
 ```
 
 **Failure Path**:
 ```
-... 5 iterations ... → Quality Check (iteration >= 5)
-→ Success Split (FALSE) → Format Failure → Log to Sheets ⚠️
+... 10 iterations ... → Max Check (≥ 10)
+→ Mark Failure → Final Output → Return to Form ⚠️
 ```
 
 ### Key Variables Tracked
 
 | Variable | Purpose | Example |
 |----------|---------|---------|
-| `iteration` | Current attempt number | `3` |
-| `score_history` | All scores | `[65, 78, 85]` |
-| `feedback_history` | All feedback | `["Add details", "Good!", "Perfect"]` |
-| `current_content` | Latest generated content | `"Experience premium sound..."` |
-| `previous_feedback` | Fed back to generator | `"Strengthen conclusion. Add CTA."` |
-| `passed` | Quality gate status | `true` |
+| `retry_count` | Current attempt number | `3` |
+| `max_retries` | Maximum allowed attempts | `10` |
+| `previous_feedback` | Fed back to generator | `"Add lunch location details"` |
+| `evaluation_result` | Pass/fail status | `true` |
+| `output` | Latest generated content | `"Dear Sarah, ..."` |
+| `feedback` | Judge's feedback | `"Excellent! Meets all criteria."` |
+| `status` | Final workflow status | `"success"` or `"failed"` |
+
+---
+
+## Step 14: Optimize and Tune
+
+### Adjust Retry Limit
+
+If too many runs are failing:
+- Increase `max_retries` from 10 to 15 or 20
+- Or make success criteria less strict
+
+### Improve Judge Prompts
+
+Make evaluation criteria more specific:
+- Add examples of passing vs failing content
+- Define exact requirements
+- Provide scoring rubrics
+- Use comparative language ("must have X AND Y")
+
+### Test Different Scenarios
+
+Try various task types:
+- **Short content**: Social media posts (50 words)
+- **Medium content**: Emails (150 words)
+- **Long content**: Blog posts (500 words)
+- **Technical**: Code explanations
+- **Creative**: Story introductions
+- **Professional**: Business proposals
 
 ---
 
@@ -703,50 +577,51 @@ Manual Trigger → Initialize → Generator → Judge → Parse
 
 ### Workflow keeps looping infinitely
 
-**Cause**: Quality Check condition might be wrong
+**Cause**: Max retries check might be wrong
 
 **Fix**:
-- Check IF node has TWO conditions with OR logic
-- Ensure `iteration >= max_iterations` stops the loop
+- Verify Max Retries Check condition: `retry_count >= max_retries`
+- Ensure the true branch goes to Mark Failure
+- Check that Initialize Variables increments properly
 
 ### Generator doesn't improve on iterations
 
 **Cause**: Feedback not being passed correctly
 
 **Fix**:
-- Verify Loop Controller connects to Generator LLM input
-- Check `previous_feedback` is populated in Parse node
-- Ensure Generator prompt uses `{{ $json.previous_feedback }}`
+- Verify Increment Retry sets `previous_feedback` correctly
+- Check that Initialize Variables preserves `previous_feedback`
+- Ensure Generator prompt uses `$json.previous_feedback`
 
-### Judge always gives same score
+### Judge always passes or always fails
 
-**Cause**: Not enough variation in evaluation or prompt too vague
-
-**Fix**:
-- Make judge prompt more specific with examples
-- Use different model for judge vs generator
-- Add more detailed criteria descriptions
-
-### Google Sheets not logging
-
-**Cause**: Credential or sheet ID issue
+**Cause**: Judge prompt too lenient or too strict
 
 **Fix**:
-- Verify OAuth2 credential is authenticated
-- Check Spreadsheet ID is correct
-- Ensure sheet name matches ("Sheet1")
-- Test credential with simple append operation
+- Adjust judge prompt severity
+- Make success criteria more specific
+- Add examples of passing/failing content
+- Test with different Gemini model versions
+
+### Form doesn't return results
+
+**Cause**: Response mode not set correctly
+
+**Fix**:
+- Verify Form Trigger **Response Mode** is set to `Last Node`
+- Ensure Final Output node is connected properly
+- Check that workflow is activated
 
 ---
 
 ## What You've Accomplished
 
-✅ Built complete LLM as a Judge workflow
-✅ Implemented iterative quality improvement loop
-✅ Created structured evaluation system
+✅ Built complete LLM as a Judge workflow with form interface
+✅ Implemented iterative quality improvement loop (up to 10 retries)
+✅ Created structured evaluation system with pass/fail logic
 ✅ Added loop controls and exit conditions
-✅ Logged results to Google Sheets for analysis
-✅ Tested with real content generation
+✅ Tested with real content generation tasks
+✅ Learned how to tune quality thresholds and prompts
 
 ---
 
@@ -754,9 +629,10 @@ Manual Trigger → Initialize → Generator → Judge → Parse
 
 Now that your workflow is working:
 
-1. **Test Different Content Types**: Blog posts, emails, social media
-2. **Analyze Patterns**: Review Google Sheets to see common feedback
+1. **Test Different Content Types**: Try emails, blog posts, code, documentation
+2. **Analyze Patterns**: Track common failure reasons
 3. **Optimize Prompts**: Refine generator and judge based on results
-4. **Try Challenge Tasks**: Multi-criteria evaluation, A/B testing, automatic optimization
+4. **Adjust Strictness**: Balance quality vs iteration count
+5. **Try Challenge Tasks**: Multi-criteria evaluation, A/B testing, automatic optimization
 
 [Continue to Challenge Tasks →](./challenge-tasks){: .btn .btn-primary }
