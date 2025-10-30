@@ -116,18 +116,48 @@ Google's Gemini offers generous free quotas perfect for AI agents, complex reaso
 
 Real-time web search capabilities for your AI agents. Essential for research tasks.
 
+### Student Access (Recommended)
+
+{: .highlight }
+> **Students Get 12 Months Free!** Students worldwide can get Perplexity Pro for free for 12 months (worth $240), which includes API credits, unlimited searches, and access to the Comet browser.
+
+**To claim your free student access:**
+
+1. Visit [Perplexity Student Program](https://www.perplexity.ai/grow/comet/students)
+2. Click to verify your student status
+3. Verify using one of these methods:
+   - **Student email** (`.edu` or university email address)
+   - **Student ID card** or documentation upload
+   - Verification is handled through SheerID
+4. Get instant access to 12 months of Perplexity Pro
+5. Bonus: Skip the waitlist for Comet browser
+
+**What's Included for Students:**
+- **12 months of Perplexity Pro** ($240 value)
+- Unlimited Quick Searches
+- 600+ Pro Searches per day
+- Access to advanced AI models (GPT-4, Claude, etc.)
+- **$5/month in API credits** (automatically included)
+- File upload and analysis
+- Access to Comet browser (AI-powered browser built for students)
+
+**Eligibility:**
+- Available to students globally (US, UK, and international)
+- Must verify student status through student email or documentation
+- UK students and international students can verify with university email or ID
+
 ### Get Your API Key
 
 1. Go to [Perplexity AI](https://www.perplexity.ai/)
 2. Navigate to [API Settings](https://www.perplexity.ai/settings/api)
-3. Sign up for API access
+3. Sign up for API access (use your student account if eligible)
 4. Generate API key:
    - Click "Generate New Key"
    - Name: `n8n-research`
    - Copy and save
 
 {: .highlight }
-> **Monthly Credits**: $5 free monthly (~1000 searches) - resets each month!
+> **Monthly Credits**: $5 free monthly (~1000 searches) - resets each month! Students get this automatically with Pro access.
 
 ### Available Models
 
