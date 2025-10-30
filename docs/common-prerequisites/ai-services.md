@@ -55,11 +55,11 @@ Access multiple AI models with one API key. Perfect for comparing different mode
 
 ---
 
-## Google Gemini (Free Tier) ⭐ Required
+## Google Gemini (Free Tier)
 
 ### Why Gemini?
 
-Google's Gemini offers generous free quotas perfect for AI agents and complex tasks. **Required for Exercise 3** (LLM as a Judge).
+Google's Gemini offers generous free quotas perfect for AI agents, complex reasoning tasks, and iterative workflows.
 
 ### Generate API Key
 
@@ -91,15 +91,12 @@ Google's Gemini offers generous free quotas perfect for AI agents and complex ta
 {: .highlight }
 > **Free Limits**: 60 requests/minute, 1 million tokens/month, 1,500 requests/day - plenty for all exercises!
 
-{: .important }
-> **Exercise 3 Requirement**: Exercise 3 (LLM as a Judge) uses Gemini for both the generator and judge AI agents. Make sure to complete this setup before starting Exercise 3.
-
 ### When to Use Gemini
 
-- **Exercise 3**: LLM as a Judge system (required)
 - AI Agents with complex reasoning
 - Iterative workflows with feedback loops
 - Multi-step content generation
+- LLM as a Judge patterns
 - When you need consistent, free performance
 
 ### Gemini vs OpenRouter
@@ -108,8 +105,8 @@ Google's Gemini offers generous free quotas perfect for AI agents and complex ta
 |---------|--------------|------------|
 | **Free Tier** | 1M tokens/month | $1 credit (~100K tokens) |
 | **Setup** | Direct API key | Account + payment method |
-| **Best For** | Learning, prototyping | Production, model comparison |
-| **Exercise 3** | ✅ Required | ❌ Not needed |
+| **Best For** | Learning, prototyping, AI agents | Production, model comparison |
+| **Quota Reset** | Monthly | One-time credit |
 
 ---
 
@@ -165,14 +162,14 @@ Real-time web search capabilities for your AI agents. Essential for research tas
 
 ### Which Service for What?
 
-| Exercise/Need | Use This Service | Why |
-|---------------|------------------|-----|
-| **Exercise 1** | OpenRouter (Gemma) | Free, fast, simple classification |
-| **Exercise 2** | OpenRouter or Gemini | Cold email generation |
-| **Exercise 3** | Google Gemini (Required) | LLM as a Judge system |
+| Need | Use This Service | Why |
+|------|------------------|-----|
+| Email classification | OpenRouter (Gemma) | Free, fast, simple |
+| Content generation | OpenRouter or Gemini | Flexible options |
 | AI agents | Google Gemini | Free tier, powerful, consistent |
 | Web research | Perplexity | Real-time data access |
 | Complex reasoning | Gemini or Claude | Better understanding |
+| Iterative workflows | Google Gemini | Good for feedback loops |
 | Quick tests | Free models | No cost, fast iteration |
 
 ---

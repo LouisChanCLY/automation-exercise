@@ -26,13 +26,10 @@ Complete these prerequisites once, and you're ready for all 30+ exercises. This 
 | Service | Purpose | Time |
 |---------|---------|------|
 | **[Google Cloud & OAuth](./google-setup)** | Authentication for Gmail, Sheets, Drive | 10 min |
-| **[AI Services](./ai-services)** | OpenRouter, Gemini ⭐, Perplexity APIs | 10 min |
+| **[AI Services](./ai-services)** | OpenRouter, Gemini, Perplexity APIs | 10 min |
 | **[n8n Platform](./n8n-setup)** | Workflow automation platform | 5 min |
 | **[Credentials](./credentials)** | Connect everything in n8n | 10 min |
 | **[GitHub Setup](./github-setup)** | Back up and version control workflows | 15 min |
-
-{: .note }
-> ⭐ **Google Gemini is required for Exercise 3** (LLM as a Judge). Make sure to get your free Gemini API key from [ai.google.dev](https://ai.google.dev/).
 
 {: .important }
 > **Do This First**: These prerequisites are required before starting any exercise. Once configured, you won't need to repeat these steps.
