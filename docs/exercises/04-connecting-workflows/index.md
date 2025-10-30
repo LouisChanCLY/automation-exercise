@@ -33,7 +33,7 @@ This exercise teaches you to build complex automation systems by connecting mult
 
 ### The Universal Pattern
 
-You're learning the **Workflow Orchestration & Composition** pattern:
+You're learning the **Workflow Orchestration & Composition** pattern - think of it like a restaurant kitchen:
 
 ```mermaid
 graph LR
@@ -50,6 +50,11 @@ graph LR
     style E fill:#e1f5fe
     style F fill:#e8f5e9
 ```
+
+Just like a head chef (Master Workflow) coordinates with specialized stations (Sub-Workflows):
+- The prep station chops vegetables (Classifier)
+- The main kitchen cooks the dish (Response Generator)
+- The head chef plates and serves (Final Action)
 
 **Today's Implementation:**
 
