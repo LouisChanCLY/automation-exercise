@@ -1,0 +1,615 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Task Submission Form",
+        "formDescription": "Submit a task for AI generation with quality control",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Task Description",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "How to Do It (Instructions)",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Success Criteria (How to Measure)",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "form_trigger",
+      "name": "Form Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "position": [
+        80,
+        992
+      ],
+      "typeVersion": 2.3,
+      "webhookId": "1c6b6b66-bfb1-4ceb-8d57-ab6230a67cd3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Task: {{ $('Form Trigger').item.json['Task Description'] }}\n\nInstructions: {{ $('Form Trigger').item.json['How to Do It (Instructions)'] }}\n\n{{ $json.previous_feedback ? 'Previous Feedback: ' + $json.previous_feedback : '' }}\n\nPlease generate the output according to the task description and instructions. Ensure it meets the success criteria{{ $json.previous_feedback ? ' and addresses the feedback provided' : '' }}.",
+        "options": {}
+      },
+      "id": "ai_agent",
+      "name": "AI Agent - Generator",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        528,
+        816
+      ],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "gemini_model",
+      "name": "Google Gemini Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        600,
+        1040
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "iphWvVTXMVbM58k6",
+          "name": "Main Gemini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an EXTREMELY STRICT quality judge with ZERO tolerance for mediocrity. Evaluate the following output with RUTHLESS scrutiny.\n\nTask: {{ $('Form Trigger').item.json['Task Description'] }}\n\nSuccess Criteria: {{ $('Form Trigger').item.json['Success Criteria (How to Measure)'] }}\n\nGenerated Output: {{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "id": "judge_agent",
+      "name": "LLM Judge",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        880,
+        816
+      ],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "gemini_judge_model",
+      "name": "Google Gemini Judge Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        952,
+        1248
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "iphWvVTXMVbM58k6",
+          "name": "Main Gemini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"passed\": {\n      \"type\": \"boolean\"\n    },\n    \"feedback\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"passed\", \"feedback\"]\n}",
+        "autoFix": true
+      },
+      "id": "json_parser",
+      "name": "Parse Judge Output",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        956,
+        1040
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "version": 2,
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "passed_check",
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.evaluation_result }}",
+              "rightValue": true
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check_result",
+      "name": "Check Pass/Fail",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1548,
+        816
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "version": 2,
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "max_check",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.retry_count === $json.max_retries}}",
+              "rightValue": true
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check_max_retries",
+      "name": "Max Retries Check",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1996,
+        1096
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0ddf546a-2e7c-4d5f-8a32-76759119de91",
+              "name": "evaluation_result",
+              "value": "={{ $json.output.passed }}",
+              "type": "boolean"
+            },
+            {
+              "id": "84f13ae9-23cb-4ef3-8fac-5b8eca866921",
+              "name": "feedback",
+              "value": "={{ $json.output.feedback }}",
+              "type": "string"
+            },
+            {
+              "id": "f0549a57-bfbe-4d7c-8764-f8539e36c404",
+              "name": "output",
+              "value": "={{ $('AI Agent - Generator').item.json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "f2ffcb43-c1a7-446a-90d6-4914434c014d",
+              "name": "max_retries",
+              "value": "={{ $('Edit Fields1').item.json.max_retries }}",
+              "type": "number"
+            },
+            {
+              "id": "36016e4f-4e96-4432-920a-f4d279880af5",
+              "name": "retry_count",
+              "value": "={{ $('Edit Fields1').item.json.retry_count }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1324,
+        816
+      ],
+      "id": "1a003513-b4de-4ea0-8efd-b0c89070d860",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d61584f0-61f2-4f6e-b704-eac6eadf844f",
+              "name": "retry_count",
+              "value": "={{ $json.retry_count || 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "0b9fff1b-d0ad-42aa-a60e-93b0285a7153",
+              "name": "max_retries",
+              "value": "=10",
+              "type": "number"
+            },
+            {
+              "id": "88be9fac-292e-4773-aead-dfb57622f2c9",
+              "name": "previous_feedback",
+              "value": "={{ $json.previous_feedback || null }}",
+              "type": "string"
+            },
+            {
+              "id": "be38d2fe-c921-4349-845a-271b79ae839c",
+              "name": "ai_output",
+              "value": "={{ $json.ai_output || null }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        304,
+        992
+      ],
+      "id": "6448b74c-697b-4116-b004-18b2f18d6316",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cfc9da3e-3f85-41e4-941d-48954911ed23",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "2b99040a-ceea-4433-a773-4f370f6c15ae",
+              "name": "evaluation_result",
+              "value": "={{ $json.evaluation_result }}",
+              "type": "boolean"
+            },
+            {
+              "id": "66f5d1bb-59c2-4cad-8ec1-d7e10effcaaa",
+              "name": "feedback",
+              "value": "={{ $json.feedback }}",
+              "type": "string"
+            },
+            {
+              "id": "f8b70344-cd38-42b0-b0c3-0239537523e2",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "279b8f9a-6678-442c-a53a-42689e409002",
+              "name": "retry_count",
+              "value": "={{ $json.retry_count }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2444,
+        992
+      ],
+      "id": "ed78f204-0c91-4008-9e89-89049eadd70d",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e114f0c0-2408-4dd3-90f6-014f998c928d",
+              "name": "retry_count",
+              "value": "={{ ($json.retry_count || 0) + 1 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1772,
+        920
+      ],
+      "id": "75aeff3f-da40-4f37-b15e-46cd67e6a000",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f0c800c-b94a-4c3f-9032-7bbc1a3efd24",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2220,
+        744
+      ],
+      "id": "b022fd88-085a-4d82-8616-d60fae45909d",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b3c03b31-d6c9-4154-a873-44d70eab301b",
+              "name": "status",
+              "value": "failed",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2220,
+        1096
+      ],
+      "id": "4bd8587e-fbb3-4c52-a02f-ee8aace2b514",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Task Description"
+            },
+            {
+              "name": "How to Do It (Instructions)"
+            },
+            {
+              "name": "Success Criteria (How to Measure)"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        784
+      ],
+      "id": "631929a0-5280-4f81-aee2-09c94fe8bc1d",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "connections": {
+    "Form Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Generator": {
+      "main": [
+        [
+          {
+            "node": "LLM Judge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Judge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Judge Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LLM Judge",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse Judge Output",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Judge Output": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "LLM Judge",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Pass/Fail": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Max Retries Check": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Check Pass/Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Max Retries Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {
+    "Form Trigger": [
+      {
+        "Task Description": "Draft an email to Albert Einstein to thank him for his effort in quantum mechanics and invite him to a dinner.",
+        "How to Do It (Instructions)": "Write a professional yet warm email that:\r\n1. Opens with a respectful greeting\r\n2. Expresses genuine appreciation for Einstein's contributions to quantum mechanics\r\n3. Mentions specific achievements (e.g., photoelectric effect, energy quanta)\r\n4. Extends a dinner invitation with specific details (date, time, location)\r\n5. Closes with a polite sign-off\r\n6. Keep the tone respectful but not overly formal\r\n7. Length should be 150-250 words",
+        "Success Criteria (How to Measure)": "The email must meet ALL of the following criteria with ZERO exceptions:\r\n\r\n1. Include EXACTLY the greeting \"Dear Dr. Einstein,\" or \"Dear Professor Einstein,\" - no variations allowed\r\n2. Contain at least TWO specific references to his quantum mechanics work (must mention photoelectric effect AND one other: light quanta, wave-particle duality, or energy quantization)\r\n3. Express gratitude using STRONG, specific language (not weak phrases like \"I appreciate\" - use \"profoundly grateful\", \"deeply indebted\", \"revolutionary impact\")\r\n4. Include a SPECIFIC dinner invitation with ALL THREE details:\r\n   - Exact date (e.g., \"Friday, November 15th, 2024\")\r\n   - Exact time (e.g., \"7:00 PM\")\r\n   - Exact location/venue (e.g., \"The Grand Hotel, Room 42\")\r\n5. Have a professional closing with full name and title (e.g., \"Sincerely, [Full Name], [Title]\")\r\n6. Be EXACTLY between 180-220 words (not 150-250) - count precisely\r\n7. Maintain a consistently warm yet respectful tone - no shifts between formal/casual\r\n8. Be 100% grammatically perfect with ZERO spelling errors\r\n9. Follow perfect email format:\r\n   - Subject line (must include \"Invitation\" and \"Quantum Mechanics\")\r\n   - Proper greeting with comma\r\n   - 2-3 body paragraphs with clear topic sentences\r\n   - Closing salutation\r\n   - Signature block\r\n10. Use active voice throughout (no passive constructions)\r\n11. Include at least one emotional expression of admiration (beyond basic gratitude)\r\n12. End the invitation paragraph with a question to encourage response\r\n13. No generic phrases - every sentence must be specific and meaningful\r\n14. Perfect punctuation including proper comma usage in lists\r\n15. No filler words (very, really, quite, just, etc.)",
+        "submittedAt": "2025-10-29T12:38:55.591-04:00",
+        "formMode": "test"
+      }
+    ]
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "83a73f6b60773397e290c1ba61713e8720c66a009a97ac39a7c02fc80cd39bf4"
+  }
+}
