@@ -54,6 +54,17 @@ Build an AI quality control system where one LLM generates content and another e
 
 ---
 
+### Exercise 4: Connecting Multiple Workflows
+
+**Duration**: 75 min | **Difficulty**: Intermediate | **Prerequisites**: Ex. 3 | **Status**: Available
+**Capabilities**: Workflow Orchestration, Classification, Generation
+Build an intelligent email response system by connecting three workflows: master orchestrator, email classifier, and LLM-as-a-judge response generator.
+**AI Models**: Google Gemini | **Key Concept**: Workflow Composition & Modular Architecture
+
+[Start Exercise →](./04-connecting-workflows/)
+
+---
+
 ### Exercise 7: Meeting Notes Summariser
 
 **Duration**: 45 min | **Difficulty**: Intermediate | **Prerequisites**: Ex. 3
@@ -81,7 +92,7 @@ Create real-time multi-language translation workflows.
 
 ## AI Integration Track (Exercises 4-20)
 
-### Exercise 4: Reddit Trend Content Generator
+### Exercise 5: Reddit Trend Content Generator
 
 **Duration**: 50 min | **Difficulty**: Intermediate | **Prerequisites**: Ex. 1, 3
 **Capabilities**: Classification, Generation, Search
@@ -319,6 +330,7 @@ Most exercises build on previous knowledge. Exercise 1 is the only true starting
 
 - **Support & Service Path**: 1 → 2 → 12 → 29 → 30
 - **Content Creation Path**: 1 → 3 → 4 → 5 → 6 → 27
+- **Workflow Orchestration Path**: 1 → 3 → 4 → (advanced multi-workflow systems)
 - **Visual AI Path**: 1 → 16 → 17 → 18 → 22 → 25
 - **Audio Processing Path**: 3 → 7 → 19 → 20 → 21 → 26
 - **Enterprise Integration Path**: 2 → 13 → 14 → 15 → 24
