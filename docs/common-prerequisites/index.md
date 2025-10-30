@@ -12,8 +12,7 @@ has_children: true
 One-time setup guide for all services used across automation exercises.
 {: .fs-6 .fw-300 }
 
-[Start Setup](./google-setup){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[Quick Checklist](./checklist){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Start Setup](./google-setup){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
@@ -25,11 +24,11 @@ Complete these prerequisites once, and you're ready for all 30+ exercises. This 
 
 | Service | Purpose | Time |
 |---------|---------|------|
-| **[Google Cloud & OAuth](./google-setup)** | Authentication for Gmail, Sheets, Drive | 10 min |
-| **[AI Services](./ai-services)** | OpenRouter, Gemini, Perplexity APIs | 10 min |
+| **[Google Cloud & OAuth](./google-setup)** | Access Gmail, Sheets, Drive | 10 min |
+| **[AI Services](./ai-services)** | Get AI API keys | 10 min |
 | **[n8n Platform](./n8n-setup)** | Workflow automation platform | 5 min |
 | **[Credentials](./credentials)** | Connect everything in n8n | 10 min |
-| **[GitHub Setup](./github-setup)** | Back up and version control workflows | 15 min |
+| **[GitHub Setup](./github-setup)** | Save workflows online | 10 min |
 
 {: .important }
 > **Do This First**: These prerequisites are required before starting any exercise. Once configured, you won't need to repeat these steps.
@@ -45,7 +44,7 @@ graph LR
     A[Google Cloud<br/>Setup] --> B[AI Services<br/>Setup]
     B --> C[n8n Platform<br/>Setup]
     C --> D[Add Credentials<br/>to n8n]
-    D --> E[Verify<br/>Everything]
+    D --> E[Start Building<br/>Workflows]
 
     style A fill:#e1f5fe
     style B fill:#fff3e0
@@ -94,24 +93,8 @@ graph LR
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>📦 GitHub Setup</h4>
-      <p>Back up your workflows</p>
+      <p>Save your workflows online</p>
       <a href="./github-setup">Set Up →</a>
-    </div>
-  </div>
-
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
-      <h4>✅ Verification</h4>
-      <p>Test all connections</p>
-      <a href="./verification">Verify →</a>
-    </div>
-  </div>
-
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
-      <h4>🆘 Troubleshooting</h4>
-      <p>Common issues & solutions</p>
-      <a href="./troubleshooting">Get Help →</a>
     </div>
   </div>
 </div>
