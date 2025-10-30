@@ -43,12 +43,14 @@ Create intelligent routing for support tickets with auto-responses and prioritis
 
 ---
 
-### Exercise 3: Product Review Sentiment Pipeline
+### Exercise 3: LLM as a Judge - Quality Control System
 
-**Duration**: 45 min | **Difficulty**: Beginner | **Prerequisites**: Ex. 1
-**Capabilities**: Classification, Summarisation, Search
-Analyse product reviews for sentiment and extract actionable insights.
-**AI Models**: GPT-4o, Text-Embedding-3 | **Key Concept**: AI-Powered Analytics
+**Duration**: 60 min | **Difficulty**: Intermediate | **Prerequisites**: Ex. 1 | **Status**: Available
+**Capabilities**: Generation, Classification, Iteration
+Build an AI quality control system where one LLM generates content and another evaluates it, iterating until quality standards are met.
+**AI Models**: Claude 3.5 Sonnet, GPT-4o-mini | **Key Concept**: Self-Improving AI Workflows
+
+[Start Exercise →](./03-llm-as-judge/)
 
 ---
 

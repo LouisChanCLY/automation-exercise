@@ -29,6 +29,7 @@ Complete these prerequisites once, and you're ready for all 30+ exercises. This 
 | **[AI Services](./ai-services)** | OpenRouter, Gemini, Perplexity APIs | 10 min |
 | **[n8n Platform](./n8n-setup)** | Workflow automation platform | 5 min |
 | **[Credentials](./credentials)** | Connect everything in n8n | 10 min |
+| **[GitHub Setup](./github-setup)** | Back up and version control workflows | 15 min |
 
 {: .important }
 > **Do This First**: These prerequisites are required before starting any exercise. Once configured, you won't need to repeat these steps.
@@ -87,6 +88,14 @@ graph LR
       <h4>🔗 Connect Everything</h4>
       <p>Add credentials to n8n</p>
       <a href="./credentials">Connect →</a>
+    </div>
+  </div>
+
+  <div class="col-4 col-md-4 col-lg-4">
+    <div class="card">
+      <h4>📦 GitHub Setup</h4>
+      <p>Back up your workflows</p>
+      <a href="./github-setup">Set Up →</a>
     </div>
   </div>
 
