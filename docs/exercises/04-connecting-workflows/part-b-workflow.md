@@ -668,4 +668,48 @@ Now that you have a working multi-workflow system, you can:
 
 ---
 
+## Push Your Workflows to GitHub
+
+### Export and Save Your Work
+
+Now that you've built all three workflows, it's important to save them to your GitHub repository. This creates a backup and allows you to track changes over time.
+
+#### Step 1: Export Your Workflows from n8n
+
+For each of your three workflows, repeat these steps:
+
+1. Open the workflow in n8n
+2. Click the **three-dot menu** (⋮) in the top-right corner
+3. Select **"Download"** or **"Export workflow"**
+4. Save the JSON files to your computer with descriptive names:
+   - `email-classifier-workflow.json`
+   - `email-response-generator-workflow.json`
+   - `master-email-orchestrator-workflow.json`
+
+{: .note }
+> **Tip**: The exported files contain your entire workflow structures, but credentials are not included for security reasons.
+
+#### Step 2: Upload to GitHub via UI
+
+1. **Navigate to your GitHub repository** in your web browser
+2. **Go to the workflows folder** (or create one if it doesn't exist):
+   - Click **"Add file"** → **"Create new file"**
+   - Type `workflows/` in the filename field to create the folder
+3. **Upload your workflows**:
+   - Click **"Add file"** → **"Upload files"**
+   - Drag and drop all three JSON files, or click to browse
+   - Alternatively, upload them one by one using **"Create new file"** and paste the JSON content
+4. **Commit your changes**:
+   - Add a commit message: `Add Exercise 4 workflows - Connecting Workflows`
+   - Choose **"Commit directly to the main branch"** or create a new branch
+   - Click **"Commit changes"**
+
+{: .highlight }
+> **Success!** Your workflows are now safely stored in GitHub and can be shared with others or imported into a different n8n instance.
+
+{: .important }
+> **Best Practice**: Consider adding a README.md in your workflows folder explaining what each workflow does and how they connect to each other. This will help anyone (including your future self!) understand your automation system.
+
+---
+
 [← Back to Part A](./part-a-setup){: .btn } [Continue to Challenges →](./challenge-tasks){: .btn .btn-primary }

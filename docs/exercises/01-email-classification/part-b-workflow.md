@@ -512,6 +512,42 @@ More importantly, you've mastered the **Intelligent Triage & Routing** pattern. 
 
 ---
 
+## Push Your Workflow to GitHub
+
+### Export and Save Your Work
+
+Now that you've built your workflow, it's important to save it to your GitHub repository. This creates a backup and allows you to track changes over time.
+
+#### Step 1: Export Your Workflow from n8n
+
+1. In your n8n workflow canvas, click the **three-dot menu** (⋮) in the top-right corner
+2. Select **"Download"** or **"Export workflow"**
+3. Save the JSON file to your computer with a descriptive name:
+   - Example: `email-classification-workflow.json`
+
+{: .note }
+> **Tip**: The exported file contains your entire workflow structure, but credentials are not included for security reasons.
+
+#### Step 2: Upload to GitHub via UI
+
+1. **Navigate to your GitHub repository** in your web browser
+2. **Go to the workflows folder** (or create one if it doesn't exist):
+   - Click **"Add file"** → **"Create new file"**
+   - Type `workflows/` in the filename field to create the folder
+3. **Upload your workflow**:
+   - Click **"Add file"** → **"Upload files"**
+   - Drag and drop your exported JSON file, or click to browse
+   - Alternatively, click **"Create new file"** and paste the JSON content
+4. **Commit your changes**:
+   - Add a commit message: `Add Email Classification workflow`
+   - Choose **"Commit directly to the main branch"** or create a new branch
+   - Click **"Commit changes"**
+
+{: .highlight }
+> **Success!** Your workflow is now safely stored in GitHub and can be shared with others or imported into a different n8n instance.
+
+---
+
 ## Download Complete Workflow
 
 ### Import Pre-Built Template
