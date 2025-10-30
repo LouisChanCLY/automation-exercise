@@ -82,16 +82,21 @@ By completing this exercise, you will:
 
 ```mermaid
 graph TB
-    Start[Manual Trigger] --> Input[Input: Topic & Criteria]
-    Input --> Gen[Generator LLM]
-    Gen --> Judge[Judge LLM]
-    Judge --> Decision{Score >= Threshold?}
-    Decision -->|No & iterations < max| Feedback[Extract Feedback]
-    Feedback --> Gen
-    Decision -->|Yes| Success[Log Success]
-    Decision -->|No & iterations >= max| Fail[Log Failure]
-    Success --> Sheet[Google Sheets]
-    Fail --> Sheet
+    Start[Form Trigger] --> Input[Input: Task, Instructions, Criteria]
+    Input --> Init[Initialize Variables]
+    Init --> Gen[Generator AI Agent]
+    Gen --> Judge[Judge AI Agent]
+    Judge --> Parse[Parse Structured Output]
+    Parse --> Merge[Merge Results]
+    Merge --> Decision{Passed?}
+    Decision -->|Yes| Success[Mark Success]
+    Decision -->|No| Retry[Increment Retry]
+    Retry --> MaxCheck{Max Retries?}
+    MaxCheck -->|Yes| Fail[Mark Failure]
+    MaxCheck -->|No| Init
+    Success --> Output[Final Output]
+    Fail --> Output
+    Output --> Form[Return to Form]
 
     style Start fill:#e1f5fe
     style Gen fill:#fff3e0
@@ -103,128 +108,166 @@ graph TB
 
 ### Detailed Data Flow
 
-1. **Manual Trigger**: Start workflow with topic input
-2. **Generate Content**: Creator LLM produces first draft
-3. **Evaluate Quality**: Judge LLM scores against criteria (0-100)
-4. **Decision Point**:
-   - If score >= 80 AND all criteria pass → Success path
-   - If score < 80 AND iterations < 5 → Feedback loop
-   - If iterations >= 5 → Failure path (log best attempt)
-5. **Feedback Loop**: Extract specific improvement suggestions, pass to generator
-6. **Regenerate**: Creator LLM produces improved version incorporating feedback
-7. **Log Results**: Record all attempts, scores, and final content in Google Sheets
+1. **Form Trigger**: User submits web form with task, instructions, and success criteria
+2. **Initialize Variables**: Set up retry counter (max 10), feedback tracking
+3. **Generate Content**: Generator AI creates content based on task and instructions
+4. **Evaluate Quality**: Judge AI evaluates against success criteria with strict scrutiny
+5. **Parse Output**: Extract structured JSON (`passed: boolean, feedback: string`)
+6. **Merge Results**: Combine evaluation with generated content and counters
+7. **Decision Point**:
+   - If `passed = true` → Success path
+   - If `passed = false` AND retries < 10 → Feedback loop
+   - If retries >= 10 → Failure path (return best attempt)
+8. **Feedback Loop**: Increment counter, save feedback, loop back to generator
+9. **Regenerate**: Generator AI produces improved version incorporating feedback
+10. **Return Results**: Output final status, content, feedback, and retry count to form
 
 ### Node Breakdown
 
 | Node Type | Purpose | Configuration |
 |-----------|---------|---------------|
-| **Manual Trigger** | Start workflow with input data | Topic, criteria, target audience |
-| **Generator LLM** | Create/improve content | OpenRouter with GPT-4 or Claude |
-| **Judge LLM** | Evaluate content quality | Structured output with scoring |
-| **IF Node** | Quality gate decision | Score threshold check |
-| **Loop Node** | Iteration control | Max iterations = 5 |
-| **Code Node** | Data transformation | Extract feedback, format results |
-| **Google Sheets** | Logging & analytics | Track iterations, scores, final output |
+| **Form Trigger** | Collect user input via web form | Task, instructions, success criteria |
+| **Initialize Variables (Set)** | Set up loop counters and tracking | retry_count, max_retries (10), previous_feedback |
+| **Generator AI Agent** | Create/improve content | Google Gemini with dynamic prompt |
+| **Judge AI Agent** | Evaluate content quality | Google Gemini with structured output parser |
+| **Structured Output Parser** | Parse judge evaluation | JSON schema: {passed, feedback} |
+| **Merge Results (Set)** | Combine evaluation and content | Merge judge output with generator output |
+| **Check Pass/Fail (IF)** | Quality gate decision | If evaluation_result = true |
+| **Increment Retry (Set)** | Update loop variables | retry_count++, store previous_feedback |
+| **Max Retries Check (IF)** | Loop control | If retry_count >= max_retries |
+| **Mark Success/Failure (Set)** | Set final status | status: "success" or "failed" |
+| **Final Output (Set)** | Format results for form | Return status, content, feedback, retry_count |
 
 ### Why We Built It This Way
 
 #### Design Decisions Explained
 
-**Why Two Different LLMs?**
+**Why Two Different AI Agents?**
 
-- **Separation of Concerns**: Generator focuses on creativity, judge focuses on evaluation
+- **Separation of Concerns**: Generator focuses on creation, judge focuses on evaluation
 - **Better Results**: Specialized roles produce better outcomes than single "do everything" prompt
 - **Objective Evaluation**: Judge isn't biased by its own output
-- **Cost Optimization**: Can use cheaper models for judging, premium for generation
+- **Same Model, Different Roles**: Both use Google Gemini but with different system prompts
 
 **Why Structured Output for Judge?**
 
-- **Consistent Format**: Always get score, pass/fail, and feedback in same structure
-- **Easy Decision Logic**: Can programmatically check scores and criteria
-- **Better Tracking**: Log structured data for analytics
+- **Consistent Format**: Always get `passed` boolean and `feedback` string in same structure
+- **Easy Decision Logic**: Can programmatically check if passed = true/false
+- **Better Feedback Loop**: Structured feedback feeds directly back to generator
 - **Reduced Errors**: JSON schema validation prevents malformed responses
 
-**Why Loop with Max Iterations?**
+**Why Loop with Max Iterations (10)?**
 
-- **Prevents Infinite Loops**: Safety mechanism if quality never reached
+- **Prevents Infinite Loops**: Safety mechanism if quality criteria impossible to meet
 - **Cost Control**: Don't spend unlimited API credits trying to perfect
-- **Practical Limits**: Diminishing returns after 3-5 iterations
-- **Fail Gracefully**: Still log best attempt even if never passes
+- **Practical Limits**: Most tasks pass in 2-4 iterations; 10 is generous
+- **Fail Gracefully**: Still return best attempt even if never passes
 
-**Why Google Sheets for Logging?**
+**Why Form Trigger Instead of Manual Trigger?**
 
-- **Easy Analysis**: Spreadsheet format perfect for reviewing results
-- **Visual Tracking**: See improvement across iterations
-- **Historical Data**: Build dataset of what works/doesn't work
-- **Accessible**: Non-technical stakeholders can review results
+- **Better UX**: Clean web form interface for users to submit tasks
+- **Immediate Feedback**: Results returned directly to form after processing
+- **No Sheets Required**: Simplified architecture, fewer dependencies
+- **Easy Testing**: Just visit form URL to test workflow
 
 ## Quality Evaluation Framework
 
-### Scoring Rubric
+### User-Defined Success Criteria
 
-The judge LLM evaluates on these dimensions:
+Unlike traditional scoring rubrics, this workflow lets users define their own success criteria for each task. The judge evaluates based on what YOU specify in the form.
 
-| Criterion | Weight | Description | Examples |
-|-----------|--------|-------------|----------|
-| **Accuracy** | 25% | Factually correct, no hallucinations | Claims are verifiable, data is real |
-| **Clarity** | 25% | Easy to understand, well-structured | Clear sentences, logical flow |
-| **Completeness** | 20% | Covers all required points | Includes all requested elements |
-| **Tone** | 15% | Matches target audience and brand | Professional, friendly, technical, etc. |
-| **Creativity** | 15% | Engaging and original | Fresh angles, vivid examples |
+**Example Success Criteria**:
+```
+The email must:
+1. Have proper greeting ("Dear [Name]")
+2. Mention at least 2 specific contributions
+3. Include lunch invitation with date, time, and location
+4. Be 100-150 words
+5. Have no grammatical errors
+6. Maintain professional yet warm tone
+```
 
-**Overall Score**: Weighted average of all criteria (0-100)
-
-**Pass Threshold**: 80/100 minimum
+**Flexibility**: Change criteria for each task based on content type, audience, and goals.
 
 ### Structured Judge Output
 
+The judge returns simple, actionable JSON:
+
 ```json
 {
-  "overall_score": 85,
-  "pass": true,
-  "criteria_scores": {
-    "accuracy": 90,
-    "clarity": 85,
-    "completeness": 80,
-    "tone": 85,
-    "creativity": 85
-  },
-  "feedback": "Strong draft! Clarity could improve in paragraph 2. Consider adding specific example for point #3.",
-  "specific_improvements": [
-    "Break up long sentence in paragraph 2",
-    "Add concrete example to support claim about ROI",
-    "Strengthen call-to-action in conclusion"
-  ]
+  "passed": false,
+  "feedback": "Missing specific lunch location. Word count is 175 but should be 100-150. Only 1 specific contribution mentioned, need at least 2."
+}
+```
+
+**Success Output**:
+```json
+{
+  "passed": true,
+  "feedback": "Excellent! Meets all criteria. Specific contributions mentioned (database work, UI design). Clear lunch details (Friday, noon, Cafe Roma). Perfect word count (142). Professional yet warm tone throughout."
 }
 ```
 
 ## Example Use Case
 
-### Scenario: Product Description Generator
+### Scenario: Thank You Email Generator
 
-**Goal**: Generate compelling product descriptions for e-commerce
+**Goal**: Generate professional thank you emails for team members
 
-**Input**:
-- Product: "Wireless Noise-Cancelling Headphones"
-- Target Audience: "Remote workers, 25-45 years old"
-- Required Elements: "Features, benefits, use cases, call-to-action"
-- Tone: "Professional but approachable"
+**Form Input**:
+
+**Task Description:**
+```
+Draft an email thanking Sarah for her work on the Q4 marketing campaign.
+```
+
+**Instructions:**
+```
+Write a professional yet friendly email that:
+1. Opens with warm greeting
+2. Thanks Sarah for specific contributions
+3. Mentions campaign success metrics
+4. Invites her to celebration lunch
+5. 100-150 words
+```
+
+**Success Criteria:**
+```
+Must have:
+- Greeting: "Dear Sarah"
+- At least 2 specific contributions
+- Campaign results mentioned (e.g., "30% increase")
+- Lunch invite with date, time, place
+- 100-150 words
+- Grammatically perfect
+```
 
 **Iteration 1**:
 - Generator creates first draft
-- Judge scores 65/100 - fails on completeness (missing battery life) and tone (too technical)
-- Feedback: "Add battery life specs, simplify technical jargon, emphasize work-from-home benefits"
+- Judge evaluates: `passed: false`
+- Feedback: "Only mentions 'great work' - needs specific contributions. No lunch location specified. 175 words exceeds 150 limit."
 
 **Iteration 2**:
 - Generator incorporates feedback
-- Judge scores 82/100 - passes!
-- Content saved to Google Sheets with all iteration data
+- Judge evaluates: `passed: true`
+- Feedback: "Perfect! Mentions ad campaign design and social media strategy. Clear lunch details (Friday, noon, Bistro Cafe). 145 words. Professional and warm."
+
+**Final Output Returned to Form**:
+```json
+{
+  "status": "success",
+  "evaluation_result": true,
+  "retry_count": 2,
+  "output": "Dear Sarah,\n\nI wanted to personally thank you...",
+  "feedback": "Perfect! Meets all criteria..."
+}
+```
 
 **Business Value**:
-- Consistent quality across 1000s of product descriptions
-- No manual review needed for 80%+ of outputs
-- Automatic escalation (to humans) for difficult products
-- Continuous improvement through logged feedback patterns
+- Consistent quality for all team communications
+- No manual drafting needed
+- Personalized content at scale
+- Time saved: 10 min per email → 30 seconds
 
 ## What Makes This Exercise Powerful
 
@@ -264,35 +307,35 @@ This exercise introduces enterprise patterns:
 
 Before starting this exercise, you should have:
 
-### Required Setup (from Common Prerequisites)
+### Required Setup
 
-- ✅ OpenRouter API account and key ([Setup Guide](../../common-prerequisites/ai-services))
+- ✅ Google account (for Gemini API)
 - ✅ n8n platform installed and configured ([Setup Guide](../../common-prerequisites/n8n-setup))
-- ✅ Google account with Sheets access ([Setup Guide](../../common-prerequisites/google-setup))
 - ✅ Basic familiarity with n8n interface
 
 ### Recommended Background
 
-- Completed Exercise 1 or equivalent n8n experience
+- Completed Exercise 1 or 2 (or equivalent n8n experience)
 - Basic understanding of AI/LLM capabilities
-- Familiarity with JSON data structures (helpful but not required)
+- Familiarity with web forms and JSON (helpful but not required)
 
 ### Time Commitment
 
 - **Total Time**: 60 minutes
-- **Part A (Setup)**: 15 minutes - Create Google Sheet, verify credentials
+- **Part A (Setup)**: 15 minutes - Set up Gemini API, understand architecture
 - **Part B (Build)**: 40 minutes - Build nodes, configure prompts, test iterations
-- **Testing**: 5 minutes - Run full workflow, verify logging
+- **Testing**: 5 minutes - Submit form, verify output
 
 ## Success Criteria
 
 You'll know you've succeeded when:
 
-- ✅ Workflow generates content on any topic
-- ✅ Judge evaluates with structured feedback
-- ✅ Loop iterates until quality threshold met
+- ✅ Form accepts user input (task, instructions, success criteria)
+- ✅ Generator AI creates content based on input
+- ✅ Judge AI evaluates with structured feedback (passed: boolean, feedback: string)
+- ✅ Loop iterates until quality criteria met (or max 10 retries)
 - ✅ Maximum iterations prevent infinite loops
-- ✅ All iterations logged to Google Sheets
+- ✅ Results returned to form showing status, content, feedback, and retry count
 - ✅ You can see quality improvement across iterations
 - ✅ System handles both success and failure cases gracefully
 

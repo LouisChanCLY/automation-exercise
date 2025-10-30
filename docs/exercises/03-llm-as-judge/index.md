@@ -24,10 +24,11 @@ This exercise teaches you to build a self-improving content generation system us
 
 ### What You'll Build
 
-- **Content generation** with AI models
-- **Quality evaluation** using a judge LLM
-- **Iterative improvement** based on feedback
-- **Quality metrics tracking** in Google Sheets
+- **Web form interface** for task submission
+- **Content generation** with Google Gemini AI
+- **Quality evaluation** using a strict judge AI
+- **Iterative improvement** with feedback loops (up to 10 retries)
+- **Form-based output** with immediate results
 - **Loop control** with pass/fail criteria
 
 ### The Universal Pattern
@@ -52,11 +53,13 @@ graph LR
 
 ```mermaid
 graph LR
-    A1[Generator LLM] --> B1[Judge LLM]
-    B1 --> C1{Quality Check}
-    C1 -->|Fail| D1[Feedback Loop]
-    D1 --> A1
-    C1 -->|Pass| E1[Save to Sheets]
+    A1[Form Input] --> B1[Generator AI]
+    B1 --> C1[Judge AI]
+    C1 --> D1{Pass?}
+    D1 -->|No & < 10| E1[Feedback Loop]
+    E1 --> B1
+    D1 -->|Yes| F1[Return to Form]
+    D1 -->|No & = 10| F1
 ```
 
 **Tomorrow's Applications:**
