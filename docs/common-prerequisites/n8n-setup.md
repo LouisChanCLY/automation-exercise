@@ -75,11 +75,3 @@ When you first access n8n:
 
 ✅ n8n account created
 ✅ Ready to add credentials
-
----
-
-## Next Steps
-
-Connect all your API credentials to n8n.
-
-[Continue to Credentials →](./credentials){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }

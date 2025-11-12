@@ -599,14 +599,13 @@ Multiple human reviewers vote on edge cases, ML model learns from consensus.
 
 ---
 
-## Share Your Solutions
+## Saving Your Work
 
-Built something cool? Share with the community:
+After completing any challenge:
 
-1. Export your n8n workflow JSON
-2. Document your approach
-3. Share results and learnings
-4. Inspire others!
+1. **Export Workflow**: In n8n, click ⋯ menu → Download → Save as JSON
+2. **Commit to GitHub**: Save your workflow JSON files to your repository
+3. **Document Changes**: Add notes explaining your approach and learnings
 
 ---
 

@@ -237,6 +237,7 @@ Create folders to organize your workflows by exercise:
    - Example: `n8n-workflows/exercises/01-email-classification/workflow.json`
 
 **Your folder structure should look like:**
+
 ```
 n8n-workflows/
 ├── README.md
@@ -289,18 +290,22 @@ Now let's save these changes to GitHub!
 Follow these simple steps each time you complete a workflow:
 
 **1. Download from n8n**
+
 - Open your workflow in n8n
 - Click ⋮ menu → Download
 - Save the JSON file
 
 **2. Move to Your Folder**
+
 - Move the file from Downloads
 - Put it in your exercise folder in `n8n-workflows`
 
 **3. Open GitHub Desktop**
+
 - GitHub Desktop will automatically see the new file
 
 **4. Save It**
+
 - Write a simple description (e.g., `Add Exercise 1`)
 - Click "Commit to main"
 - Click "Push origin"
@@ -318,22 +323,3 @@ Follow these simple steps each time you complete a workflow:
 ✅ Installed GitHub Desktop
 ✅ Created a folder for your workflows
 ✅ Saved your first workflow online
-
----
-
-## Next Steps
-
-Now that GitHub is set up:
-
-1. **Continue with Other Prerequisites**
-   - Set up the other services you'll need
-   - [Back to Prerequisites →](./index)
-
-2. **Start the Exercises**
-   - Begin building workflows
-   - Save each workflow to GitHub
-   - [View All Exercises →](../exercises/)
-
----
-
-[← Back to Prerequisites](./index){: .btn }

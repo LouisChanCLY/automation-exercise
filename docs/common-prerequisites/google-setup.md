@@ -161,11 +161,3 @@ Click "Create"
 ✅ Configured OAuth consent screen
 ✅ Generated OAuth credentials
 ✅ Added test users
-
----
-
-## Next Steps
-
-Continue to AI Services setup to get your API keys.
-
-[Continue to AI Services →](./ai-services){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }

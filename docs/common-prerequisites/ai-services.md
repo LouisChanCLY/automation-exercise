@@ -82,6 +82,7 @@ Google's Gemini offers generous free quotas perfect for AI agents, complex reaso
    - Store securely in your password manager
 
 5. **Optional: Test Your Key**
+
    ```bash
    curl -H 'Content-Type: application/json' \
         -d '{"contents":[{"parts":[{"text":"Hello!"}]}]}' \
@@ -133,6 +134,7 @@ Real-time web search capabilities for your AI agents. Essential for research tas
 5. Bonus: Skip the waitlist for Comet browser
 
 **What's Included for Students:**
+
 - **12 months of Perplexity Pro** ($240 value)
 - Unlimited Quick Searches
 - 600+ Pro Searches per day
@@ -142,6 +144,7 @@ Real-time web search capabilities for your AI agents. Essential for research tas
 - Access to Comet browser (AI-powered browser built for students)
 
 **Eligibility:**
+
 - Available to students globally (US, UK, and international)
 - Must verify student status through student email or documentation
 - UK students and international students can verify with university email or ID
@@ -211,11 +214,3 @@ Real-time web search capabilities for your AI agents. Essential for research tas
 ✅ Perplexity API ready
 ✅ Understand which service for which task
 ✅ Keys stored securely
-
----
-
-## Next Steps
-
-Set up the n8n platform to use these APIs.
-
-[Continue to n8n Setup →](./n8n-setup){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }

@@ -265,22 +265,13 @@ Optimize your workflow to handle 1000+ prospects efficiently while maintaining q
 
 ---
 
-## Share Your Success
+## Saving Your Work
 
-Completed a challenge? Share your implementation:
+After completing any challenge:
 
-1. **Document** your approach and results
-2. **Share** in the n8n community forum
-3. **Tag** #AutomationExercises
-4. **Help** others learn from your solution
+1. **Export Workflow**: In n8n, click ⋯ menu → Download → Save as JSON
+2. **Commit to GitHub**: Save your workflow JSON files to your repository
+3. **Document Changes**: Add notes explaining what you built and why
 
 {: .highlight }
 > **Pro Tip**: Each challenge teaches skills applicable far beyond cold email. Think about how these patterns apply to your specific use cases!
-
----
-
-## What's Next?
-
-You've mastered the AI Research & Personalization pattern. Ready for the next pattern?
-
-[Return to Exercises →](../../exercises){: .btn .btn-primary }

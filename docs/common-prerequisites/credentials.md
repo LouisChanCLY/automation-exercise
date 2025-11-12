@@ -203,11 +203,3 @@ In n8n cloud:
 ✅ Gemini API ready
 ✅ Perplexity API connected
 ✅ All credentials tested
-
----
-
-## Next Steps
-
-Verify everything is working correctly.
-
-[Continue to Verification →](./verification){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }

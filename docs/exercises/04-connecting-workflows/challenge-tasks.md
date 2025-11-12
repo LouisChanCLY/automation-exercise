@@ -11,6 +11,7 @@ nav_order: 4
 {: .no_toc }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -23,6 +24,7 @@ nav_order: 4
 Ready to level up your workflow orchestration skills? These challenge tasks will help you build production-ready features and handle complex scenarios.
 
 **Difficulty Levels**:
+
 - ⭐ Beginner-Friendly
 - ⭐⭐ Intermediate
 - ⭐⭐⭐ Advanced
@@ -439,14 +441,13 @@ Combine multiple challenges to build a production-ready customer support automat
 
 ---
 
-## Share Your Solutions
+## Saving Your Work
 
-Built something awesome? Share your solutions with the community:
+After completing any challenge:
 
-1. Export your workflows (anonymize any credentials)
-2. Document your approach and learnings
-3. Share on GitHub or community forums
-4. Help others learn from your implementation
+1. **Export Workflows**: In n8n, export all modified workflows to JSON
+2. **Commit to GitHub**: Save your workflow files to your repository
+3. **Document Changes**: Explain your multi-workflow architecture decisions
 
 ---
 
