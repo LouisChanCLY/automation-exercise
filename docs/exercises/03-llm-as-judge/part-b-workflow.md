@@ -224,6 +224,8 @@ Set up the AI model for content generation:
 
 The prompt dynamically adapts based on whether this is the first attempt or a retry:
 
+{% raw %}
+
 ```
 =Task: {{ $('Form Trigger').item.json['Task Description'] }}
 
@@ -234,8 +236,10 @@ Instructions: {{ $('Form Trigger').item.json['How to Do It (Instructions)'] }}
 Please generate the output according to the task description and instructions. Ensure it meets the success criteria{{ $json.previous_feedback ? ' and addresses the feedback provided' : '' }}.
 ```
 
+{% endraw %}
+
 {: .tip }
-> **Conditional feedback injection**: The `{{ $json.previous_feedback ? ... }}` expression only includes feedback on retries. First attempts start fresh without any previous context.
+> **Conditional feedback injection**: The expression only includes feedback on retries. First attempts start fresh without any previous context.
 
 Click **Test step** to verify. **Expected output**: Generated content text in the `output` field.
 
@@ -288,6 +292,8 @@ Set up the AI model for quality evaluation:
 
 5. **Configure Judge Prompt**:
 
+{% raw %}
+
 ```
 =You are an EXTREMELY STRICT quality judge with ZERO tolerance for mediocrity. Evaluate the following output with RUTHLESS scrutiny.
 
@@ -297,6 +303,8 @@ Success Criteria: {{ $('Form Trigger').item.json['Success Criteria (How to Measu
 
 Generated Output: {{ $json.output }}
 ```
+
+{% endraw %}
 
 **Why this prompt works**:
 
