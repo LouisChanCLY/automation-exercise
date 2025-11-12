@@ -139,7 +139,7 @@ This workflow categorizes incoming emails into types (support, sales, general in
    - Select **"Google Gemini Chat Model"**
    - Configure:
      - **Credential**: Select your Gemini API credential
-     - **Model**: `gemini-1.5-flash` (or your preferred model)
+     - **Model**: `gemini-2.5-flash`
 
 #### Step 5: Parse and Format Output
 

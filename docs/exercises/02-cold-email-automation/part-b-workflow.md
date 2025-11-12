@@ -165,7 +165,7 @@ Provide a concise research summary focusing on information useful for email pers
 2. Select "Google Gemini Chat Model"
 3. Configure:
    - **Credential**: Your Gemini credential
-   - **Model**: "gemini-pro" or "gemini-1.5-flash"
+   - **Model**: "gemini-2.5-flash"
    - **Temperature**: 0.7 (balanced creativity)
 
 {: .tip }

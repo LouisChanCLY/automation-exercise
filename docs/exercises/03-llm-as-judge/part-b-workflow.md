@@ -233,6 +233,7 @@ The Generator creates content based on the task and instructions. On subsequent 
    - Add a **Google Gemini Model** sub-node
    - Connect it to the AI Agent
    - Select your Google Gemini credential
+   - **Model**: "gemini-2.5-flash"
 
 4. **Configure Prompt**:
 
@@ -269,9 +270,10 @@ The Judge evaluates content quality against success criteria and provides strict
 2. Rename to: `LLM Judge`
 
 3. **Configure Model Sub-node**:
-   - Add a **Google Gemini Judge Model** sub-node
+   - Add a **Google Gemini Model** sub-node
    - Connect it to the LLM Judge
    - Select your Google Gemini credential
+   - **Model**: "gemini-2.5-flash"
    - **Enable Output Parser**: Check the box
 
 4. **Add Structured Output Parser**:
