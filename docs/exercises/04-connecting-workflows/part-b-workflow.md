@@ -11,6 +11,7 @@ nav_order: 3
 {: .no_toc }
 
 ## Table of contents
+
 {: .no_toc .text-delta }
 
 1. TOC
@@ -25,6 +26,7 @@ In this section, you'll build three interconnected workflows that work together 
 **Time**: 55 minutes
 
 **What You'll Build**:
+
 1. Email Classifier Workflow (15 min)
 2. Response Generator Workflow (15 min)
 3. Master Orchestrator Workflow (20 min)
@@ -37,6 +39,15 @@ In this section, you'll build three interconnected workflows that work together 
 ### Purpose
 
 This workflow categorizes incoming emails into types (support, sales, general inquiry) and assigns priority levels.
+
+### Workflow Components
+
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Form Trigger** | Test interface for standalone use | Fields: Email Subject, Email Body, Sender Email |
+| **Execute Workflow Trigger** | Receives data from master workflow | Inputs: email_subject, email_body, email_sender |
+| **AI Agent** | Classifies email into categories | Classification prompt, returns category/priority/sentiment |
+| **Code (Parse Output)** | Extract structured classification | Parse JSON from AI output, handle errors gracefully |
 
 ### Build Steps
 
@@ -88,6 +99,7 @@ This workflow categorizes incoming emails into types (support, sales, general in
 5. Note: This trigger will receive data when the master workflow calls this workflow
 
 **Important**: Both triggers are now in your workflow. Only ONE will activate per execution:
+
 - **Form Trigger** activates when you access the form URL
 - **Execute Workflow Trigger** activates when called by master workflow
 
@@ -97,6 +109,7 @@ This workflow categorizes incoming emails into types (support, sales, general in
 2. Configure:
    - **Prompt Type**: `Define below`
    - **Text**:
+
    ```
    You are an email classification expert. Analyze the following email and classify it.
 
@@ -135,6 +148,7 @@ This workflow categorizes incoming emails into types (support, sales, general in
    - **Mode**: `Run Once for All Items`
    - **Language**: `JavaScript`
    - **Code**:
+
    ```javascript
    // Parse the AI output to extract JSON
    const aiOutput = items[0].json.output;
@@ -188,6 +202,7 @@ This workflow categorizes incoming emails into types (support, sales, general in
    - **Sender Email**: `frustrated.user@example.com`
 
 3. Expected output:
+
    ```json
    {
      "category": "support",
@@ -203,6 +218,20 @@ This workflow categorizes incoming emails into types (support, sales, general in
 ### Purpose
 
 This workflow generates high-quality email responses using the LLM-as-a-judge pattern from Exercise 3.
+
+### Workflow Components
+
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Form Trigger** | Test interface for standalone use | Fields: Task Description, Instructions, Success Criteria |
+| **Execute Workflow Trigger** | Receives task from master workflow | Inputs: Task Description, Instructions, Success Criteria |
+| **Set (Initialize)** | Set up loop counters and tracking | retry_count, max_retries (10), previous_feedback |
+| **AI Agent (Generator)** | Create response content | Dynamic prompt incorporating task and feedback |
+| **AI Agent (Judge)** | Evaluate response quality | Structured output: {passed: boolean, feedback: string} |
+| **IF (Check Pass)** | Quality gate decision | If evaluation_result = true |
+| **Set (Increment Retry)** | Update loop variables | retry_count++, store previous_feedback |
+| **IF (Max Retries)** | Loop control | If retry_count >= max_retries |
+| **Set (Mark Status)** | Set final status | status: "success" or "failed" |
 
 ### Build Steps
 
@@ -266,6 +295,7 @@ See [Exercise 3 Build Guide](../03-llm-as-judge/part-b-workflow) for detailed in
 
 3. Wait for the workflow to complete (may take 10-30 seconds)
 4. Expected output:
+
    ```json
    {
      "status": "success",
@@ -282,6 +312,20 @@ See [Exercise 3 Build Guide](../03-llm-as-judge/part-b-workflow) for detailed in
 ### Purpose
 
 This is the main workflow that ties everything together. It fetches emails, calls the classifier, calls the response generator, and sends replies.
+
+### Workflow Components
+
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Gmail Trigger** | Monitor inbox for new emails | Event: New Email, Poll interval: every minute |
+| **Set (Extract Data)** | Extract email fields | subject, body_plain, sender, message_id, thread_id |
+| **Execute Workflow (Classifier)** | Call email classification workflow | Pass: email_subject, email_body, email_sender |
+| **Code (Prepare Instructions)** | Build response instructions | Create task, instructions, criteria based on category |
+| **Execute Workflow (Generator)** | Call response generation workflow | Pass: Task Description, Instructions, Success Criteria |
+| **Set (Format Reply)** | Format final email reply | Extract: reply_text, subject, to, quality_status |
+| **IF (Quality Check)** | Verify response passed quality gate | If quality_status = "success" |
+| **Gmail (Send Reply)** | Send automated response | Send to original sender in same thread |
+| **Notification Node** | Alert on failed quality check | Notify for manual review when quality fails |
 
 ### Build Steps
 
@@ -351,6 +395,7 @@ This is the main workflow that ties everything together. It fetches emails, call
    - **Mode**: `Run Once for All Items`
    - **Language**: `JavaScript`
    - **Code**:
+
    ```javascript
    // Get classification results
    const category = items[0].json.category;
@@ -561,6 +606,7 @@ Your master workflow should look like this:
 ### Test Scenario 1: Support Email
 
 1. Send an email to your Gmail account:
+
    ```
    Subject: Cannot access dashboard
    Body: Hi, I've been trying to log into my dashboard for the past 30 minutes but keep getting "Invalid credentials" error. I'm sure my password is correct. Please help!
@@ -577,6 +623,7 @@ Your master workflow should look like this:
 ### Test Scenario 2: Sales Inquiry
 
 1. Send an email to your Gmail account:
+
    ```
    Subject: Interested in your Enterprise plan
    Body: Hello, I'm interested in learning more about your Enterprise plan features. Could you provide pricing and setup information?
@@ -590,6 +637,7 @@ Your master workflow should look like this:
 ### Test Scenario 3: General Question
 
 1. Send an email to your Gmail account:
+
    ```
    Subject: Quick question about your company
    Body: Hi, I was wondering if you have any office locations in New York?

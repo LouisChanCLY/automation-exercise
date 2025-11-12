@@ -96,6 +96,23 @@ Follow the detailed instructions below to build the workflow step-by-step and le
 
 ---
 
+## Workflow Components Reference
+
+Here's a quick reference of all the nodes you'll build in this exercise:
+
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Form Trigger** | Test interface for standalone use | Fields: Task Description, Instructions, Success Criteria |
+| **Set (Initialize)** | Set up loop counters and tracking | retry_count, max_retries (10), previous_feedback |
+| **AI Agent (Generator)** | Create response content | Dynamic prompt incorporating task and feedback |
+| **AI Agent (Judge)** | Evaluate response quality | Structured output: {passed: boolean, feedback: string} |
+| **IF (Check Pass)** | Quality gate decision | If evaluation_result = true |
+| **Set (Increment Retry)** | Update loop variables | retry_count++, store previous_feedback |
+| **IF (Max Retries)** | Loop control | If retry_count >= max_retries |
+| **Set (Mark Status)** | Set final status | status: "success" or "failed" |
+
+---
+
 ## Step 1: Create New Workflow
 
 1. Open n8n
@@ -140,11 +157,13 @@ The Form Trigger creates a web form where users can submit tasks for AI generati
 ### Example Form Input
 
 **Task Description:**
+
 ```
 Draft an email to a colleague thanking them for their help on a project and inviting them to a celebration lunch.
 ```
 
 **How to Do It (Instructions):**
+
 ```
 Write a professional yet friendly email that:
 1. Opens with a warm greeting
@@ -156,6 +175,7 @@ Write a professional yet friendly email that:
 ```
 
 **Success Criteria (How to Measure):**
+
 ```
 The email must:
 1. Have proper greeting and closing
@@ -227,6 +247,7 @@ Please generate the output according to the task description and instructions. E
 ```
 
 **How it works**:
+
 - **First iteration**: Generates fresh content based on task and instructions
 - **Later iterations**: Incorporates previous feedback from the judge
 
@@ -275,7 +296,7 @@ The Judge evaluates content quality against success criteria and provides strict
 }
 ```
 
-   - **Auto-Fix**: Enable
+- **Auto-Fix**: Enable
 
 5. **Configure Judge Prompt**:
 
@@ -290,6 +311,7 @@ Generated Output: {{ $json.output }}
 ```
 
 **Why this prompt works**:
+
 - **Extremely strict**: Ensures high-quality output
 - **Zero tolerance**: Prevents accepting mediocre results
 - **Ruthless scrutiny**: Forces careful evaluation
@@ -345,6 +367,7 @@ Decision point: Did the content pass the quality check?
    - **Right Value**: `true`
 
 **Output Routing**:
+
 - **True** branch: Content passed - go to success path
 - **False** branch: Content failed - go to retry path
 
@@ -408,6 +431,7 @@ After incrementing retry count, check if we've hit the maximum allowed retries.
    - **Operation**: `is true`
 
 **Output Routing**:
+
 - **True** branch: Max retries reached - go to failure path
 - **False** branch: Can retry - loop back to Initialize Variables
 
@@ -492,6 +516,7 @@ Format and return the final results (success or failure) back to the form.
 ### Expected Behavior
 
 **Scenario 1: Success in 2-3 iterations**
+
 ```
 Iteration 1: Failed → Feedback: "Missing specific lunch details"
 Iteration 2: Failed → Feedback: "Word count too high (175 words)"
@@ -501,6 +526,7 @@ Retry Count: 3
 ```
 
 **Scenario 2: Max iterations reached**
+
 ```
 Iteration 1-10: All failed for various reasons
 Status: failed
@@ -515,12 +541,14 @@ Final feedback: "Best attempt after 10 iterations"
 ### Visual Execution Path
 
 **Success Path**:
+
 ```
 Form → Initialize → Generator → Judge → Merge → Check (PASS)
 → Mark Success → Final Output → Return to Form ✅
 ```
 
 **Iteration Path**:
+
 ```
 Form → Initialize → Generator → Judge → Merge → Check (FAIL)
 → Increment Retry → Max Check (< 10)
@@ -529,6 +557,7 @@ Form → Initialize → Generator → Judge → Merge → Check (FAIL)
 ```
 
 **Failure Path**:
+
 ```
 ... 10 iterations ... → Max Check (≥ 10)
 → Mark Failure → Final Output → Return to Form ⚠️
@@ -553,12 +582,14 @@ Form → Initialize → Generator → Judge → Merge → Check (FAIL)
 ### Adjust Retry Limit
 
 If too many runs are failing:
+
 - Increase `max_retries` from 10 to 15 or 20
 - Or make success criteria less strict
 
 ### Improve Judge Prompts
 
 Make evaluation criteria more specific:
+
 - Add examples of passing vs failing content
 - Define exact requirements
 - Provide scoring rubrics
@@ -567,6 +598,7 @@ Make evaluation criteria more specific:
 ### Test Different Scenarios
 
 Try various task types:
+
 - **Short content**: Social media posts (50 words)
 - **Medium content**: Emails (150 words)
 - **Long content**: Blog posts (500 words)
@@ -583,6 +615,7 @@ Try various task types:
 **Cause**: Max retries check might be wrong
 
 **Fix**:
+
 - Verify Max Retries Check condition: `retry_count >= max_retries`
 - Ensure the true branch goes to Mark Failure
 - Check that Initialize Variables increments properly
@@ -592,6 +625,7 @@ Try various task types:
 **Cause**: Feedback not being passed correctly
 
 **Fix**:
+
 - Verify Increment Retry sets `previous_feedback` correctly
 - Check that Initialize Variables preserves `previous_feedback`
 - Ensure Generator prompt uses `$json.previous_feedback`
@@ -601,6 +635,7 @@ Try various task types:
 **Cause**: Judge prompt too lenient or too strict
 
 **Fix**:
+
 - Adjust judge prompt severity
 - Make success criteria more specific
 - Add examples of passing/failing content
@@ -611,6 +646,7 @@ Try various task types:
 **Cause**: Response mode not set correctly
 
 **Fix**:
+
 - Verify Form Trigger **Response Mode** is set to `Last Node`
 - Ensure Final Output node is connected properly
 - Check that workflow is activated

@@ -19,6 +19,8 @@ Build an intelligent cold email system that researches prospects and generates p
 
 This exercise teaches you to build an AI-powered outreach system that combines autonomous research, personalisation, and automation. Perfect for building skills in AI agent orchestration and structured content generation.
 
+**The Problem:** Cold outreach has a poor success rate—77% of cold emails never get opened. Generic templates feel impersonal and get ignored, but manual research for personalisation doesn't scale. You need an AI system that can research prospects autonomously and generate genuinely personalised messages based on real data.
+
 ### What You'll Build
 
 A complete AI research and personalisation workflow featuring:
@@ -69,17 +71,9 @@ The **AI Research & Personalisation** pattern you'll learn applies to:
 <div class="grid">
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
-      <h4>📚 Overview</h4>
-      <p>Understanding AI agents and research automation</p>
-      <a href="./overview">Start here →</a>
-    </div>
-  </div>
-
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
       <h4>⚙️ Part A: Setup</h4>
       <p>API keys & environment (20 min)</p>
-      <a href="./part-a-setup">Configure →</a>
+      <a href="./part-a-setup">Start here →</a>
     </div>
   </div>
 
@@ -94,7 +88,7 @@ The **AI Research & Personalisation** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>🏆 Challenges</h4>
-      <p>Advanced personalization (optional)</p>
+      <p>Advanced personalisation (optional)</p>
       <a href="./challenge-tasks">Level up →</a>
     </div>
   </div>
@@ -106,7 +100,6 @@ The **AI Research & Personalisation** pattern you'll learn applies to:
 
 | Section | Description | Duration |
 |---------|-------------|----------|
-| [Overview](./overview) | Why AI agents matter, learning outcomes, architecture | 5 min |
 | [Part A: Setup](./part-a-setup) | Perplexity API, Gmail, Google Sheets setup | 20 min |
 | [Part B: Build & Test](./part-b-workflow) | Agent configuration, prompt engineering, testing | 35 min |
 | [Challenges](./challenge-tasks) | Multi-channel outreach, A/B testing, follow-ups | Optional |

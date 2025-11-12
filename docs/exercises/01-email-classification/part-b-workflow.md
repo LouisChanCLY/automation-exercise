@@ -66,6 +66,24 @@ Now we'll build this pattern step-by-step, and you'll see how easily each compon
 
 ---
 
+## Workflow Components Reference
+
+Here's a quick reference of all the nodes you'll build in this exercise:
+
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Gmail Trigger** | Monitor inbox for new emails | Poll interval: every minute, Event: Message Received |
+| **Code (Prepare Email)** | Extract and clean email data | Extract sender, subject, body; remove signatures/quotes |
+| **Basic LLM Chain** | AI-powered email classification | Structured output parser, classification prompt, OpenRouter model |
+| **Edit Fields (Extract Results)** | Extract AI classification fields | Priority, confidence, reasoning, sender, subject, messageId |
+| **Switch (Route by Priority)** | Route based on priority level | Rules: urgent → Output 1, high → Output 2, others → fallback |
+| **Gmail (Add Labels)** | Apply priority labels to emails | Add URGENT-SUPPORT or HIGH-PRIORITY labels |
+| **No Operation** | Skip labelling for standard emails | Pass-through for low/medium priority emails |
+| **Edit Fields (Consolidate)** | Merge all data for logging | Combine email metadata with classification results |
+| **Google Sheets** | Log all classifications | Append or update rows based on messageId |
+
+---
+
 ## Step 5: Create a New Workflow
 
 ### Set Up Your Canvas

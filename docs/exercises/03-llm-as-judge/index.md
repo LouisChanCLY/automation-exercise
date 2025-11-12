@@ -19,6 +19,8 @@ Build an AI quality control system where one LLM generates content and another L
 
 This exercise teaches you to build a self-improving content generation system using the "LLM as a Judge" pattern. Learn how to create AI workflows that evaluate and iterate on their own output until quality standards are met.
 
+**The Problem:** AI-generated content is inconsistent—the same prompt can produce brilliant results or complete rubbish. Manual review doesn't scale, and there's no built-in quality control. You need an automated system where one AI generates content and another AI judges it, providing feedback until quality standards are met.
+
 ### What You'll Build
 
 A complete AI quality control workflow featuring:
@@ -72,17 +74,9 @@ The **AI Quality Control & Iteration** pattern you'll learn applies to:
 <div class="grid">
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
-      <h4>📚 Overview</h4>
-      <p>Understanding the why and how</p>
-      <a href="./overview">Start here →</a>
-    </div>
-  </div>
-
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
       <h4>⚙️ Part A: Setup</h4>
       <p>Environment & prerequisites (15 min)</p>
-      <a href="./part-a-setup">Configure →</a>
+      <a href="./part-a-setup">Start here →</a>
     </div>
   </div>
 
@@ -109,10 +103,9 @@ The **AI Quality Control & Iteration** pattern you'll learn applies to:
 
 | Section | Description | Duration |
 |---------|-------------|----------|
-| [Overview](./overview) | Why this matters, learning outcomes, architecture | 5 min |
 | [Part A: Setup](./part-a-setup) | Prerequisites check, Google Sheets setup | 15 min |
 | [Part B: Build & Test](./part-b-workflow) | Build generator, judge, loop logic, and test | 40 min |
-| [Challenges](./challenge-tasks) | Multi-criteria evaluation, A/B testing, prompt optimization | Optional |
+| [Challenges](./challenge-tasks) | Multi-criteria evaluation, A/B testing, prompt optimisation | Optional |
 
 ---
 

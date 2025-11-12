@@ -19,6 +19,8 @@ Build an intelligent email response system by connecting three separate workflow
 
 This exercise teaches you to build complex automation systems by connecting multiple workflows together. Learn how to create modular, reusable workflows that can call each other, passing data between them to solve complex business problems. Think of it like conducting an orchestra—each workflow plays its part, and you're coordinating them into a harmonious system.
 
+**The Problem:** As automations grow, building everything in one workflow creates unmanageable "spaghetti code." You can't reuse logic, debugging becomes difficult, and multiple people can't work on different parts. You need a modular approach where workflows call each other like functions in programming.
+
 ### What You'll Build
 
 A complete multi-workflow orchestration system featuring:
@@ -79,17 +81,9 @@ The **Workflow Orchestration & Composition** pattern you'll learn applies to:
 <div class="grid">
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
-      <h4>📚 Overview</h4>
-      <p>Understanding workflow composition</p>
-      <a href="./overview">Start here →</a>
-    </div>
-  </div>
-
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
       <h4>⚙️ Part A: Setup</h4>
       <p>Prerequisites & configuration (15 min)</p>
-      <a href="./part-a-setup">Configure →</a>
+      <a href="./part-a-setup">Start here →</a>
     </div>
   </div>
 
@@ -116,7 +110,6 @@ The **Workflow Orchestration & Composition** pattern you'll learn applies to:
 
 | Section | Description | Duration |
 |---------|-------------|----------|
-| [Overview](./overview) | Why workflow composition matters, architecture | 5 min |
 | [Part A: Setup](./part-a-setup) | Prerequisites, API setup | 15 min |
 | [Part B: Build & Test](./part-b-workflow) | Build three workflows and connect them | 55 min |
 | [Challenges](./challenge-tasks) | Error handling, parallel execution, monitoring | Optional |

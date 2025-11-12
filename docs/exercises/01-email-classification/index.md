@@ -19,6 +19,8 @@ Build an intelligent email classification system that automatically processes, c
 
 This exercise teaches you to build a working email automation system that combines Gmail, AI classification, and smart routing. Perfect for beginners, no coding experience required.
 
+**The Problem:** Professionals receive 50-150 emails daily. Manual sorting is time-consuming, important messages get buried, and urgent requests slip through. You need an intelligent system that automatically understands and routes emails based on content, not just rules.
+
 ### What You'll Build
 
 A complete automation workflow featuring:
@@ -65,17 +67,9 @@ The **Intelligent Triage & Routing** pattern you'll learn applies to:
 <div class="grid">
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
-      <h4>📚 Overview</h4>
-      <p>Understanding the why and how</p>
-      <a href="./overview">Start here →</a>
-    </div>
-  </div>
-
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
       <h4>⚙️ Part A: Setup</h4>
       <p>Environment & prerequisites (15 min)</p>
-      <a href="./part-a-setup">Configure →</a>
+      <a href="./part-a-setup">Start here →</a>
     </div>
   </div>
 
@@ -102,7 +96,6 @@ The **Intelligent Triage & Routing** pattern you'll learn applies to:
 
 | Section | Description | Duration |
 |---------|-------------|----------|
-| [Overview](./overview) | Why this matters, learning outcomes, architecture | 5 min |
 | [Part A: Setup](./part-a-setup) | Account creation, API configuration, prerequisites | 15 min |
 | [Part B: Build & Test](./part-b-workflow) | Node creation, AI integration, testing, activation | 25 min |
 | [Challenges](./challenge-tasks) | Multi-language, auto-reply, analytics | Optional |
