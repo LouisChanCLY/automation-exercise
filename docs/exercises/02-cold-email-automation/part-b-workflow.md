@@ -164,6 +164,16 @@ Provide a concise research summary focusing on information useful for email pers
 {: .tip }
 > **Pin Output During Development**: After testing once, pin the agent output to save API calls while building the rest of your workflow.
 
+### Connect This Node
+
+Now connect the nodes you've created:
+
+1. Drag a connection line from the **Form Trigger** node to the **AI Agent - Research Prospect** node
+2. The workflow will pass form data (Name, Company, Email, Context) to the research agent
+
+{: .highlight }
+> **Connected!** Your research agent will now receive form submissions automatically.
+
 ---
 
 ## Step 4: Email Generation Agent
@@ -238,6 +248,16 @@ Format the output with clear sections for subject, hook, body, and CTA.
 
 Use the same Gemini model (it's already configured from the first agent).
 
+### Connect This Node
+
+Connect the research agent to the email agent:
+
+1. Drag a connection line from **AI Agent - Research Prospect** to **AI Agent - Craft Email**
+2. The email agent will now receive the research findings to use for personalisation
+
+{: .highlight }
+> **Data Flow**: Form → Research Agent → Email Agent. Each node enriches the data for the next!
+
 ---
 
 ## Step 5: Gmail Integration
@@ -278,6 +298,16 @@ Use the same Gemini model (it's already configured from the first agent).
 {: .warning }
 > **Sender Reputation**: Start with a few test emails. Sudden high volume can trigger spam filters.
 
+### Connect This Node
+
+Connect the email agent to Gmail:
+
+1. Drag a connection line from **AI Agent - Craft Email** to **Send Email via Gmail**
+2. The Gmail node will compose and send emails using the AI-generated components
+
+{: .highlight }
+> **Email Ready**: Your workflow can now send personalised emails automatically!
+
 ---
 
 ## Step 6: Metadata Enrichment
@@ -314,6 +344,16 @@ sent_status: "sent"
 
 {% endraw %}
 
+### Connect This Node
+
+Connect Gmail to the enrichment node:
+
+1. Drag a connection line from **Send Email via Gmail** to **Enrich with Metadata**
+2. This node will collect data from all previous nodes for logging
+
+{: .highlight }
+> **Data Collection**: The enrichment node pulls data from multiple nodes to create a complete record.
+
 ---
 
 ## Step 7: Analytics Logging
@@ -332,41 +372,19 @@ sent_status: "sent"
 {: .note }
 > **Auto-mapping**: Since we named our fields to match the spreadsheet columns, they'll map automatically.
 
----
+### Connect This Node
 
-## Step 8: Connect the Workflow
+Final connection - link enrichment to logging:
 
-### Link All Nodes
+1. Drag a connection line from **Enrich with Metadata** to **Log to Google Sheets**
+2. Every email sent will now be logged automatically
 
-Connect nodes in this sequence:
-
-```mermaid
-graph LR
-    FT[Form Trigger] --> RA[Research Agent]
-    RA --> EA[Email Agent]
-    EA --> GM[Gmail]
-    GM --> EN[Enrich]
-    EN --> SH[Sheets]
-
-    RA -.-> PT[Perplexity Tool]
-    PT -.-> G1[Gemini Model]
-
-    EA -.-> OP[Output Parser]
-    OP -.-> G2[Gemini Model]
-
-    style FT fill:#e1f5fe
-    style RA fill:#fff3e0
-    style EA fill:#fff3e0
-    style GM fill:#f3e5f5
-    style EN fill:#ffe0b2
-    style SH fill:#e8f5e9
-    style PT fill:#fffde7
-    style OP fill:#fffde7
-```
+{: .highlight }
+> **Workflow Complete**: You've connected all nodes! Form → Research → Email → Gmail → Enrich → Sheets.
 
 ---
 
-## Step 9: Test & Activate
+## Step 8: Test & Activate
 
 ### Test Your Workflow
 
