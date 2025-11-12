@@ -90,3 +90,33 @@ pre {
     padding-left: 1rem;
   }
 }
+
+// Make main content area wider for better diagram visibility
+.main-content-wrap {
+  max-width: 1200px !important; // Increased from default ~800px
+}
+
+.main-content {
+  max-width: 1200px !important;
+}
+
+// Make Mermaid diagrams responsive and larger
+.mermaid {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 2rem 0;
+
+  svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+// Add extra spacing around workflow architecture sections
+h2#workflow-architecture,
+h3#what-were-building {
+  margin-top: 2rem;
+}
