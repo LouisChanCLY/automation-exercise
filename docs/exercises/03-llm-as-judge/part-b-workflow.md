@@ -227,7 +227,7 @@ The prompt dynamically adapts based on whether this is the first attempt or a re
 {% raw %}
 
 ```
-=Task: {{ $('Form Trigger').item.json['Task Description'] }}
+Task: {{ $('Form Trigger').item.json['Task Description'] }}
 
 Instructions: {{ $('Form Trigger').item.json['How to Do It (Instructions)'] }}
 
@@ -295,7 +295,7 @@ Set up the AI model for quality evaluation:
 {% raw %}
 
 ```
-=You are an EXTREMELY STRICT quality judge with ZERO tolerance for mediocrity. Evaluate the following output with RUTHLESS scrutiny.
+You are an EXTREMELY STRICT quality judge with ZERO tolerance for mediocrity. Evaluate the following output with RUTHLESS scrutiny.
 
 Task: {{ $('Form Trigger').item.json['Task Description'] }}
 
