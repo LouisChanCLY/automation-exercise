@@ -115,15 +115,16 @@ graph LR
     style E fill:#fffde7
 ```
 
-### Component Breakdown
+### Node Breakdown
 
-| Component | Purpose | What You'll Configure |
-|-----------|---------|----------------------|
-| **Form Trigger** | Collect lead data | Fields for name, company, email, context |
-| **Research Agent** | Find relevant info | Perplexity searches, research prompts |
-| **Email Generator** | Create personalized content | Structured prompts, output schema |
-| **Gmail Integration** | Send emails | Authentication, templates |
-| **Google Sheets** | Track everything | Logging schema, analytics |
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Form Trigger** | Collect lead information via web form | Fields: Name, Company, Email, Key Points/Context |
+| **AI Agent (Research)** | Autonomous research using Perplexity | Tools: Perplexity API, Model: Gemini, research prompt |
+| **AI Agent (Email Generator)** | Generate personalized email content | Structured output parser (subject, hook, body, cta), Model: Gemini |
+| **Gmail (Send)** | Send personalized cold emails | Compose email from AI output, send to prospect |
+| **Set/Edit Fields (Metadata)** | Enrich data for logging | Combine prospect info, research summary, email content |
+| **Google Sheets (Log)** | Track all outreach activity | Append all data to tracking spreadsheet |
 
 ---
 

@@ -129,12 +129,14 @@ graph TB
 **Purpose**: Coordinates the entire email response process
 
 **Nodes**:
+
 - Gmail Trigger: Monitors inbox for new emails
 - Execute Workflow (Classifier): Calls the email classification workflow
 - Execute Workflow (Response Generator): Calls the response generation workflow
 - Gmail Send: Sends the generated reply
 
 **Data Flow**:
+
 ```
 Input: New email from Gmail
 → Pass to Classifier: { subject, body, sender }
@@ -144,17 +146,33 @@ Input: New email from Gmail
 → Send: response_text to original sender
 ```
 
+**Node Breakdown:**
+
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Gmail Trigger** | Monitor inbox for new emails | Event: New Email, Poll interval: every minute |
+| **Set (Extract Data)** | Extract email fields | subject, body_plain, sender, message_id, thread_id |
+| **Execute Workflow (Classifier)** | Call email classification workflow | Pass: email_subject, email_body, email_sender |
+| **Code (Prepare Instructions)** | Build response instructions | Create task, instructions, criteria based on category |
+| **Execute Workflow (Generator)** | Call response generation workflow | Pass: Task Description, Instructions, Success Criteria |
+| **Set (Format Reply)** | Format final email reply | Extract: reply_text, subject, to, quality_status |
+| **IF (Quality Check)** | Verify response passed quality gate | If quality_status = "success" |
+| **Gmail (Send Reply)** | Send automated response | Send to original sender in same thread |
+| **Notification Node** | Alert on failed quality check | Notify for manual review when quality fails |
+
 #### 2. Email Classifier Workflow
 
 **Purpose**: Categorizes emails into types (support, sales, general)
 
 **Nodes**:
+
 - Execute Workflow Trigger: Receives email data from master workflow
 - AI Agent: Uses LLM to classify the email
 - Set Variables: Formats classification result
 - Return data to master workflow
 
 **Data Flow**:
+
 ```
 Input: { subject, body, sender }
 → AI Classification: Analyzes content
@@ -163,16 +181,27 @@ Output: Return to master workflow
 ```
 
 **Why a Separate Workflow?**
+
 - **Reusability**: Can be called by other workflows (ticket routing, analytics, etc.)
 - **Testability**: Easy to test classification accuracy in isolation
 - **Maintainability**: Update classification logic without touching email orchestration
 - **Different Trigger Types**: Can be triggered by email, form submission, API call, etc.
+
+**Node Breakdown:**
+
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Form Trigger** | Test interface for standalone use | Fields: Email Subject, Email Body, Sender Email |
+| **Execute Workflow Trigger** | Receives data from master workflow | Inputs: email_subject, email_body, email_sender |
+| **AI Agent** | Classifies email into categories | Classification prompt, returns category/priority/sentiment |
+| **Code (Parse Output)** | Extract structured classification | Parse JSON from AI output, handle errors gracefully |
 
 #### 3. LLM-as-a-Judge Response Generator
 
 **Purpose**: Generates high-quality email responses with iterative improvement
 
 **Nodes**:
+
 - Execute Workflow Trigger: Receives task from master workflow
 - Initialize Variables: Set up retry counters
 - AI Generator: Creates response based on email category and content
@@ -181,6 +210,7 @@ Output: Return to master workflow
 - Return final response to master workflow
 
 **Data Flow**:
+
 ```
 Input: { category, original_email, task_description, success_criteria }
 → Generate Response: AI creates first draft
@@ -191,10 +221,25 @@ Input: { category, original_email, task_description, success_criteria }
 ```
 
 **Why a Separate Workflow?**
+
 - **Complex Logic**: The LLM-as-a-judge pattern is complex enough to deserve its own workflow
 - **Reusability**: Can generate quality-controlled content for emails, social posts, reports, etc.
 - **Independent Testing**: Test the generation + evaluation loop without email context
 - **Performance Isolation**: Long-running generation doesn't block the master workflow
+
+**Node Breakdown:**
+
+| Node Type | Purpose | Configuration |
+|-----------|---------|---------------|
+| **Form Trigger** | Test interface for standalone use | Fields: Task Description, Instructions, Success Criteria |
+| **Execute Workflow Trigger** | Receives task from master workflow | Inputs: Task Description, Instructions, Success Criteria |
+| **Set (Initialize)** | Set up loop counters and tracking | retry_count, max_retries (10), previous_feedback |
+| **AI Agent (Generator)** | Create response content | Dynamic prompt incorporating task and feedback |
+| **AI Agent (Judge)** | Evaluate response quality | Structured output: {passed: boolean, feedback: string} |
+| **IF (Check Pass)** | Quality gate decision | If evaluation_result = true |
+| **Set (Increment Retry)** | Update loop variables | retry_count++, store previous_feedback |
+| **IF (Max Retries)** | Loop control | If retry_count >= max_retries |
+| **Set (Mark Status)** | Set final status | status: "success" or "failed" |
 
 ### The Critical Component: Execute Workflow Trigger
 
@@ -208,11 +253,13 @@ Each sub-workflow (Classifier and Response Generator) has **TWO triggers**:
 #### Why This Dual-Trigger Pattern?
 
 **During Development:**
+
 - Use Form Trigger to test the workflow in isolation
 - Quickly iterate on prompts and logic without running the entire system
 - Debug issues in a controlled environment with known inputs
 
 **In Production:**
+
 - Execute Workflow Trigger activates when master workflow calls it
 - Master workflow passes data directly (no form needed)
 - Faster execution without user interaction
@@ -226,12 +273,14 @@ Without Execute Workflow Trigger, you can't call a workflow from another workflo
 Imagine you're running a restaurant with specialized stations:
 
 **Without Execute Workflow Trigger (doesn't work):**
+
 - You're the head chef (master workflow)
 - You need the dessert station to make a cake
 - But the dessert station has no way to receive your order!
 - You can't coordinate the meal
 
 **With Execute Workflow Trigger (works!):**
+
 - You're the head chef (master workflow)
 - You send an order ticket to the dessert station (Execute Workflow Trigger)
 - The dessert station receives your order with all the details (chocolate cake, 2 layers, vanilla frosting)
@@ -301,6 +350,7 @@ Master workflow receives: { category: "support", priority: "high" }
 **Goal**: Automatically respond to support emails with high-quality, categorized responses
 
 **Email Received**:
+
 ```
 From: customer@example.com
 Subject: Login issue
@@ -316,9 +366,10 @@ Body: I can't log into my account. I've tried resetting my password but the emai
 3. **Call Response Generator**:
    - Passes: `{ category: "technical_support", original_email: "...", task: "Generate helpful support response" }`
    - Receives: `{ response: "Dear Customer, I understand you're experiencing login issues...", status: "success" }`
-4. **Send Reply**: Gmail sends the generated response to customer@example.com
+4. **Send Reply**: Gmail sends the generated response to <customer@example.com>
 
 **Business Value**:
+
 - Response time: 2 hours → 30 seconds
 - Consistent quality across all responses
 - Proper categorization for analytics
@@ -329,11 +380,13 @@ Body: I can't log into my account. I've tried resetting my password but the emai
 ### Beyond Single Workflows
 
 Most automation tutorials teach you to build one big workflow - like trying to cook an entire meal on one stove burner:
+
 ```
 Email → Process Everything → Send Reply
 ```
 
 This exercise teaches you professional organization - like a well-run restaurant kitchen:
+
 ```
 Master Workflow (Head Chef):
   → Call Classifier Workflow (Prep Station)
