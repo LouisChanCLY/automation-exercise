@@ -109,18 +109,25 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ## Step 3: AI Research Agent
 
-### Configure Perplexity Research
+### Add and Connect the Node
 
 {: .note }
 > **Understanding AI Agents**: Unlike basic LLM nodes, agents can use tools autonomously. They decide when and how to search based on your instructions.
 
-1. Add "AI Agent" node
-2. Name it: "AI Agent - Research Prospect"
-3. Configure:
-   - **Type**: "Tools Agent"
-   - **Prompt Type**: "Define Below"
+1. Add "AI Agent" node to your canvas
+2. **Connect it**: Drag a connection line from the **Form Trigger** to this new node
+3. Name it: "AI Agent - Research Prospect"
 
-4. In the **Prompt** field, enter:
+{: .highlight }
+> **Why connect first?** Once connected, you can see the form data available in expressions like `{{ $json.Name }}`.
+
+### Configure the Agent
+
+Now set up the agent's behaviour:
+
+1. **Type**: "Tools Agent"
+2. **Prompt Type**: "Define Below"
+3. In the **Prompt** field, enter:
 
 {% raw %}
 
@@ -164,28 +171,25 @@ Provide a concise research summary focusing on information useful for email pers
 {: .tip }
 > **Pin Output During Development**: After testing once, pin the agent output to save API calls while building the rest of your workflow.
 
-### Connect This Node
-
-Now connect the nodes you've created:
-
-1. Drag a connection line from the **Form Trigger** node to the **AI Agent - Research Prospect** node
-2. The workflow will pass form data (Name, Company, Email, Context) to the research agent
-
-{: .highlight }
-> **Connected!** Your research agent will now receive form submissions automatically.
-
 ---
 
 ## Step 4: Email Generation Agent
 
-### Create Email Crafting Agent
+### Add and Connect the Node
 
 {: .note }
 > **Why Two Agents?** Separation of concerns - one agent researches, another writes. This makes each agent better at its specific task and easier to debug.
 
-1. Add another "AI Agent" node
-2. Name it: "AI Agent - Craft Email"
-3. Configure the prompt:
+1. Add another "AI Agent" node to your canvas
+2. **Connect it**: Drag a connection line from **AI Agent - Research Prospect** to this new node
+3. Name it: "AI Agent - Craft Email"
+
+{: .highlight }
+> **Research data flows in**: This agent now receives the research findings from the previous node.
+
+### Configure the Prompt
+
+Set up the agent to craft personalised emails:
 
 {% raw %}
 
@@ -244,36 +248,31 @@ Format the output with clear sections for subject, hook, body, and CTA.
 }
 ```
 
-### Connect Language Model
+### Add Language Model
 
 Use the same Gemini model (it's already configured from the first agent).
-
-### Connect This Node
-
-Connect the research agent to the email agent:
-
-1. Drag a connection line from **AI Agent - Research Prospect** to **AI Agent - Craft Email**
-2. The email agent will now receive the research findings to use for personalisation
-
-{: .highlight }
-> **Data Flow**: Form → Research Agent → Email Agent. Each node enriches the data for the next!
 
 ---
 
 ## Step 5: Gmail Integration
 
-### Send Personalized Emails
+### Add and Connect the Node
+
+1. Add "Gmail" node to your canvas
+2. **Connect it**: Drag a connection line from **AI Agent - Craft Email** to this new node
+3. Name it: "Send Email via Gmail"
+
+{: .highlight }
+> **Email components ready**: This node receives the structured email output (subject, hook, body, cta).
+
+### Configure Email Sending
 
 {: .note }
 > **Email Composition**: We'll combine the AI-generated components into a professional email.
 
-1. Add "Gmail" node
-2. Name it: "Send Email via Gmail"
-3. Configure:
-   - **Operation**: "Send"
-   - **Credential**: Your Gmail credential
-
-4. Set email fields using expressions:
+1. **Operation**: "Send"
+2. **Credential**: Your Gmail credential
+3. Set email fields using expressions:
 
 {% raw %}
 
@@ -298,28 +297,25 @@ Connect the research agent to the email agent:
 {: .warning }
 > **Sender Reputation**: Start with a few test emails. Sudden high volume can trigger spam filters.
 
-### Connect This Node
-
-Connect the email agent to Gmail:
-
-1. Drag a connection line from **AI Agent - Craft Email** to **Send Email via Gmail**
-2. The Gmail node will compose and send emails using the AI-generated components
-
-{: .highlight }
-> **Email Ready**: Your workflow can now send personalised emails automatically!
-
 ---
 
 ## Step 6: Metadata Enrichment
 
-### Prepare Data for Logging
+### Add and Connect the Node
+
+1. Add "Set" node (or "Edit Fields" in newer versions) to your canvas
+2. **Connect it**: Drag a connection line from **Send Email via Gmail** to this new node
+3. Name it: "Enrich with Metadata"
+
+{: .highlight }
+> **Data consolidation**: This node pulls data from all previous nodes to create a complete record.
+
+### Configure Field Assignments
 
 {: .note }
 > **Why Enrich?** We need to combine data from multiple nodes into a single record for our analytics spreadsheet.
 
-1. Add "Set" node (or "Edit Fields" in newer versions)
-2. Name it: "Enrich with Metadata"
-3. Add these field assignments:
+Add these field assignments:
 
 {% raw %}
 
@@ -344,43 +340,32 @@ sent_status: "sent"
 
 {% endraw %}
 
-### Connect This Node
-
-Connect Gmail to the enrichment node:
-
-1. Drag a connection line from **Send Email via Gmail** to **Enrich with Metadata**
-2. This node will collect data from all previous nodes for logging
-
-{: .highlight }
-> **Data Collection**: The enrichment node pulls data from multiple nodes to create a complete record.
-
 ---
 
 ## Step 7: Analytics Logging
 
-### Track Everything in Sheets
+### Add and Connect the Node
 
-1. Add "Google Sheets" node
-2. Name it: "Log to Google Sheets"
-3. Configure:
-   - **Operation**: "Append"
-   - **Credential**: Your Sheets credential
-   - **Document**: Select your "Cold Email Tracking" spreadsheet
-   - **Sheet**: "Sheet1"
-   - **Mapping Mode**: "Auto-map Input Data"
+1. Add "Google Sheets" node to your canvas
+2. **Connect it**: Drag a connection line from **Enrich with Metadata** to this new node
+3. Name it: "Log to Google Sheets"
+
+{: .highlight }
+> **Final node**: Every email sent will now be logged to your tracking spreadsheet.
+
+### Configure Sheets Logging
+
+1. **Operation**: "Append"
+2. **Credential**: Your Sheets credential
+3. **Document**: Select your "Cold Email Tracking" spreadsheet
+4. **Sheet**: "Sheet1"
+5. **Mapping Mode**: "Auto-map Input Data"
 
 {: .note }
 > **Auto-mapping**: Since we named our fields to match the spreadsheet columns, they'll map automatically.
 
-### Connect This Node
-
-Final connection - link enrichment to logging:
-
-1. Drag a connection line from **Enrich with Metadata** to **Log to Google Sheets**
-2. Every email sent will now be logged automatically
-
 {: .highlight }
-> **Workflow Complete**: You've connected all nodes! Form → Research → Email → Gmail → Enrich → Sheets.
+> **Workflow Complete**: All nodes connected! Form → Research → Email → Gmail → Enrich → Sheets.
 
 ---
 
