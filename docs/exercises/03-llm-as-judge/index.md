@@ -10,11 +10,8 @@ has_children: true
 
 {: .fs-9 }
 
-Build an AI quality control system where one LLM generates content and another LLM evaluates it, providing feedback and iterating until quality standards are met.
+Build an AI quality control system where one LLM generates content and another LLM evaluates it, providing feedback and iterating until quality standards are met. By completing this exercise, you'll demonstrate your ability to build self-improving AI systems with quality gates—applicable to content marketing, code generation, customer service, and any scenario requiring consistent, verified output.
 {: .fs-6 .fw-300 }
-
-[Start Exercise](./overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[Download Workflow](./downloads/llm-judge-workflow.json){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
@@ -24,63 +21,51 @@ This exercise teaches you to build a self-improving content generation system us
 
 ### What You'll Build
 
-- **Web form interface** for task submission
-- **Content generation** with Google Gemini AI
-- **Quality evaluation** using a strict judge AI
-- **Iterative improvement** with feedback loops (up to 10 retries)
-- **Form-based output** with immediate results
-- **Loop control** with pass/fail criteria
+A complete AI quality control workflow featuring:
 
-### The Universal Pattern
-
-You're learning the **AI Quality Control & Iteration** pattern:
+- **Web form interface** for task submission with custom quality criteria
+- **Generator AI** that creates content based on instructions
+- **Judge AI** that evaluates output against your specific criteria
+- **Feedback loop** with iterative improvement (up to 10 attempts)
+- **Structured evaluation** with pass/fail status and actionable feedback
+- **Loop control logic** preventing infinite iterations
 
 ```mermaid
 graph LR
-    A[Generate Content] --> B[Evaluate Quality]
-    B --> C{Pass?}
-    C -->|No| D[Provide Feedback]
-    D --> A
-    C -->|Yes| E[Final Output]
+    A[Form Input] --> B[Generate Content]
+    B --> C[Evaluate Quality]
+    C --> D{Pass?}
+    D -->|No & < 10| E[Incorporate Feedback]
+    E --> B
+    D -->|Yes or Max| F[Return Result]
 
     style A fill:#e1f5fe
     style B fill:#fff3e0
-    style C fill:#f3e5f5
-    style E fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#f3e5f5
+    style F fill:#e8f5e9
 ```
 
-**Today's Implementation:**
+### Skills You'll Demonstrate
 
-```mermaid
-graph LR
-    A1[Form Input] --> B1[Generator AI]
-    B1 --> C1[Judge AI]
-    C1 --> D1{Pass?}
-    D1 -->|No & < 10| E1[Feedback Loop]
-    E1 --> B1
-    D1 -->|Yes| F1[Return to Form]
-    D1 -->|No & = 10| F1
-```
+By completing this exercise, you will have demonstrated:
 
-**Tomorrow's Applications:**
+- **Loop Logic Design**: Building iterative workflows with exit conditions
+- **Dual AI Agent Setup**: Configuring two AI models for different roles (creation vs evaluation)
+- **Structured Output Parsing**: Extracting consistent JSON from AI responses
+- **Quality Gate Implementation**: Creating pass/fail criteria and feedback mechanisms
+- **Variable Management**: Tracking state across loop iterations (counters, previous feedback)
 
-```mermaid
-graph TD
-    subgraph "Content Marketing"
-        CM[Generate Copy] --> CE[Evaluate Brand Voice]
-        CE --> CI[Iterate Until Perfect]
-    end
+### The Pattern You'll Master
 
-    subgraph "Code Review"
-        CG[Generate Code] --> CR[Review Quality]
-        CR --> CF[Fix Issues]
-    end
+The **AI Quality Control & Iteration** pattern you'll learn applies to:
 
-    subgraph "Customer Service"
-        RG[Generate Response] --> RS[Check Tone/Accuracy]
-        RS --> RR[Refine Message]
-    end
-```
+- **Content Marketing**: Generate brand-aligned copy that consistently meets tone and style guidelines
+- **Code Generation**: Create code that passes security, performance, and style standards
+- **Customer Service**: Produce empathetic, accurate responses before sending
+- **Product Descriptions**: Generate compelling copy that includes all required information
+- **Email Campaigns**: Create messages that pass compliance and brand guidelines
+- **Educational Content**: Produce learning materials that meet pedagogical standards
 
 ### Exercise Structure
 

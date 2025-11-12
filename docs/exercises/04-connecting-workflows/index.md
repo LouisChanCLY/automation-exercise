@@ -10,60 +10,32 @@ has_children: true
 
 {: .fs-9 }
 
-Build an intelligent email response system by connecting three separate workflows together: a master orchestrator, an email classifier, and an LLM-as-a-judge response generator.
+Build an intelligent email response system by connecting three separate workflows together: a master orchestrator, an email classifier, and an LLM-as-a-judge response generator. By completing this exercise, you'll demonstrate your ability to design modular, scalable automation systems—a professional skill applicable to customer support, content pipelines, data processing, and any complex multi-step business process.
 {: .fs-6 .fw-300 }
-
-[Start Exercise](./overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[Download Workflows](./downloads/){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
 ## 75-Minute Hands-On Exercise
 
-This exercise teaches you to build complex automation systems by connecting multiple workflows together. Learn how to create modular, reusable workflows that can call each other, passing data between them to solve complex business problems.
+This exercise teaches you to build complex automation systems by connecting multiple workflows together. Learn how to create modular, reusable workflows that can call each other, passing data between them to solve complex business problems. Think of it like conducting an orchestra—each workflow plays its part, and you're coordinating them into a harmonious system.
 
 ### What You'll Build
 
-- **Master orchestrator workflow** that fetches emails and coordinates other workflows
-- **Email classification workflow** that categorizes incoming emails
-- **LLM-as-a-judge response generator** that creates high-quality email replies
-- **Workflow triggers** that allow workflows to call each other
-- **Data passing** between workflows with structured inputs/outputs
-- **End-to-end automation** that handles the entire email response process
+A complete multi-workflow orchestration system featuring:
 
-### The Universal Pattern
-
-You're learning the **Workflow Orchestration & Composition** pattern - think of it like a restaurant kitchen:
-
-```mermaid
-graph LR
-    A[Master Workflow] --> B[Sub-Workflow 1]
-    A --> C[Sub-Workflow 2]
-    B --> D[Process Data]
-    C --> D
-    D --> E[Master Workflow]
-    E --> F[Final Action]
-
-    style A fill:#e1f5fe
-    style B fill:#fff3e0
-    style C fill:#fff3e0
-    style E fill:#e1f5fe
-    style F fill:#e8f5e9
-```
-
-Just like a head chef (Master Workflow) coordinates with specialized stations (Sub-Workflows):
-- The prep station chops vegetables (Classifier)
-- The main kitchen cooks the dish (Response Generator)
-- The head chef plates and serves (Final Action)
-
-**Today's Implementation:**
+- **Master orchestrator workflow** that fetches emails and coordinates sub-workflows
+- **Email classifier sub-workflow** that categorises incoming messages
+- **Response generator sub-workflow** that creates quality-controlled replies
+- **Execute Workflow Triggers** enabling inter-workflow communication
+- **Structured data passing** with defined inputs and outputs between workflows
+- **Dual triggers** allowing standalone testing and production orchestration
 
 ```mermaid
 graph TB
-    A[Master: Fetch Email] --> B[Call Classifier Workflow]
-    B --> C[Receive Classification]
-    C --> D[Call Response Generator Workflow]
-    D --> E[Receive Generated Response]
+    A[Master: Fetch Email] --> B[Call Classifier]
+    B --> C[Receive Category]
+    C --> D[Call Generator]
+    D --> E[Receive Response]
     E --> F[Master: Send Reply]
 
     style A fill:#e1f5fe
@@ -72,28 +44,35 @@ graph TB
     style F fill:#e8f5e9
 ```
 
-**Tomorrow's Applications:**
+**Restaurant Kitchen Analogy:**
 
-```mermaid
-graph TD
-    subgraph "Customer Support"
-        CS[Ticket Router] --> CT[Classify Ticket]
-        CT --> CR[Generate Response]
-        CR --> CS2[Send & Track]
-    end
+Just like a head chef coordinates specialized stations:
 
-    subgraph "Content Pipeline"
-        CP[Content Planner] --> CG[Generate Content]
-        CG --> CQ[Quality Check]
-        CQ --> CP2[Publish]
-    end
+- **Head Chef** (Master Workflow) receives orders and coordinates
+- **Prep Station** (Classifier) categorises and prepares ingredients
+- **Main Kitchen** (Generator) cooks the dish with quality checks
+- **Head Chef** plates and serves the final product
 
-    subgraph "Data Processing"
-        DP[Data Ingest] --> DT[Transform Data]
-        DT --> DV[Validate Data]
-        DV --> DS[Store Data]
-    end
-```
+### Skills You'll Demonstrate
+
+By completing this exercise, you will have demonstrated:
+
+- **Workflow Composition**: Breaking complex processes into reusable components
+- **Inter-Workflow Communication**: Configuring Execute Workflow nodes and triggers
+- **Data Contract Design**: Defining clear inputs/outputs between workflows
+- **Dual-Trigger Architecture**: Supporting both standalone testing and production orchestration
+- **Modular System Design**: Building maintainable, scalable automation architectures
+
+### The Pattern You'll Master
+
+The **Workflow Orchestration & Composition** pattern you'll learn applies to:
+
+- **Customer Support**: Route tickets → Classify urgency → Generate response → Assign agent
+- **Content Pipeline**: Plan content → Generate drafts → Review quality → Schedule publishing
+- **Order Fulfilment**: Receive order → Check inventory → Process payment → Ship product
+- **Data Processing**: Ingest data → Validate format → Transform structure → Load to database
+- **Lead Management**: Capture lead → Score quality → Enrich data → Route to sales
+- **Invoice Processing**: Extract data → Validate information → Approve payment → Update accounts
 
 ### Exercise Structure
 

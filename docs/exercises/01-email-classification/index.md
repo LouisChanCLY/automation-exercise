@@ -10,34 +10,30 @@ has_children: true
 
 {: .fs-9 }
 
-Build an intelligent email classification system that automatically processes, categorizes, and routes emails using AI.
+Build an intelligent email classification system that automatically processes, categorizes, and routes emails using AI. By completing this exercise, you'll demonstrate your ability to integrate AI models into real business workflows—a skill applicable to customer support, document processing, error monitoring, and any scenario requiring intelligent triage.
 {: .fs-6 .fw-300 }
-
-[Start Exercise](./overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[Download Workflow](./downloads/email-classification-workflow.json){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
 ## 45-Minute Hands-On Exercise
 
-This exercise teaches you to build a production-ready email automation system that combines Gmail, AI classification, and smart routing. Perfect for beginners, no coding experience required.
+This exercise teaches you to build a working email automation system that combines Gmail, AI classification, and smart routing. Perfect for beginners, no coding experience required.
 
 ### What You'll Build
+
+A complete automation workflow featuring:
 
 - **Real-time email monitoring** with Gmail API
 - **AI-powered classification** using natural language processing
 - **Intelligent routing system** based on priority and sentiment
-- **Automated labeling** for inbox organization
-
-### The Universal Pattern
-
-You're learning the **Intelligent Triage & Routing** pattern:
+- **Automated labelling** for inbox organisation
+- **Analytics logging** to Google Sheets
 
 ```mermaid
 graph LR
-    A[Data Source] --> B[AI Analysis]
-    B --> C[Smart Routing]
-    C --> D[Different Actions]
+    A[Gmail Inbox] --> B[AI Classifier]
+    B --> C[Smart Router]
+    C --> D[Labels & Logging]
 
     style A fill:#e1f5fe
     style B fill:#fff3e0
@@ -45,37 +41,24 @@ graph LR
     style D fill:#e8f5e9
 ```
 
-**Today's Implementation:**
+### Skills You'll Demonstrate
 
-```mermaid
-graph LR
-    A1[Gmail] --> B1[AI Classification]
-    B1 --> C1[Switch Node]
-    C1 --> D1[Labels & Logging]
-```
+By completing this exercise, you will have demonstrated:
 
-**Tomorrow's Applications:**
+- **AI Integration**: Connecting and using language models for text classification
+- **API Orchestration**: Working with Gmail API, AI services, and Google Sheets
+- **Workflow Design**: Building multi-step automation with conditional logic
+- **Data Processing**: Extracting, transforming, and routing information
 
-```mermaid
-graph TD
-    subgraph "Support System"
-        ST[Support Tickets] --> CAT[Categorization]
-        CAT --> PR[Priority Routing]
-        PR --> TA[Team Assignment]
-    end
+### The Pattern You'll Master
 
-    subgraph "Error Monitoring"
-        EL[Error Logs] --> SA[Severity Analysis]
-        SA --> AR[Alert Rules]
-        AR --> IC[Incident Creation]
-    end
+The **Intelligent Triage & Routing** pattern you'll learn applies to:
 
-    subgraph "Document Processing"
-        DOC[Documents] --> CT[Content Type]
-        CT --> AF[Approval Flow]
-        AF --> PP[Processing Pipeline]
-    end
-```
+- **Customer Support**: Categorise tickets, assign priority, route to specialists
+- **Error Monitoring**: Analyse logs, determine severity, trigger alerts
+- **Document Processing**: Classify documents, route for approval, track workflow
+- **Social Media**: Monitor mentions, detect sentiment, escalate issues
+- **Lead Qualification**: Score leads, categorise inquiries, assign to sales team
 
 ### Exercise Structure
 

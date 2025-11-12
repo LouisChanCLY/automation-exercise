@@ -10,36 +10,31 @@ has_children: true
 
 {: .fs-9 }
 
-Build an intelligent cold email system that researches prospects and generates personalized outreach at scale.
+Build an intelligent cold email system that researches prospects and generates personalised outreach at scale. By completing this exercise, you'll demonstrate your ability to use AI agents for autonomous research and content generation—applicable to sales outreach, recruiting, partnership building, and any scenario requiring personalised, research-backed communication.
 {: .fs-6 .fw-300 }
-
-[Start Exercise](./overview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[Download Workflow](./downloads/cold-email-automation.json){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
 ## 60-Minute Hands-On Exercise
 
-This exercise teaches you to build an AI-powered cold outreach system that combines research, personalization, and automation. Perfect for sales teams, recruiters, and networkers.
+This exercise teaches you to build an AI-powered outreach system that combines autonomous research, personalisation, and automation. Perfect for building skills in AI agent orchestration and structured content generation.
 
 ### What You'll Build
 
-- **Web form** for lead capture and campaign initiation
-- **AI research agent** using Perplexity for prospect intelligence
-- **Personalized email generator** with structured components
-- **Automated sending** via Gmail with full tracking
+A complete AI research and personalisation workflow featuring:
+
+- **Web form interface** for lead capture and campaign initiation
+- **AI research agent** using Perplexity for autonomous prospect intelligence gathering
+- **Structured email generator** with AI-created hooks, body, and CTAs
+- **Automated sending** via Gmail with comprehensive tracking
 - **Analytics dashboard** in Google Sheets
-
-### The Universal Pattern
-
-You're learning the **AI Research & Personalization** pattern:
 
 ```mermaid
 graph LR
-    A[Input] --> B[AI Research]
+    A[Form Input] --> B[AI Research]
     B --> C[AI Generation]
-    C --> D[Action]
-    D --> E[Analytics]
+    C --> D[Gmail Send]
+    D --> E[Sheets Log]
 
     style A fill:#e1f5fe
     style B fill:#fff3e0
@@ -48,44 +43,26 @@ graph LR
     style E fill:#e8f5e9
 ```
 
-**Today's Implementation:**
+### Skills You'll Demonstrate
 
-```mermaid
-graph LR
-    F[Form] --> PR[Perplexity Research]
-    PR --> EG[Email Generation]
-    EG --> GS[Gmail Send]
-    GS --> SL[Sheets Log]
-```
+By completing this exercise, you will have demonstrated:
 
-**Tomorrow's Applications:**
+- **AI Agent Configuration**: Setting up autonomous agents that use tools independently
+- **Tool Integration**: Connecting Perplexity for real-time web research
+- **Structured Output Design**: Using JSON schemas to enforce consistent AI responses
+- **Multi-Step Workflows**: Chaining AI operations where one agent's output feeds another
+- **Prompt Engineering**: Crafting prompts that produce reliable, high-quality results
 
-```mermaid
-graph TD
-    subgraph "LinkedIn Outreach"
-        LP[LinkedIn Profile] --> CR1[Company Research]
-        CR1 --> CNR[Connection Request]
-        CNR --> CRM[CRM Update]
-    end
+### The Pattern You'll Master
 
-    subgraph "Job Applications"
-        JP[Job Posting] --> CCR[Company Culture Research]
-        CCR --> CL[Cover Letter]
-        CL --> AS[Application Submit]
-    end
+The **AI Research & Personalisation** pattern you'll learn applies to:
 
-    subgraph "Sales Pipeline"
-        CD[Customer Data] --> MR[Market Research]
-        MR --> PG[Proposal Generation]
-        PG --> SN[Slack Notification]
-    end
-
-    subgraph "Event Follow-up"
-        ER[Event Registration] --> AR[Attendee Research]
-        AR --> PF[Personalised Follow-up]
-        PF --> DE[Database Entry]
-    end
-```
+- **Job Applications**: Research company → Generate tailored cover letter
+- **Sales Proposals**: Research client needs → Create customised proposal
+- **Partnership Outreach**: Research organisation → Craft collaboration pitch
+- **Event Follow-up**: Research attendees → Generate personalised follow-ups
+- **Content Creation**: Research topic → Generate informed article drafts
+- **Customer Onboarding**: Research customer → Create personalised welcome materials
 
 ### Exercise Structure
 
