@@ -195,16 +195,18 @@ The email must:
 
 ## Step 3: Add Initialize Variables Node
 
-### Purpose
+### Add and Connect the Node
 
-Set up tracking variables for the iteration loop (retry counter, max retries, feedback).
+{: .note }
+> **Why initialize variables?** The workflow loops back when content needs improvement. We need to track the retry count, store feedback, and set a maximum retry limit to prevent infinite loops.
 
-### Configuration
+1. Add **Edit Fields (Set)** node to your canvas
+2. **Connect it**: Drag a connection line from **Form Trigger** to this new node
+3. Rename to: `Initialize Variables`
 
-1. Add **Edit Fields (Set)** node (connect to Form Trigger)
-2. Rename to: `Initialize Variables`
+### Configure the Variables
 
-3. **Configure Assignments**:
+Set up tracking for the iteration loop:
 
    | Field Name | Type | Value | Purpose |
    |------------|------|-------|---------|
@@ -221,23 +223,27 @@ Set up tracking variables for the iteration loop (retry counter, max retries, fe
 
 ## Step 4: Add AI Generator Agent
 
-### Purpose
+### Add and Connect the Node
 
-The Generator creates content based on the task and instructions. On subsequent iterations, it improves based on judge feedback.
+{: .note }
+> **Two-phase generation**: On the first try, the generator creates content from scratch. If the judge rejects it, the generator tries again using the judge's feedback to improve. This creates a self-improving loop.
 
-### Configuration
+1. Add **AI Agent** node to your canvas
+2. **Connect it**: Drag a connection line from **Initialize Variables** to this new node
+3. Rename to: `AI Agent - Generator`
 
-1. Add **AI Agent** node (after Initialize Variables)
-2. Rename to: `AI Agent - Generator`
+### Configure the Model
 
-3. **Configure Model Sub-node**:
+Set up the AI model for content generation:
    - Click on the node to open configuration
    - Add a **Google Gemini Model** sub-node
    - Connect it to the AI Agent
    - Select your Google Gemini credential
    - **Model**: "gemini-2.5-flash"
 
-4. **Configure Prompt**:
+### Configure the Prompt
+
+The prompt dynamically adapts based on whether this is the first attempt or a retry:
 
 ```
 =Task: {{ $('Form Trigger').item.json['Task Description'] }}
@@ -249,29 +255,27 @@ Instructions: {{ $('Form Trigger').item.json['How to Do It (Instructions)'] }}
 Please generate the output according to the task description and instructions. Ensure it meets the success criteria{{ $json.previous_feedback ? ' and addresses the feedback provided' : '' }}.
 ```
 
-**How it works**:
+{: .tip }
+> **Conditional feedback injection**: The `{{ $json.previous_feedback ? ... }}` expression only includes feedback on retries. First attempts start fresh without any previous context.
 
-- **First iteration**: Generates fresh content based on task and instructions
-- **Later iterations**: Incorporates previous feedback from the judge
-
-5. Click **Test step**
-
-**Expected Output**: Generated content text in the `output` field.
+Click **Test step** to verify. **Expected output**: Generated content text in the `output` field.
 
 ---
 
 ## Step 5: Add LLM Judge Agent
 
-### Purpose
+### Add and Connect the Node
 
-The Judge evaluates content quality against success criteria and provides strict, structured feedback.
+{: .note }
+> **Extremely strict evaluation**: The judge uses "ZERO tolerance for mediocrity" to ensure high-quality outputs. It either approves content that truly meets all criteria, or provides specific, actionable feedback for improvement.
 
-### Configuration
+1. Add **AI Agent** node to your canvas
+2. **Connect it**: Drag a connection line from **AI Agent - Generator** to this new node
+3. Rename to: `LLM Judge`
 
-1. Add **AI Agent** node (after AI Generator)
-2. Rename to: `LLM Judge`
+### Configure the Model
 
-3. **Configure Model Sub-node**:
+Set up the AI model for quality evaluation:
    - Add a **Google Gemini Model** sub-node
    - Connect it to the LLM Judge
    - Select your Google Gemini credential
@@ -329,16 +333,18 @@ Generated Output: {{ $json.output }}
 
 ## Step 6: Add Merge Results Node
 
-### Purpose
+### Add and Connect the Node
 
-Combine the judge's evaluation with the generator's output and tracking variables.
+1. Add **Edit Fields (Set)** node to your canvas
+2. **Connect it**: Drag a connection line from **LLM Judge** to this new node
+3. Rename to: `Merge Results`
 
-### Configuration
+{: .highlight }
+> **Data consolidation**: This node pulls together the judge's verdict, the generated content, and the tracking variables into one object for easy decision-making in the next steps.
 
-1. Add **Edit Fields (Set)** node (after LLM Judge)
-2. Rename to: `Merge Results`
+### Configure the Merge
 
-3. **Configure Assignments**:
+Combine all the information we need:
 
    | Field Name | Type | Value |
    |------------|------|-------|
@@ -356,16 +362,18 @@ Combine the judge's evaluation with the generator's output and tracking variable
 
 ## Step 7: Add Check Pass/Fail Node
 
-### Purpose
+### Add and Connect the Node
 
-Decision point: Did the content pass the quality check?
+{: .note }
+> **The decision point**: This is where the workflow splits into two paths - success (content passed) or retry (content needs improvement).
 
-### Configuration
+1. Add **IF** node to your canvas
+2. **Connect it**: Drag a connection line from **Merge Results** to this new node
+3. Rename to: `Check Pass/Fail`
 
-1. Add **IF** node (after Merge Results)
-2. Rename to: `Check Pass/Fail`
+### Configure the Condition
 
-3. **Configure Condition**:
+Set up the pass/fail logic:
    - **Left Value**: `={{ $json.evaluation_result }}`
    - **Operation**: `equals`
    - **Right Value**: `true`
@@ -379,16 +387,15 @@ Decision point: Did the content pass the quality check?
 
 ## Step 8: Add Mark Success Node
 
-### Purpose
+### Add and Connect the Node
 
-When content passes, set status to "success".
+1. Add **Edit Fields (Set)** node to your canvas
+2. **Connect it**: Drag a connection line from **Check Pass/Fail (true)** output to this new node
+3. Rename to: `Mark Success`
 
-### Configuration
+### Configure Success Status
 
-1. Connect **Check Pass/Fail (true)** to new **Edit Fields (Set)** node
-2. Rename to: `Mark Success`
-
-3. **Configure Assignments**:
+Mark this execution as successful:
    - **Field Name**: `status`
    - **Type**: String
    - **Value**: `success`
@@ -399,16 +406,18 @@ When content passes, set status to "success".
 
 ## Step 9: Add Increment Retry Node
 
-### Purpose
+### Add and Connect the Node
 
-When content fails, increment the retry counter and save feedback for the next attempt.
+{: .note }
+> **Preparing for retry**: When content doesn't pass, we increment the counter and save the judge's feedback so the generator can improve on the next attempt.
 
-### Configuration
+1. Add **Edit Fields (Set)** node to your canvas
+2. **Connect it**: Drag a connection line from **Check Pass/Fail (false)** output to this new node
+3. Rename to: `Increment Retry`
 
-1. Connect **Check Pass/Fail (false)** to new **Edit Fields (Set)** node
-2. Rename to: `Increment Retry`
+### Configure Retry Logic
 
-3. **Configure Assignments**:
+Track attempts and store feedback:
 
    | Field Name | Type | Value |
    |------------|------|-------|
@@ -421,16 +430,18 @@ When content fails, increment the retry counter and save feedback for the next a
 
 ## Step 10: Add Max Retries Check Node
 
-### Purpose
+### Add and Connect the Node
 
-After incrementing retry count, check if we've hit the maximum allowed retries.
+{: .note }
+> **Safety limit**: We set a maximum of 10 retries to prevent infinite loops if the content simply can't meet the criteria. This protects against runaway API costs and endless execution.
 
-### Configuration
+1. Add **IF** node to your canvas
+2. **Connect it**: Drag a connection line from **Increment Retry** to this new node
+3. Rename to: `Max Retries Check`
 
-1. Add **IF** node (after Increment Retry)
-2. Rename to: `Max Retries Check`
+### Configure the Condition
 
-3. **Configure Condition**:
+Check if we've exhausted our retries:
    - **Left Value**: `={{ $json.retry_count >= $json.max_retries }}`
    - **Operation**: `is true`
 
@@ -439,24 +450,26 @@ After incrementing retry count, check if we've hit the maximum allowed retries.
 - **True** branch: Max retries reached - go to failure path
 - **False** branch: Can retry - loop back to Initialize Variables
 
-4. **Create Loop Connection**:
-   - Drag connection from **Max Retries Check (false)** output back to **Initialize Variables** input
-   - This creates the iteration loop!
+### Create the Iteration Loop
+
+{: .highlight }
+> **The magic connection**: This loop-back is what makes the workflow self-improving. Failed content goes back through the generator with feedback, creating an iterative refinement process.
+
+Drag a connection from **Max Retries Check (false)** output back to **Initialize Variables** input. This creates the retry loop!
 
 ---
 
 ## Step 11: Add Mark Failure Node
 
-### Purpose
+### Add and Connect the Node
 
-When max retries reached without passing, set status to "failed".
+1. Add **Edit Fields (Set)** node to your canvas
+2. **Connect it**: Drag a connection line from **Max Retries Check (true)** output to this new node
+3. Rename to: `Mark Failure`
 
-### Configuration
+### Configure Failure Status
 
-1. Connect **Max Retries Check (true)** to new **Edit Fields (Set)** node
-2. Rename to: `Mark Failure`
-
-3. **Configure Assignments**:
+Mark that we exhausted retries without success:
    - **Field Name**: `status`
    - **Type**: String
    - **Value**: `failed`
@@ -467,17 +480,18 @@ When max retries reached without passing, set status to "failed".
 
 ## Step 12: Add Final Output Node
 
-### Purpose
+### Add and Connect the Node
 
-Format and return the final results (success or failure) back to the form.
+{: .note }
+> **Merge point**: Both the success and failure paths converge here. This node formats the final response that gets returned to the user via the form.
 
-### Configuration
-
-1. Add **Edit Fields (Set)** node
-2. Connect BOTH **Mark Success** and **Mark Failure** to this node
+1. Add **Edit Fields (Set)** node to your canvas
+2. **Connect it**: Drag connections from BOTH **Mark Success** and **Mark Failure** to this new node
 3. Rename to: `Final Output`
 
-4. **Configure Assignments**:
+### Configure Output Format
+
+Structure the final response:
 
    | Field Name | Type | Value |
    |------------|------|-------|
