@@ -32,19 +32,21 @@ In this section, you'll build the complete LLM as a Judge workflow from scratch.
 ### What We're Building
 
 ```mermaid
-graph TB
-    Start[1. Form Trigger] --> Init[2. Initialize Variables]
-    Init --> Gen[3. AI Generator Agent]
-    Gen --> Judge[4. LLM Judge Agent]
-    Judge --> Parse[5. Parse Judge Output]
-    Parse --> Merge[6. Merge Results]
+graph LR
+    Start[1. Form<br/>Trigger] --> Init[2. Initialize<br/>Variables]
+    Init --> Gen[3. AI Generator<br/>Agent]
+    Gen --> Judge[4. LLM Judge<br/>Agent]
+    Judge --> Parse[5. Parse Judge<br/>Output]
+    Parse --> Merge[6. Merge<br/>Results]
     Merge --> Check{7. Pass?}
-    Check -->|Yes| Success[8. Mark Success]
-    Check -->|No| Retry[9. Increment Retry]
-    Retry --> MaxCheck{10. Max Retries?}
-    MaxCheck -->|Yes| Fail[11. Mark Failure]
+
+    Check -->|Yes| Success[8. Mark<br/>Success]
+    Success --> Output[12. Final<br/>Output]
+
+    Check -->|No| Retry[9. Increment<br/>Retry]
+    Retry --> MaxCheck{10. Max<br/>Retries?}
     MaxCheck -->|No| Init
-    Success --> Output[12. Final Output]
+    MaxCheck -->|Yes| Fail[11. Mark<br/>Failure]
     Fail --> Output
 
     style Start fill:#e1f5fe
