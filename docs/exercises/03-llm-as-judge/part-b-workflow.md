@@ -76,28 +76,6 @@ graph LR
 
 ---
 
-## Quick Start: Import the Workflow
-
-### Option 1: Import Pre-built Workflow (Recommended)
-
-The fastest way to complete this exercise is to import the pre-built workflow:
-
-1. **Download** the workflow file: [llm-judge-workflow.json](./downloads/llm-judge-workflow.json)
-2. Open n8n and click **Import from File**
-3. Select the downloaded JSON file
-4. **Update credentials**:
-   - Configure Google Gemini API credentials (see [Part A: Setup](./part-a-setup))
-5. **Test the workflow** by clicking the Form Trigger URL
-
-{: .highlight }
-> **Note**: You'll still need to set up Google Gemini credentials as described in Part A.
-
-### Option 2: Build from Scratch
-
-Follow the detailed instructions below to build the workflow step-by-step and learn how each component works.
-
----
-
 ## Workflow Components Reference
 
 Here's a quick reference of all the nodes you'll build in this exercise:
@@ -235,11 +213,12 @@ Set up tracking for the iteration loop:
 ### Configure the Model
 
 Set up the AI model for content generation:
-   - Click on the node to open configuration
-   - Add a **Google Gemini Model** sub-node
-   - Connect it to the AI Agent
-   - Select your Google Gemini credential
-   - **Model**: "gemini-2.5-flash"
+
+- Click on the node to open configuration
+- Add a **Google Gemini Model** sub-node
+- Connect it to the AI Agent
+- Select your Google Gemini credential
+- **Model**: "gemini-2.5-flash"
 
 ### Configure the Prompt
 
@@ -276,11 +255,12 @@ Click **Test step** to verify. **Expected output**: Generated content text in th
 ### Configure the Model
 
 Set up the AI model for quality evaluation:
-   - Add a **Google Gemini Model** sub-node
-   - Connect it to the LLM Judge
-   - Select your Google Gemini credential
-   - **Model**: "gemini-2.5-flash"
-   - **Enable Output Parser**: Check the box
+
+- Add a **Google Gemini Model** sub-node
+- Connect it to the LLM Judge
+- Select your Google Gemini credential
+- **Model**: "gemini-2.5-flash"
+- **Enable Output Parser**: Check the box
 
 4. **Add Structured Output Parser**:
    - Add sub-node: **Structured Output Parser**
@@ -374,9 +354,10 @@ Combine all the information we need:
 ### Configure the Condition
 
 Set up the pass/fail logic:
-   - **Left Value**: `={{ $json.evaluation_result }}`
-   - **Operation**: `equals`
-   - **Right Value**: `true`
+
+- **Left Value**: `={{ $json.evaluation_result }}`
+- **Operation**: `equals`
+- **Right Value**: `true`
 
 **Output Routing**:
 
@@ -396,9 +377,10 @@ Set up the pass/fail logic:
 ### Configure Success Status
 
 Mark this execution as successful:
-   - **Field Name**: `status`
-   - **Type**: String
-   - **Value**: `success`
+
+- **Field Name**: `status`
+- **Type**: String
+- **Value**: `success`
 
 4. **Enable**: `Include Other Fields` (passes all previous data through)
 
@@ -442,8 +424,9 @@ Track attempts and store feedback:
 ### Configure the Condition
 
 Check if we've exhausted our retries:
-   - **Left Value**: `={{ $json.retry_count >= $json.max_retries }}`
-   - **Operation**: `is true`
+
+- **Left Value**: `={{ $json.retry_count >= $json.max_retries }}`
+- **Operation**: `is true`
 
 **Output Routing**:
 
@@ -470,9 +453,10 @@ Drag a connection from **Max Retries Check (false)** output back to **Initialize
 ### Configure Failure Status
 
 Mark that we exhausted retries without success:
-   - **Field Name**: `status`
-   - **Type**: String
-   - **Value**: `failed`
+
+- **Field Name**: `status`
+- **Type**: String
+- **Value**: `failed`
 
 4. **Enable**: `Include Other Fields`
 
@@ -691,6 +675,17 @@ Now that your workflow is working:
 3. **Optimize Prompts**: Refine generator and judge based on results
 4. **Adjust Strictness**: Balance quality vs iteration count
 5. **Try Challenge Tasks**: Multi-criteria evaluation, A/B testing, automatic optimization
+
+---
+
+## Compare Your Solution
+
+Want to check your work or troubleshoot issues? Download our model answer:
+
+[Download Model Answer: llm-judge-workflow.json](./downloads/llm-judge-workflow.json)
+
+{: .note }
+> **Using the Model Answer**: Import this into n8n to compare with your solution. You'll still need to configure Google Gemini credentials after importing.
 
 ---
 

@@ -275,35 +275,15 @@ This workflow generates high-quality email responses using the LLM-as-a-judge pa
 
 ### Build Steps
 
-#### Option A: Import from Exercise 3 (Recommended)
+{: .note }
+> **Exercise Focus**: This exercise teaches workflow orchestration, not the LLM-as-judge pattern (which you learned in Exercise 3).
 
-If you completed Exercise 3:
+#### Build from Exercise 3 Guide
 
-1. Go to Exercise 3 workflow
-2. Click **"..."** menu → **"Duplicate"**
-3. Rename to: `Email Response Generator`
-4. Verify it has both:
-   - Form Trigger
-   - Execute Workflow Trigger
-5. No changes needed - it already has the quality control loop!
+Follow the [Exercise 3 Build Guide](../03-llm-as-judge/part-b-workflow) to build this workflow with these requirements:
 
-#### Option B: Import from JSON (Quick Start)
-
-1. Download the workflow JSON file (link below)
-2. In n8n, click **"..."** → **"Import from File"**
-3. Select the downloaded JSON file
-4. Rename to: `Email Response Generator`
-5. Update Gemini credentials if needed
-6. Save and activate
-
-[Download Response Generator JSON](./downloads/email-response-generator.json)
-
-#### Option C: Build from Scratch (Detailed)
-
-This option is covered in Exercise 3. Follow these steps if you haven't done Exercise 3:
-
-1. Create workflow with Form Trigger
-2. Add Execute Workflow Trigger with inputs:
+1. Create workflow with **Form Trigger**
+2. Add **Execute Workflow Trigger** with inputs:
    - `Task Description`
    - `How to Do It (Instructions)`
    - `Success Criteria (How to Measure)`
@@ -313,7 +293,15 @@ This option is covered in Exercise 3. Follow these steps if you haven't done Exe
 6. Add loop logic with retry counter and max retries check
 7. Return final output
 
-See [Exercise 3 Build Guide](../03-llm-as-judge/part-b-workflow) for detailed instructions.
+{: .highlight }
+> **Time-Saving Alternative**: If you've already completed Exercise 3, you can duplicate that workflow:
+>
+> 1. Go to Exercise 3 workflow in n8n
+> 2. Click **"..."** menu → **"Duplicate"**
+> 3. Rename to: `Email Response Generator`
+> 4. Verify it has both triggers (Form + Execute Workflow)
+>
+> This saves time whilst letting you focus on learning workflow orchestration in the master workflow.
 
 ### Test the Response Generator
 
