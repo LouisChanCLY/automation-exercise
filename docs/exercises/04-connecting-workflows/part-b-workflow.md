@@ -59,6 +59,9 @@ This workflow categorizes incoming emails into types (support, sales, general in
 
 #### Step 2: Add Form Trigger (For Testing)
 
+{: .note }
+> **Development Best Practice**: Always add a Form Trigger for testing sub-workflows independently. This lets you test the classifier without needing the master workflow running.
+
 1. Click **"+"** to add a node
 2. Search for **"Form Trigger"**
 3. Select **"Form Trigger"**
@@ -84,6 +87,9 @@ This workflow categorizes incoming emails into types (support, sales, general in
 
 #### Step 3: Add Execute Workflow Trigger (For Master Workflow)
 
+{: .highlight }
+> **Workflow Orchestration Pattern**: The Execute Workflow Trigger allows other workflows to call this one like a function. It receives typed inputs and returns structured outputs, enabling modular, reusable workflow design.
+
 1. Click **"+"** to add a node
 2. Search for **"Execute Workflow Trigger"**
 3. Select **"When Executed by Another Workflow"**
@@ -98,15 +104,33 @@ This workflow categorizes incoming emails into types (support, sales, general in
 
 5. Note: This trigger will receive data when the master workflow calls this workflow
 
-**Important**: Both triggers are now in your workflow. Only ONE will activate per execution:
-
-- **Form Trigger** activates when you access the form URL
-- **Execute Workflow Trigger** activates when called by master workflow
+{: .tip }
+> **Dual Trigger Pattern**: Both triggers coexist in the same workflow, but only ONE activates per execution:
+>
+> - **Form Trigger**: Activates when you access the test form URL (for development)
+> - **Execute Workflow Trigger**: Activates when called by the master workflow (for production)
+>
+> This pattern gives you the best of both worlds: easy testing AND production integration.
 
 #### Step 4: Add AI Classification Node
 
-1. Add **"AI Agent"** node after the triggers
-2. Configure:
+### Add and Connect the Node
+
+{: .note }
+> **Smart Field Mapping**: Notice the expression pattern `{{ $json['Email Subject'] || $json.email_subject }}`. This handles both triggers elegantly:
+>
+> - Form Trigger outputs: `Email Subject`, `Email Body`, `Sender Email` (with spaces)
+> - Execute Workflow Trigger outputs: `email_subject`, `email_body`, `email_sender` (without spaces)
+>
+> The `||` (OR) operator tries the first format, then falls back to the second. This makes your workflow work with BOTH triggers without duplicating logic.
+
+1. Add **"AI Agent"** node to your canvas
+2. **Connect it**: Drag a connection line from **either trigger** to this new node (both triggers connect to the same downstream nodes)
+3. Name it: `AI Agent - Classify Email`
+
+### Configure the Node
+
+1. Configure:
    - **Prompt Type**: `Define below`
    - **Text**:
 
@@ -143,8 +167,24 @@ This workflow categorizes incoming emails into types (support, sales, general in
 
 #### Step 5: Parse and Format Output
 
-1. Add **"Code"** node after AI Agent
-2. Configure:
+### Add and Connect the Node
+
+{: .note }
+> **Handling AI Variability**: AI models sometimes add extra text before/after JSON, or occasionally fail to produce valid JSON. This parsing node:
+>
+> 1. Extracts JSON even when surrounded by text
+> 2. Provides sensible fallback values if parsing fails
+> 3. Returns clean, predictable data structure for downstream nodes
+>
+> This defensive programming pattern prevents your automation from breaking when AI output varies.
+
+1. Add **"Code"** node to your canvas
+2. **Connect it**: Drag a connection line from **AI Agent** to this new node
+3. Name it: `Parse Classification`
+
+### Configure the Node
+
+1. Configure:
    - **Mode**: `Run Once for All Items`
    - **Language**: `JavaScript`
    - **Code**:
@@ -337,7 +377,10 @@ This is the main workflow that ties everything together. It fetches emails, call
 
 #### Step 2: Add Gmail Trigger
 
-1. Add **"Gmail Trigger"** node
+{: .highlight }
+> **Polling Triggers**: The Gmail Trigger polls your inbox every minute for new emails. When it detects new messages, it starts the workflow for each email. This polling approach works reliably without needing complex webhook setup, making it perfect for learning and prototyping.
+
+1. Add **"Gmail Trigger"** node to your canvas
 2. Configure:
    - **Trigger On**: `New Email`
    - **Credential**: Select your Gmail OAuth2 credential
@@ -347,9 +390,18 @@ This is the main workflow that ties everything together. It fetches emails, call
 
 #### Step 3: Extract Email Data
 
-1. Add **"Set"** node after Gmail Trigger
-2. Configure to extract and format email data:
-   - **Name**: `Extract Email Data`
+### Add and Connect the Node
+
+{: .note }
+> **Data Shaping**: Gmail returns complex email objects with many fields. This Set node extracts only the essential fields we need, making downstream nodes simpler and data flow clearer. It's like defining a clean API contract between workflow stages.
+
+1. Add **"Set"** node to your canvas
+2. **Connect it**: Drag a connection line from **Gmail Trigger** to this new node
+3. Name it: `Extract Email Data`
+
+### Configure the Node
+
+1. Configure to extract and format email data:
    - **Assignments**:
      - Assignment 1:
        - **Name**: `subject`
@@ -369,9 +421,18 @@ This is the main workflow that ties everything together. It fetches emails, call
 
 #### Step 4: Call Email Classifier Workflow
 
-1. Add **"Execute Workflow"** node
-2. Configure:
-   - **Name**: `Call Classifier`
+### Add and Connect the Node
+
+{: .highlight }
+> **Workflow Orchestration**: This is where the magic happens! The Execute Workflow node calls your Email Classifier workflow like a function call in programming. Data flows from this "parent" workflow to the "child" workflow, which processes it and returns results. This pattern lets you build complex systems from simple, testable components.
+
+1. Add **"Execute Workflow"** node to your canvas
+2. **Connect it**: Drag a connection line from **Extract Email Data** to this new node
+3. Name it: `Call Classifier`
+
+### Configure the Node
+
+1. Configure:
    - **Source**: `Database`
    - **Workflow**: Select `Email Classifier` workflow
    - **Workflow Inputs**:
@@ -389,9 +450,18 @@ This is the main workflow that ties everything together. It fetches emails, call
 
 #### Step 5: Prepare Response Generation Instructions
 
-1. Add **"Code"** node after the classifier
-2. Configure:
-   - **Name**: `Prepare Response Instructions`
+### Add and Connect the Node
+
+{: .note }
+> **Dynamic Prompt Engineering**: Instead of static instructions, this node generates different prompts based on the email classification. Support emails get troubleshooting-focused instructions, sales emails get benefit-focused instructions. This contextual adaptation produces higher-quality, more appropriate responses.
+
+1. Add **"Code"** node to your canvas
+2. **Connect it**: Drag a connection line from **Call Classifier** to this new node
+3. Name it: `Prepare Response Instructions`
+
+### Configure the Node
+
+1. Configure:
    - **Mode**: `Run Once for All Items`
    - **Language**: `JavaScript`
    - **Code**:
@@ -496,9 +566,15 @@ This is the main workflow that ties everything together. It fetches emails, call
 
 #### Step 6: Call Response Generator Workflow
 
-1. Add **"Execute Workflow"** node
-2. Configure:
-   - **Name**: `Call Response Generator`
+### Add and Connect the Node
+
+1. Add **"Execute Workflow"** node to your canvas
+2. **Connect it**: Drag a connection line from **Prepare Response Instructions** to this new node
+3. Name it: `Call Response Generator`
+
+### Configure the Node
+
+1. Configure:
    - **Source**: `Database`
    - **Workflow**: Select `Email Response Generator` workflow
    - **Workflow Inputs**:
@@ -516,9 +592,15 @@ This is the main workflow that ties everything together. It fetches emails, call
 
 #### Step 7: Format Reply Email
 
-1. Add **"Set"** node
-2. Configure:
-   - **Name**: `Format Reply`
+### Add and Connect the Node
+
+1. Add **"Set"** node to your canvas
+2. **Connect it**: Drag a connection line from **Call Response Generator** to this new node
+3. Name it: `Format Reply`
+
+### Configure the Node
+
+1. Configure:
    - **Assignments**:
      - Assignment 1:
        - **Name**: `reply_text`
@@ -538,9 +620,18 @@ This is the main workflow that ties everything together. It fetches emails, call
 
 #### Step 8: Add Quality Check (Optional but Recommended)
 
-1. Add **"IF"** node after Format Reply
-2. Configure:
-   - **Name**: `Check Quality Passed`
+### Add and Connect the Node
+
+{: .highlight }
+> **Quality Gates in Production**: Never send automated emails without quality checks! The LLM-as-a-judge pattern in the Response Generator ensures high quality, but this gate prevents sending if something went wrong. Failed responses get flagged for human review instead of embarrassing your business with poor-quality emails.
+
+1. Add **"IF"** node to your canvas
+2. **Connect it**: Drag a connection line from **Format Reply** to this new node
+3. Name it: `Check Quality Passed`
+
+### Configure the Node
+
+1. Configure:
    - **Conditions**:
      - Condition 1:
        - **Field**: `={{ $json.quality_status }}`
@@ -551,8 +642,18 @@ This is the main workflow that ties everything together. It fetches emails, call
 
 #### Step 9: Send Reply Email
 
-1. Add **"Gmail"** node connected to the **true** output of IF node
-2. Configure:
+### Add and Connect the Node
+
+{: .note }
+> **Conversation Threading**: Setting the **Thread ID** is crucial - it makes your reply appear in the same email conversation thread instead of starting a new one. This keeps communication organised and contextual, just like when humans reply to emails manually.
+
+1. Add **"Gmail"** node to your canvas
+2. **Connect it**: Drag a connection line from the **true** output (green dot) of the **IF** node to this new node
+3. Name it: `Send Reply`
+
+### Configure the Node
+
+1. Configure:
    - **Resource**: `Message`
    - **Operation**: `Send`
    - **Credential**: Select your Gmail OAuth2 credential
@@ -561,7 +662,7 @@ This is the main workflow that ties everything together. It fetches emails, call
    - **Email Type**: `Text`
    - **Message**: `={{ $json.reply_text }}`
    - **Options**:
-     - **Thread ID**: `={{ $('Extract Email Data').item.json.thread_id }}` (replies in same thread)
+     - **Thread ID**: `={{ $('Extract Email Data').item.json.thread_id }}`
 
 #### Step 10: Handle Failed Quality (False Branch)
 
