@@ -21,15 +21,17 @@ nav_order: 2
 
 ## Prerequisites Checklist
 
-Before starting this exercise, ensure you've completed the [Common Prerequisites](../../common-prerequisites/):
+Before starting this exercise, ensure you've completed these from the [Common Prerequisites](../../common-prerequisites/):
 
-- ✅ **n8n** - Platform setup complete
-- ✅ **Gmail API** - OAuth2 credentials configured
-- ✅ **OpenRouter** - API key added to n8n
-- ✅ **Google Cloud Project** - Gmail API enabled
+### Required Setup
+
+- **n8n Platform** - [Setup guide](../../common-prerequisites/n8n-setup)
+- **Google Cloud Project** - [Setup guide](../../common-prerequisites/google-setup)
+- **Gmail API (OAuth2)** - [Setup guide](../../common-prerequisites/credentials#google-oauth2-gmail--sheets)
+- **OpenRouter API** - [Setup guide](../../common-prerequisites/ai-services#openrouter-multiple-ai-models)
 
 {: .important }
-> **Missing any?** Complete the [Common Prerequisites](../../common-prerequisites/) before continuing.
+> **Haven't completed prerequisites?** Follow the links above to set up each service before continuing.
 
 **Time for this setup**: 2-5 minutes
 

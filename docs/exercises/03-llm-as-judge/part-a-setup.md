@@ -21,13 +21,15 @@ nav_order: 2
 
 ## Prerequisites Checklist
 
-Before starting this exercise, ensure you've completed the [Common Prerequisites](../../common-prerequisites/):
+Before starting this exercise, ensure you've completed these from the [Common Prerequisites](../../common-prerequisites/):
 
-- ✅ **n8n** - Platform setup complete
-- ✅ **Google Gemini** - API key added to n8n
+### Required Setup
+
+- **n8n Platform** - [Setup guide](../../common-prerequisites/n8n-setup)
+- **Google Gemini API** - [Setup guide](../../common-prerequisites/ai-services#google-gemini-free-tier)
 
 {: .important }
-> **Missing Gemini?** Follow the [Google Gemini setup guide](../../common-prerequisites/ai-services#google-gemini-free-tier) to get your free API key.
+> **Haven't completed prerequisites?** Follow the links above to set up each service before continuing.
 
 **Time for this setup**: 2 minutes (just verify Gemini credential)
 
@@ -45,20 +47,7 @@ This exercise only requires Google Gemini for both the generator and judge AI mo
 4. The credential should show as valid/connected
 
 {: .highlight }
-> **Already set up?** Great! You're ready to build.
-
----
-
-## No Additional Setup Required
-
-Unlike other exercises, this one doesn't need:
-
-- ❌ Gmail setup
-- ❌ Google Sheets
-- ❌ Additional API keys
-- ❌ External services
-
-Just Gemini and you're good to go!
+> **Credential verified?** You're ready to build!
 
 ---
 

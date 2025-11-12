@@ -21,19 +21,18 @@ nav_order: 2
 
 ## Prerequisites Checklist
 
-This exercise builds on previous exercises. Before starting, ensure you've completed:
+This exercise builds on previous exercises. Before starting, ensure you've completed these from the [Common Prerequisites](../../common-prerequisites/):
 
-### From Exercise 1
+### Required Setup
 
-- ✅ **Gmail API** - OAuth2 credentials configured
-- ✅ **Gmail labels** - Created for classification
-
-### From Exercise 3
-
-- ✅ **Google Gemini** - API key configured for AI models
+- **n8n Platform** - [Setup guide](../../common-prerequisites/n8n-setup)
+- **Google Cloud Project** - [Setup guide](../../common-prerequisites/google-setup)
+- **Gmail API (OAuth2)** - [Setup guide](../../common-prerequisites/credentials#google-oauth2-gmail--sheets)
+- **Google Gemini API** - [Setup guide](../../common-prerequisites/ai-services#google-gemini-free-tier)
+- **Gmail labels** - Created in Exercise 1 (or [create them now](../01-email-classification/part-a-setup#create-gmail-labels))
 
 {: .important }
-> **Haven't done Exercise 1 or 3?** You can still do this exercise, but you'll need to complete the [Common Prerequisites](../../common-prerequisites/) first and set up Gmail + Gemini.
+> **Haven't completed prerequisites?** Follow the links above to set up each service before continuing.
 
 **Time for this setup**: 2 minutes (just verify existing credentials)
 
@@ -52,20 +51,7 @@ This exercise has **no unique setup** - it reuses everything from previous exerc
    - Google Gemini credential (for AI classification and generation)
 
 {: .highlight }
-> **All set?** You're ready to build three interconnected workflows!
-
----
-
-## No Additional Setup Required
-
-This exercise focuses on **workflow orchestration patterns** - how to connect multiple workflows together. You don't need:
-
-- ❌ New API keys
-- ❌ New credentials
-- ❌ External services
-- ❌ Additional setup steps
-
-Everything you need was already configured in previous exercises.
+> **Credentials verified?** You're ready to build three interconnected workflows!
 
 ---
 

@@ -21,16 +21,18 @@ nav_order: 2
 
 ## Prerequisites Checklist
 
-Before starting this exercise, ensure you've completed the [Common Prerequisites](../../common-prerequisites/):
+Before starting this exercise, ensure you've completed these from the [Common Prerequisites](../../common-prerequisites/):
 
-- ✅ **n8n** - Platform setup complete
-- ✅ **Gmail API** - OAuth2 credentials configured for sending emails
-- ✅ **Google Sheets API** - OAuth2 credentials configured for logging
-- ✅ **Perplexity API** - API key added to n8n for web research
-- ✅ **Google Gemini** - API key added to n8n for AI agents
+### Required Setup
+
+- **n8n Platform** - [Setup guide](../../common-prerequisites/n8n-setup)
+- **Google Cloud Project** - [Setup guide](../../common-prerequisites/google-setup)
+- **Gmail & Sheets API (OAuth2)** - [Setup guide](../../common-prerequisites/credentials#google-oauth2-gmail--sheets)
+- **Perplexity API** - [Setup guide](../../common-prerequisites/ai-services#perplexity-api-web-research)
+- **Google Gemini API** - [Setup guide](../../common-prerequisites/ai-services#google-gemini-free-tier)
 
 {: .important }
-> **Missing any?** Complete the [Common Prerequisites](../../common-prerequisites/) before continuing.
+> **Haven't completed prerequisites?** Follow the links above to set up each service before continuing.
 
 **Time for this setup**: 5-10 minutes
 
