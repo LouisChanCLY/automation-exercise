@@ -28,7 +28,7 @@ Set up n8n, the workflow automation platform that connects all your services.
 
 ## Cloud Setup
 
-1. Go to [n8n.cloud](https://n8n.cloud)
+1. Go to [n8n.cloud](https://n8n.partnerlinks.io/gsl7xpbjua51)
 2. Sign up with email or Google
 3. Verify your email
 4. Choose workspace name

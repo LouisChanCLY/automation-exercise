@@ -10,7 +10,7 @@ has_children: true
 
 {: .fs-9 }
 
-Build an intelligent email response system by connecting three separate workflows together: a master orchestrator, an email classifier, and an LLM-as-a-judge response generator. By completing this exercise, you'll demonstrate your ability to design modular, scalable automation systems—a professional skill applicable to customer support, content pipelines, data processing, and any complex multi-step business process.
+Build an intelligent email response system by connecting three separate workflows together: a master orchestrator, an email classifier, and an LLM-as-a-judge response generator.
 {: .fs-6 .fw-300 }
 
 ---

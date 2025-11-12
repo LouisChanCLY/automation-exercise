@@ -10,7 +10,7 @@ has_children: true
 
 {: .fs-9 }
 
-Build an intelligent cold email system that researches prospects and generates personalised outreach at scale. By completing this exercise, you'll demonstrate your ability to use AI agents for autonomous research and content generation—applicable to sales outreach, recruiting, partnership building, and any scenario requiring personalised, research-backed communication.
+Build an intelligent cold email system that researches prospects and generates personalised outreach at scale.
 {: .fs-6 .fw-300 }
 
 ---

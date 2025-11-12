@@ -10,7 +10,7 @@ has_children: true
 
 {: .fs-9 }
 
-Build an AI quality control system where one LLM generates content and another LLM evaluates it, providing feedback and iterating until quality standards are met. By completing this exercise, you'll demonstrate your ability to build self-improving AI systems with quality gates—applicable to content marketing, code generation, customer service, and any scenario requiring consistent, verified output.
+Build an AI quality control system where one LLM generates content and another LLM evaluates it, providing feedback and iterating until quality standards are met.
 {: .fs-6 .fw-300 }
 
 ---

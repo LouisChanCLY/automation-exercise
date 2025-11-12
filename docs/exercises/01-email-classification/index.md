@@ -10,7 +10,7 @@ has_children: true
 
 {: .fs-9 }
 
-Build an intelligent email classification system that automatically processes, categorizes, and routes emails using AI. By completing this exercise, you'll demonstrate your ability to integrate AI models into real business workflows—a skill applicable to customer support, document processing, error monitoring, and any scenario requiring intelligent triage.
+Build an intelligent email classification system that automatically processes, categorises, and routes emails using AI.
 {: .fs-6 .fw-300 }
 
 ---
