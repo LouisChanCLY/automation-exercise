@@ -57,6 +57,8 @@ graph LR
     style E fill:#e8f5e9
 ```
 
+![Exercise 2 Overview](./images/overview.png)
+
 ### Skills You'll Demonstrate
 
 By completing this exercise, you will have demonstrated:

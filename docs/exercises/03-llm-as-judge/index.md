@@ -60,6 +60,8 @@ graph LR
     style F fill:#e8f5e9
 ```
 
+![Exercise 3 Overview](./images/overview.png)
+
 ### Skills You'll Demonstrate
 
 By completing this exercise, you will have demonstrated:
