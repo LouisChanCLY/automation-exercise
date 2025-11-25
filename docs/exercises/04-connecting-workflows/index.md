@@ -4,6 +4,7 @@ title: "Exercise 4: Connecting Workflows"
 parent: Exercises
 nav_order: 4
 has_children: true
+nav_exclude: true
 ---
 
 # Exercise 4: Connecting Multiple Workflows

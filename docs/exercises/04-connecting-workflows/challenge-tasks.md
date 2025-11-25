@@ -4,6 +4,7 @@ title: Challenge Tasks
 parent: "Exercise 4: Connecting Workflows"
 grand_parent: Exercises
 nav_order: 4
+nav_exclude: true
 ---
 
 # Challenge Tasks

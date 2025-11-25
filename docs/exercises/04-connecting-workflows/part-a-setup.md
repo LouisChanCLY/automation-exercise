@@ -4,6 +4,7 @@ title: "Part A: Setup"
 parent: "Exercise 4: Connecting Workflows"
 grand_parent: Exercises
 nav_order: 2
+nav_exclude: true
 ---
 
 # Part A: Setup & Prerequisites

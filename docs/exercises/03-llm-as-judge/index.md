@@ -17,9 +17,21 @@ Build an AI quality control system where one LLM generates content and another L
 
 ## 60-Minute Hands-On Exercise
 
-This exercise teaches you to build a self-improving content generation system using the "LLM as a Judge" pattern. Learn how to create AI workflows that evaluate and iterate on their own output until quality standards are met.
+This exercise teaches you **loops and quality control** - building AI systems that check their own work and improve automatically. This is how you get consistent, reliable AI output without manual review.
 
 **The Problem:** AI-generated content is inconsistent—the same prompt can produce brilliant results or complete rubbish. Manual review doesn't scale, and there's no built-in quality control. You need an automated system where one AI generates content and another AI judges it, providing feedback until quality standards are met.
+
+**Why Loops + Quality Control Matter:**
+
+You'll learn to make AI reliable by having it check and improve its own work automatically:
+
+- ✅ **Consistent quality**: Only get output that meets your standards
+- ✅ **No manual review**: AI judges AI, you set the criteria
+- ✅ **Self-improving**: Failed attempts get feedback and try again
+- ✅ **Scalable quality**: Review 1000 pieces as easily as 1
+- ✅ **Peace of mind**: Nothing leaves the system unless it passes
+
+This is how professional AI systems ensure quality at scale.
 
 ### What You'll Build
 

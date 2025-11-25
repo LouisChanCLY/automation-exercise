@@ -17,9 +17,20 @@ Build an intelligent email classification system that automatically processes, c
 
 ## 45-Minute Hands-On Exercise
 
-This exercise teaches you to build a working email automation system that combines Gmail, AI classification, and smart routing. Perfect for beginners, no coding experience required.
+This exercise teaches you **dynamic routing** - a fundamental automation pattern where different situations get handled differently automatically. Perfect for beginners, no coding experience required.
 
 **The Problem:** Professionals receive 50-150 emails daily. Manual sorting is time-consuming, important messages get buried, and urgent requests slip through. You need an intelligent system that automatically understands and routes emails based on content, not just rules.
+
+**Why Dynamic Routing Matters:**
+
+Instead of one giant AI trying to handle everything, you'll learn to **divide and conquer**:
+
+- ✅ **More reliable**: Simpler logic means fewer failures
+- ✅ **Faster**: Each AI handles one specific task, not everything
+- ✅ **Easier to debug**: Know exactly which step failed
+- ✅ **Easy to enhance**: Add new categories without breaking existing logic
+
+This is how professional automations work in the real world.
 
 ### What You'll Build
 

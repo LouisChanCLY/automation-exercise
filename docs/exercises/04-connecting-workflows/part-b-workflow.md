@@ -4,6 +4,7 @@ title: "Part B: Build & Test"
 parent: "Exercise 4: Connecting Workflows"
 grand_parent: Exercises
 nav_order: 3
+nav_exclude: true
 ---
 
 # Part B: Build & Test Workflows

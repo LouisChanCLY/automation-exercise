@@ -17,9 +17,21 @@ Build an intelligent cold email system that researches prospects and generates p
 
 ## 60-Minute Hands-On Exercise
 
-This exercise teaches you to build an AI-powered outreach system that combines autonomous research, personalisation, and automation. Perfect for building skills in AI agent orchestration and structured content generation.
+This exercise teaches you **AI agents with tools** - giving AI the ability to research and act autonomously, then **chaining operations** for isolation of concern. This makes automations maintainable and extensible.
 
 **The Problem:** Cold outreach has a poor success rate—77% of cold emails never get opened. Generic templates feel impersonal and get ignored, but manual research for personalisation doesn't scale. You need an AI system that can research prospects autonomously and generate genuinely personalised messages based on real data.
+
+**Why AI Agents + Tools Matter:**
+
+You'll learn to give AI superpowers by letting it use tools (like web search), then chain multiple AI operations together:
+
+- ✅ **Autonomous research**: AI finds information you need without you doing anything
+- ✅ **Isolation of concern**: Each AI does one job well (research vs writing)
+- ✅ **Maintainable**: Change the research step without touching the writing step
+- ✅ **Extensible**: Add new tools or steps without rebuilding everything
+- ✅ **Scalable**: Turn 2 hours of manual work into 30 seconds of automation
+
+This pattern applies to any task requiring research + action.
 
 ### What You'll Build
 
