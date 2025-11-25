@@ -22,8 +22,6 @@ nav_order: 4
 
 Add your API keys and OAuth credentials into n8n so your workflows can connect to external services.
 
-**Time Required**: 5 minutes
-
 **Prerequisites**: Complete [Google Setup](./google-setup) and [AI Services Setup](./ai-services) first.
 
 ---
