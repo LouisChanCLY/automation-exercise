@@ -13,6 +13,8 @@ has_children: true
 Build an intelligent cold email system that researches prospects and generates personalised outreach at scale.
 {: .fs-6 .fw-300 }
 
+![Exercise 2 Overview](./images/overview.png)
+
 ---
 
 ## 60-Minute Hands-On Exercise
@@ -56,8 +58,6 @@ graph LR
     style D fill:#f3e5f5
     style E fill:#e8f5e9
 ```
-
-![Exercise 2 Overview](./images/overview.png)
 
 ### Skills You'll Demonstrate
 

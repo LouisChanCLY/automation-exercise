@@ -13,6 +13,8 @@ has_children: true
 Build an intelligent email classification system that automatically processes, categorises, and routes emails using AI.
 {: .fs-6 .fw-300 }
 
+![Exercise 1 Overview](./images/overview.png)
+
 ---
 
 ## 45-Minute Hands-On Exercise
@@ -53,8 +55,6 @@ graph LR
     style C fill:#f3e5f5
     style D fill:#e8f5e9
 ```
-
-![Exercise 1 Overview](./images/overview.png)
 
 ### Skills You'll Demonstrate
 

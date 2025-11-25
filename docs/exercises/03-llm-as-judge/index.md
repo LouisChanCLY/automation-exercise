@@ -13,6 +13,8 @@ has_children: true
 Build an AI quality control system where one LLM generates content and another LLM evaluates it, providing feedback and iterating until quality standards are met.
 {: .fs-6 .fw-300 }
 
+![Exercise 3 Overview](./images/overview.png)
+
 ---
 
 ## 60-Minute Hands-On Exercise
@@ -59,8 +61,6 @@ graph LR
     style D fill:#f3e5f5
     style F fill:#e8f5e9
 ```
-
-![Exercise 3 Overview](./images/overview.png)
 
 ### Skills You'll Demonstrate
 
