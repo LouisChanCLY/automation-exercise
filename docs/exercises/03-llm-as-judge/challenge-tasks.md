@@ -174,14 +174,16 @@ const adjustedThreshold = baseThreshold
 return { threshold: Math.max(70, Math.min(95, adjustedThreshold)) };
 ```
 
-3. **Progressive Standards**:
-   - Iteration 1-2: Use adjusted threshold
-   - Iteration 3-4: Relax by 5 points
-   - Iteration 5: Accept best attempt
+**Progressive Standards**:
 
-4. **Log Threshold Decisions**:
-   - Track which thresholds were applied
-   - Analyze success rates by content type
+- Iteration 1-2: Use adjusted threshold
+- Iteration 3-4: Relax by 5 points
+- Iteration 5: Accept best attempt
+
+**Log Threshold Decisions**:
+
+- Track which thresholds were applied
+- Analyze success rates by content type
 
 ### Success Criteria
 
@@ -294,16 +296,18 @@ const criteriaByType = {
 };
 ```
 
-3. **Dynamic Judge Prompts**:
-   - Load appropriate criteria for detected type
-   - Adjust weights and thresholds
-   - Use type-specific examples in judge prompt
+**Dynamic Judge Prompts**:
 
-4. **Type-Specific Validations**:
-   - Blog posts: Check for headers, bullet points, conclusion
-   - Social media: Validate character count, hashtag usage
-   - Emails: Verify subject line, personalization tokens
-   - Technical docs: Check for code blocks, error handling
+- Load appropriate criteria for detected type
+- Adjust weights and thresholds
+- Use type-specific examples in judge prompt
+
+**Type-Specific Validations**:
+
+- Blog posts: Check for headers, bullet points, conclusion
+- Social media: Validate character count, hashtag usage
+- Emails: Verify subject line, personalization tokens
+- Technical docs: Check for code blocks, error handling
 
 ### Success Criteria
 
@@ -311,206 +315,6 @@ const criteriaByType = {
 - ✅ Appropriate judge criteria applied
 - ✅ Type-specific validations pass
 - ✅ Logging shows which criteria set used
-
----
-
-## Challenge 6: Human-in-the-Loop Review Queue
-
-**Difficulty**: Intermediate | **Time**: 40 minutes
-
-### The Pattern
-
-Edge cases that fail quality checks go to human review queue instead of being discarded.
-
-### Real-World Application
-
-- **Quality Assurance**: Humans review AI edge cases
-- **Training Data**: Failed attempts become examples for improvement
-- **Escalation**: Complex requests route to appropriate human expert
-
-### Implementation Steps
-
-1. **Add Review Queue Sheet**:
-   - New Google Sheet: `Human Review Queue`
-   - Columns: id, timestamp, content, score, feedback, status, reviewer_notes
-
-2. **Escalation Logic**:
-
-```javascript
-// Determine if needs human review
-const needsReview =
-  (final_score >= 70 && final_score < 80) ||  // Close but not quite
-  (iteration >= 5 && !passed) ||               // Max iterations reached
-  (variance_between_judges > 20);              // Judges disagree
-
-if (needsReview) {
-  // Route to review queue
-  sendToReviewQueue({
-    content: final_content,
-    score: final_score,
-    feedback: all_feedback,
-    status: 'PENDING_REVIEW',
-    priority: final_score < 70 ? 'HIGH' : 'LOW'
-  });
-} else if (passed) {
-  // Auto-approve
-  sendToProductionQueue();
-} else {
-  // Reject
-  sendToFailedLog();
-}
-```
-
-3. **Reviewer Interface**:
-   - Create simple form (Google Forms or Airtable)
-   - Reviewer can: Approve, Reject, Edit, Request Regeneration
-   - Approved items move to production
-   - Rejected items logged as training examples
-
-4. **Feedback Loop**:
-   - Collect reviewer edits
-   - Analyze what humans change most often
-   - Update judge criteria to catch these issues
-
-### Success Criteria
-
-- ✅ Edge cases routed to review queue
-- ✅ Clear review interface for humans
-- ✅ Reviewer actions logged
-- ✅ Feedback improves future generations
-
----
-
-## Challenge 7: Cost-Aware Iteration Strategy
-
-**Difficulty**: Advanced | **Time**: 45 minutes
-
-### The Pattern
-
-Optimize for quality vs cost trade-off by using cheaper models initially and premium models only when needed.
-
-### Real-World Application
-
-- **Budget Management**: Control API spend per content piece
-- **Tiered Quality**: Different quality levels for different use cases
-- **Smart Escalation**: Use expensive models only for difficult content
-
-### Implementation Steps
-
-1. **Model Tier Strategy**:
-
-```javascript
-// Model selection based on iteration and budget
-function selectModel(iteration, budget_remaining, content_value) {
-  const tiers = {
-    cheap: { model: 'gpt-4o-mini', cost_per_1k: 0.0015, quality: 70 },
-    medium: { model: 'gpt-4o', cost_per_1k: 0.03, quality: 85 },
-    premium: { model: 'claude-3-opus', cost_per_1k: 0.075, quality: 95 }
-  };
-
-  // Iteration 1-2: Try cheap model
-  if (iteration <= 2) return tiers.cheap;
-
-  // Iteration 3-4: Upgrade if budget allows
-  if (iteration <= 4 && budget_remaining > 0.10) return tiers.medium;
-
-  // Final iteration: Use best model for high-value content
-  if (content_value === 'high' && budget_remaining > 0.20) return tiers.premium;
-
-  return tiers.medium;
-}
-```
-
-2. **Cost Tracking**:
-   - Calculate token usage per iteration
-   - Track running cost
-   - Stop if cost exceeds budget
-
-3. **Quality-Cost Analysis**:
-   - Log cost per content piece
-   - Analyze ROI: Does premium model justify 5x cost?
-   - Find sweet spot for each content type
-
-4. **Adaptive Budgeting**:
-   - High-value content: Higher budget
-   - Bulk content: Strict budget caps
-   - Experimental: Medium budget with aggressive cutoffs
-
-### Success Criteria
-
-- ✅ Model selection adapts per iteration
-- ✅ Cost tracked and logged
-- ✅ Budget constraints enforced
-- ✅ Analysis shows cost vs quality trade-offs
-
----
-
-## Challenge 8: Learning from Feedback Patterns
-
-**Difficulty**: Expert | **Time**: 60 minutes
-
-### The Pattern
-
-Analyze historical feedback to proactively avoid common issues in future generations.
-
-### Real-World Application
-
-- **Continuous Improvement**: Learn from past mistakes
-- **Personalization**: Adapt to specific user preferences
-- **Quality Prediction**: Predict likely issues before judging
-
-### Implementation Steps
-
-1. **Feedback Analysis Pipeline**:
-
-```javascript
-// Analyze all historical feedback
-const commonIssues = analyzeHistoricalFeedback({
-  lookback_days: 7,
-  min_occurrences: 3
-});
-
-// Example output:
-// [
-//   { issue: 'missing call-to-action', frequency: 12, avg_iteration: 2 },
-//   { issue: 'tone too formal', frequency: 8, avg_iteration: 1 },
-//   { issue: 'lacks specific examples', frequency: 15, avg_iteration: 3 }
-// ]
-```
-
-2. **Proactive Prompt Enhancement**:
-
-```javascript
-// Add common issues to generator prompt
-const enhancedPrompt = `
-${basePrompt}
-
-IMPORTANT - Avoid these common issues:
-${commonIssues.map(i => `- ${i.issue} (seen in ${i.frequency} recent runs)`).join('\n')}
-`;
-```
-
-3. **Pre-Judge Validation**:
-   - Before sending to judge, run quick checks for known issues
-   - If detected, auto-regenerate without wasting judge API call
-
-4. **Issue Trending**:
-   - Track which issues are increasing/decreasing
-   - Alert if new issue pattern emerges
-   - Celebrate when chronic issue is resolved
-
-5. **Visualization Dashboard**:
-   - Google Sheets pivot table showing:
-     - Most common issues by content type
-     - Issues by iteration (which get caught early vs late)
-     - Issue resolution trends over time
-
-### Success Criteria
-
-- ✅ Historical feedback analyzed automatically
-- ✅ Common issues incorporated into prompts
-- ✅ Pre-validation catches known issues
-- ✅ Dashboard shows improvement trends
 
 ---
 
@@ -525,9 +329,6 @@ Combine all challenges into a production-ready content generation system:
 3. **Adaptive Thresholds** (Challenge 3)
 4. **Self-Optimizing Prompts** (Challenge 4)
 5. **Smart Routing** (Challenge 5)
-6. **Human Review Queue** (Challenge 6)
-7. **Cost Optimization** (Challenge 7)
-8. **Learning System** (Challenge 8)
 
 ### Architecture
 
@@ -541,11 +342,9 @@ graph TB
     Ensemble --> Aggregate[Aggregate Scores]
     Aggregate --> Adaptive{Meets Adaptive Threshold?}
     Adaptive -->|Yes| Approve[Auto-Approve]
-    Adaptive -->|Edge Case| Review[Human Review Queue]
     Adaptive -->|No & Budget OK| Iterate[Regenerate with Feedback]
     Iterate --> MultiGen
     Approve --> Learn[Update Prompt Performance]
-    Review --> Learn
     Learn --> Analytics[Dashboard & Reports]
 ```
 
@@ -555,31 +354,6 @@ graph TB
 - **Efficiency**: Iterations to success, time per piece
 - **Cost**: API spend per content, cost per quality point
 - **Learning**: Prompt improvement, issue reduction
-- **Human Load**: % needing review, review time
-
----
-
-## Additional Ideas
-
-### Challenge 9: Multi-Language Support
-
-Generate and judge content in multiple languages with language-specific criteria.
-
-### Challenge 10: Tone Adaptation
-
-Dynamically adjust tone (formal, casual, technical, friendly) based on audience detection.
-
-### Challenge 11: SEO Optimization
-
-Add specialized judge for SEO criteria (keywords, readability, structure, meta descriptions).
-
-### Challenge 12: Version Control
-
-Track content versions, allow rollback, compare iterations side-by-side.
-
-### Challenge 13: Collaborative Judging
-
-Multiple human reviewers vote on edge cases, ML model learns from consensus.
 
 ---
 
