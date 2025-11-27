@@ -27,6 +27,64 @@ In this section, you'll build the complete LLM as a Judge workflow from scratch.
 
 ---
 
+## Key Concepts You'll Learn
+
+Before diving into the build, let's understand the fundamental concepts that make this workflow powerful:
+
+### 1. Loop Anatomy: How Iteration Works
+
+Think of loops like a quality control assembly line that keeps checking products until they're perfect:
+
+{: .important }
+> **Every loop has three essential parts**:
+>
+> - **Start Condition**: Set up your tracking variables (retry counter, feedback storage)
+> - **Check Condition**: Test if the quality is good enough to stop
+> - **End Condition**: Decide if we should try again or give up
+>
+> In this workflow, you'll see all three parts working together to create a self-improving system.
+
+### 2. The Two Exit Conditions (Preventing Infinite Loops)
+
+{: .warning }
+> **Danger: Loops can run forever!**
+>
+> Imagine a loop that never stops: the generator keeps creating, the judge keeps rejecting, and your workflow runs endlessly, costing money and never finishing. This is called an **infinite loop**.
+>
+> **Our solution: TWO ways to exit**:
+>
+> 1. ✅ **Quality passes** - We got what we wanted (success!)
+> 2. ✅ **Max retries reached** - We tried 10 times, time to stop (controlled failure)
+>
+> With two exit conditions, the workflow ALWAYS finishes eventually. No infinite loops, no runaway costs!
+
+### 3. Structured Output: When to Use It
+
+{: .important }
+> **Structured Output is like choosing between freestyle and multiple choice**:
+>
+> - **Generator (NO structured output)**: "Write me an email" - needs creative freedom, natural expression
+> - **Judge (YES structured output)**: "Is this good or bad?" - needs clear yes/no decision
+>
+> **The key difference**: The workflow needs to automatically decide what to do next based on the judge's answer. Structured output gives us `{passed: true}` or `{passed: false}` - crystal clear for automation!
+
+### 4. Memory Carrying: Include All Other Fields
+
+{: .important }
+> **Think of data flowing through nodes like passing notes in class**:
+>
+> - **"Include All Other Fields" CHECKED** ✅: You're **adding** a new note to the pile (keeping everything)
+> - **"Include All Other Fields" UNCHECKED** ❌: You're **replacing** the entire pile with just your new note
+>
+> **When to check it?**
+>
+> - ✅ When you want to **add or update** fields while keeping everything else
+> - ❌ When you want to **start fresh** with only specific fields (like the final output)
+>
+> This concept ensures important data doesn't get lost as it flows through the workflow!
+
+---
+
 ## Workflow Architecture
 
 ### What We're Building
