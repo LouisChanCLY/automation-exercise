@@ -57,39 +57,24 @@ graph LR
     style Fail fill:#ffcdd2
 ```
 
-### Node Summary
+### Workflow Nodes Reference
 
-| # | Node Name | Type | Purpose |
-|---|-----------|------|---------|
-| 1 | Form Trigger | Form Trigger | Collect task, instructions, and success criteria |
-| 2 | Initialize Variables | Edit Fields (Set) | Set up loop counter and tracking variables |
-| 3 | AI Generator Agent | AI Agent | Create/improve content based on instructions |
-| 4 | LLM Judge Agent | AI Agent | Evaluate content against success criteria |
-| 5 | Parse Judge Output | Structured Output Parser | Extract passed/failed status and feedback |
-| 6 | Merge Results | Edit Fields (Set) | Combine evaluation with generated output |
-| 7 | Check Pass/Fail | IF | Decide whether content passes quality check |
-| 8 | Mark Success | Edit Fields (Set) | Set status to "success" |
-| 9 | Increment Retry | Edit Fields (Set) | Increment counter and update feedback |
-| 10 | Max Retries Check | IF | Check if max retries reached |
-| 11 | Mark Failure | Edit Fields (Set) | Set status to "failed" |
-| 12 | Final Output | Edit Fields (Set) | Format and return final results |
+Quick reference of all the nodes you'll build in this exercise:
 
----
-
-## Workflow Components Reference
-
-Here's a quick reference of all the nodes you'll build in this exercise:
-
-| Node Type | Purpose | Configuration |
-|-----------|---------|---------------|
-| **Form Trigger** | Test interface for standalone use | Fields: Task Description, Instructions, Success Criteria |
-| **Set (Initialize)** | Set up loop counters and tracking | retry_count, max_retries (10), previous_feedback |
-| **AI Agent (Generator)** | Create response content | Dynamic prompt incorporating task and feedback |
-| **AI Agent (Judge)** | Evaluate response quality | Structured output: {passed: boolean, feedback: string} |
-| **IF (Check Pass)** | Quality gate decision | If evaluation_result = true |
-| **Set (Increment Retry)** | Update loop variables | retry_count++, store previous_feedback |
-| **IF (Max Retries)** | Loop control | If retry_count >= max_retries |
-| **Set (Mark Status)** | Set final status | status: "success" or "failed" |
+| # | Node Name | Type | Purpose | Key Configuration |
+|---|-----------|------|---------|-------------------|
+| 1 | Form Trigger | Form Trigger | Collect task, instructions, and success criteria | 3 textarea fields, Response Mode: Last Node |
+| 2 | Set Loop Variable | Edit Fields (Set) | Set up loop counter and tracking variables | retry_count, max_retries (10), previous_feedback, ai_output |
+| 3 | AI Agent - Generator | AI Agent | Create/improve content based on instructions | Dynamic prompt with conditional feedback, NO structured output |
+| 4 | LLM Judge | AI Agent | Evaluate content against success criteria | Strict evaluation prompt, YES structured output |
+| 5 | Parse Judge Output | Structured Output Parser | Extract passed/failed status and feedback | Schema: {passed: boolean, feedback: string} |
+| 6 | Update Loop Variables | Edit Fields (Set) | Combine evaluation with generated output | evaluation_result, feedback, output, retry_count, max_retries |
+| 7 | Check Pass/Fail | IF | Decide whether content passes quality check | If evaluation_result = true |
+| 8 | Set Status to Success | Edit Fields (Set) | Set status to "success" | status: "success", Include All Other Fields: ON |
+| 9 | Update Retry Count | Edit Fields (Set) | Increment counter and update feedback | retry_count + 1, store previous_feedback |
+| 10 | Max Retries Check | IF | Check if max retries reached | If retry_count === max_retries (10) |
+| 11 | Set Status to Failed | Edit Fields (Set) | Set status to "failed" | status: "failed", Include All Other Fields: ON |
+| 12 | Final Response | Edit Fields (Set) | Format and return final results | status, evaluation_result, feedback, output, retry_count |
 
 ---
 
