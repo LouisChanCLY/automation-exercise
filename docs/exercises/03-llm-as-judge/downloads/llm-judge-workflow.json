@@ -1,5 +1,4 @@
 {
-  "name": "LLM as a Judge - Quality Control",
   "nodes": [
     {
       "parameters": {
@@ -32,7 +31,137 @@
       "type": "n8n-nodes-base.formTrigger",
       "position": [80, 992],
       "typeVersion": 2.3,
-      "webhookId": "auto-generate-on-import"
+      "webhookId": "1c6b6b66-bfb1-4ceb-8d57-ab6230a67cd3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Task: {{ $('Form Trigger').item.json['Task Description'] }}\n\nInstructions: {{ $('Form Trigger').item.json['How to Do It (Instructions)'] }}\n\n{{ $json.previous_feedback ? 'Previous Feedback: ' + $json.previous_feedback : '' }}\n\nPlease generate the output according to the task description and instructions. Ensure it meets the success criteria{{ $json.previous_feedback ? ' and addresses the feedback provided' : '' }}.",
+        "options": {}
+      },
+      "id": "ai_agent",
+      "name": "AI Agent - Generator",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [528, 816],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "gemini_model",
+      "name": "Google Gemini Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [608, 1040],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "iphWvVTXMVbM58k6",
+          "name": "Main Gemini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an EXTREMELY STRICT quality judge with ZERO tolerance for mediocrity. Evaluate the following output with RUTHLESS scrutiny.\n\nTask: {{ $('Form Trigger').item.json['Task Description'] }}\n\nSuccess Criteria: {{ $('Form Trigger').item.json['Success Criteria (How to Measure)'] }}\n\nGenerated Output: {{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "id": "judge_agent",
+      "name": "LLM Judge",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [880, 816],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "gemini_judge_model",
+      "name": "Google Gemini Judge Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [960, 1248],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "iphWvVTXMVbM58k6",
+          "name": "Main Gemini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"passed\": {\n      \"type\": \"boolean\"\n    },\n    \"feedback\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"passed\", \"feedback\"]\n}",
+        "autoFix": true
+      },
+      "id": "json_parser",
+      "name": "Parse Judge Output",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [960, 1040],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "version": 2,
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "passed_check",
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.evaluation_result }}",
+              "rightValue": true
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check_result",
+      "name": "Check Pass/Fail",
+      "type": "n8n-nodes-base.if",
+      "position": [1552, 816],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "version": 2,
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "max_check",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.retry_count === $json.max_retries}}",
+              "rightValue": true
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check_max_retries",
+      "name": "Max Retries Check",
+      "type": "n8n-nodes-base.if",
+      "position": [2000, 1104],
+      "typeVersion": 2.2
     },
     {
       "parameters": {
@@ -70,76 +199,7 @@
       "typeVersion": 3.4,
       "position": [304, 992],
       "id": "6448b74c-697b-4116-b004-18b2f18d6316",
-      "name": "Initialize Variables"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Task: {{ $('Form Trigger').item.json['Task Description'] }}\n\nInstructions: {{ $('Form Trigger').item.json['How to Do It (Instructions)'] }}\n\n{{ $json.previous_feedback ? 'Previous Feedback: ' + $json.previous_feedback : '' }}\n\nPlease generate the output according to the task description and instructions. Ensure it meets the success criteria{{ $json.previous_feedback ? ' and addresses the feedback provided' : '' }}.",
-        "options": {}
-      },
-      "id": "ai_agent",
-      "name": "AI Agent - Generator",
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "position": [528, 816],
-      "typeVersion": 1.7
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "gemini_model",
-      "name": "Google Gemini Model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "position": [600, 1040],
-      "typeVersion": 1,
-      "credentials": {
-        "googlePalmApi": {
-          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "Google Gemini API"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=You are an EXTREMELY STRICT quality judge with ZERO tolerance for mediocrity. Evaluate the following output with RUTHLESS scrutiny.\n\nTask: {{ $('Form Trigger').item.json['Task Description'] }}\n\nSuccess Criteria: {{ $('Form Trigger').item.json['Success Criteria (How to Measure)'] }}\n\nGenerated Output: {{ $json.output }}",
-        "hasOutputParser": true,
-        "options": {}
-      },
-      "id": "judge_agent",
-      "name": "LLM Judge",
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "position": [880, 816],
-      "typeVersion": 1.7
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "gemini_judge_model",
-      "name": "Google Gemini Judge Model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "position": [952, 1248],
-      "typeVersion": 1,
-      "credentials": {
-        "googlePalmApi": {
-          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
-          "name": "Google Gemini API"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "schemaType": "manual",
-        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"passed\": {\n      \"type\": \"boolean\",\n      \"description\": \"Whether the output meets the success criteria\"\n    },\n    \"feedback\": {\n      \"type\": \"string\",\n      \"description\": \"Detailed feedback on what needs improvement\"\n    }\n  },\n  \"required\": [\"passed\", \"feedback\"]\n}",
-        "autoFix": true
-      },
-      "id": "json_parser",
-      "name": "Parse Judge Output",
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "position": [956, 1040],
-      "typeVersion": 1.2
+      "name": "Set Loop Variable"
     },
     {
       "parameters": {
@@ -166,13 +226,13 @@
             {
               "id": "f2ffcb43-c1a7-446a-90d6-4914434c014d",
               "name": "max_retries",
-              "value": "={{ $('Initialize Variables').item.json.max_retries }}",
+              "value": "={{ $('Set Loop Variable').item.json.max_retries }}",
               "type": "number"
             },
             {
               "id": "36016e4f-4e96-4432-920a-f4d279880af5",
               "name": "retry_count",
-              "value": "={{ $('Initialize Variables').item.json.retry_count }}",
+              "value": "={{ $('Set Loop Variable').item.json.retry_count }}",
               "type": "number"
             }
           ]
@@ -181,39 +241,30 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [1324, 816],
+      "position": [1328, 816],
       "id": "1a003513-b4de-4ea0-8efd-b0c89070d860",
-      "name": "Merge Results"
+      "name": "Update Loop Variables"
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "leftValue": "",
-            "version": 2,
-            "caseSensitive": true,
-            "typeValidation": "strict"
-          },
-          "conditions": [
+        "assignments": {
+          "assignments": [
             {
-              "id": "passed_check",
-              "operator": {
-                "type": "boolean",
-                "operation": "equals"
-              },
-              "leftValue": "={{ $json.evaluation_result }}",
-              "rightValue": true
+              "id": "e114f0c0-2408-4dd3-90f6-014f998c928d",
+              "name": "retry_count",
+              "value": "={{ ($json.retry_count || 0) + 1 }}",
+              "type": "number"
             }
-          ],
-          "combinator": "and"
+          ]
         },
+        "includeOtherFields": true,
         "options": {}
       },
-      "id": "check_result",
-      "name": "Check Pass/Fail",
-      "type": "n8n-nodes-base.if",
-      "position": [1548, 816],
-      "typeVersion": 2.2
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1776, 928],
+      "id": "75aeff3f-da40-4f37-b15e-46cd67e6a000",
+      "name": "Update Retry Count"
     },
     {
       "parameters": {
@@ -232,67 +283,9 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2220, 744],
+      "position": [2224, 752],
       "id": "b022fd88-085a-4d82-8616-d60fae45909d",
-      "name": "Mark Success"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "e114f0c0-2408-4dd3-90f6-014f998c928d",
-              "name": "retry_count",
-              "value": "={{ ($json.retry_count || 0) + 1 }}",
-              "type": "number"
-            },
-            {
-              "id": "f8b70344-cd38-42b0-b0c3-0239537523e2",
-              "name": "previous_feedback",
-              "value": "={{ $json.feedback }}",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [1772, 920],
-      "id": "75aeff3f-da40-4f37-b15e-46cd67e6a000",
-      "name": "Increment Retry"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "leftValue": "",
-            "version": 2,
-            "caseSensitive": true,
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "max_check",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              },
-              "leftValue": "={{ $json.retry_count >= $json.max_retries }}",
-              "rightValue": true
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "check_max_retries",
-      "name": "Max Retries Check",
-      "type": "n8n-nodes-base.if",
-      "position": [1996, 1096],
-      "typeVersion": 2.2
+      "name": "Set Status to Success"
     },
     {
       "parameters": {
@@ -311,9 +304,9 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2220, 1096],
+      "position": [2224, 1104],
       "id": "4bd8587e-fbb3-4c52-a02f-ee8aace2b514",
-      "name": "Mark Failure"
+      "name": "Set Status to Failed"
     },
     {
       "parameters": {
@@ -355,9 +348,9 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2444, 992],
+      "position": [2448, 992],
       "id": "ed78f204-0c91-4008-9e89-89049eadd70d",
-      "name": "Final Output"
+      "name": "Final Response"
     }
   ],
   "connections": {
@@ -365,18 +358,7 @@
       "main": [
         [
           {
-            "node": "Initialize Variables",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Initialize Variables": {
-      "main": [
-        [
-          {
-            "node": "AI Agent - Generator",
+            "node": "Set Loop Variable",
             "type": "main",
             "index": 0
           }
@@ -409,7 +391,7 @@
       "main": [
         [
           {
-            "node": "Merge Results",
+            "node": "Update Loop Variables",
             "type": "main",
             "index": 0
           }
@@ -421,6 +403,13 @@
         [
           {
             "node": "LLM Judge",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse Judge Output",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -438,51 +427,18 @@
         ]
       ]
     },
-    "Merge Results": {
-      "main": [
-        [
-          {
-            "node": "Check Pass/Fail",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Check Pass/Fail": {
       "main": [
         [
           {
-            "node": "Mark Success",
+            "node": "Set Status to Success",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Increment Retry",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Mark Success": {
-      "main": [
-        [
-          {
-            "node": "Final Output",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Increment Retry": {
-      "main": [
-        [
-          {
-            "node": "Max Retries Check",
+            "node": "Update Retry Count",
             "type": "main",
             "index": 0
           }
@@ -493,25 +449,69 @@
       "main": [
         [
           {
-            "node": "Mark Failure",
+            "node": "Set Status to Failed",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Initialize Variables",
+            "node": "Set Loop Variable",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Mark Failure": {
+    "Set Loop Variable": {
       "main": [
         [
           {
-            "node": "Final Output",
+            "node": "AI Agent - Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Loop Variables": {
+      "main": [
+        [
+          {
+            "node": "Check Pass/Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Retry Count": {
+      "main": [
+        [
+          {
+            "node": "Max Retries Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Status to Success": {
+      "main": [
+        [
+          {
+            "node": "Final Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Status to Failed": {
+      "main": [
+        [
+          {
+            "node": "Final Response",
             "type": "main",
             "index": 0
           }
@@ -520,12 +520,8 @@
     }
   },
   "pinData": {},
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "staticData": null,
-  "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2025-10-30T10:00:00.000Z",
-  "versionId": "2"
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "83a73f6b60773397e290c1ba61713e8720c66a009a97ac39a7c02fc80cd39bf4"
+  }
 }
