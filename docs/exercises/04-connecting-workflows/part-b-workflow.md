@@ -394,19 +394,19 @@ This is the main workflow that ties everything together. It fetches emails, call
    - **Assignments**:
      - Assignment 1:
        - **Name**: `subject`
-       - **Value**: `={{ $json.subject }}`
+       - **Value**: `{{ $json.subject }}`
      - Assignment 2:
        - **Name**: `body_plain`
-       - **Value**: `={{ $json.plainContent || $json.snippet }}`
+       - **Value**: `{{ $json.plainContent || $json.snippet }}`
      - Assignment 3:
        - **Name**: `sender`
-       - **Value**: `={{ $json.from }}`
+       - **Value**: `{{ $json.from }}`
      - Assignment 4:
        - **Name**: `message_id`
-       - **Value**: `={{ $json.messageId }}`
+       - **Value**: `{{ $json.messageId }}`
      - Assignment 5:
        - **Name**: `thread_id`
-       - **Value**: `={{ $json.threadId }}`
+       - **Value**: `{{ $json.threadId }}`
 
 #### Step 4: Call Email Classifier Workflow
 
@@ -427,13 +427,13 @@ This is the main workflow that ties everything together. It fetches emails, call
    - **Workflow Inputs**:
      - Input 1:
        - **Name**: `email_subject`
-       - **Value**: `={{ $json.subject }}`
+       - **Value**: `{{ $json.subject }}`
      - Input 2:
        - **Name**: `email_body`
-       - **Value**: `={{ $json.body_plain }}`
+       - **Value**: `{{ $json.body_plain }}`
      - Input 3:
        - **Name**: `email_sender`
-       - **Value**: `={{ $json.sender }}`
+       - **Value**: `{{ $json.sender }}`
 
 3. **Test this step**: Click "Test step" to verify the classifier is called and returns classification data
 
@@ -569,13 +569,13 @@ This is the main workflow that ties everything together. It fetches emails, call
    - **Workflow Inputs**:
      - Input 1:
        - **Name**: `Task Description`
-       - **Value**: `={{ $json.taskDescription }}`
+       - **Value**: `{{ $json.taskDescription }}`
      - Input 2:
        - **Name**: `How to Do It (Instructions)`
-       - **Value**: `={{ $json.instructions }}`
+       - **Value**: `{{ $json.instructions }}`
      - Input 3:
        - **Name**: `Success Criteria (How to Measure)`
-       - **Value**: `={{ $json.successCriteria }}`
+       - **Value**: `{{ $json.successCriteria }}`
 
 3. **Test this step**: Verify the response generator is called and returns generated email
 
@@ -593,19 +593,19 @@ This is the main workflow that ties everything together. It fetches emails, call
    - **Assignments**:
      - Assignment 1:
        - **Name**: `reply_text`
-       - **Value**: `={{ $json.output }}`
+       - **Value**: `{{ $json.output }}`
      - Assignment 2:
        - **Name**: `subject`
-       - **Value**: `=Re: {{ $('Prepare Response Instructions').item.json.originalSubject }}`
+       - **Value**: `Re: {{ $('Prepare Response Instructions').item.json.originalSubject }}`
      - Assignment 3:
        - **Name**: `to`
-       - **Value**: `={{ $('Prepare Response Instructions').item.json.originalSender }}`
+       - **Value**: `{{ $('Prepare Response Instructions').item.json.originalSender }}`
      - Assignment 4:
        - **Name**: `quality_status`
-       - **Value**: `={{ $json.status }}`
+       - **Value**: `{{ $json.status }}`
      - Assignment 5:
        - **Name**: `retry_count`
-       - **Value**: `={{ $json.retry_count }}`
+       - **Value**: `{{ $json.retry_count }}`
 
 #### Step 8: Add Quality Check (Optional but Recommended)
 
@@ -623,7 +623,7 @@ This is the main workflow that ties everything together. It fetches emails, call
 1. Configure:
    - **Conditions**:
      - Condition 1:
-       - **Field**: `={{ $json.quality_status }}`
+       - **Field**: `{{ $json.quality_status }}`
        - **Operation**: `Equal`
        - **Value**: `success`
 
@@ -646,12 +646,12 @@ This is the main workflow that ties everything together. It fetches emails, call
    - **Resource**: `Message`
    - **Operation**: `Send`
    - **Credential**: Select your Gmail OAuth2 credential
-   - **To**: `={{ $json.to }}`
-   - **Subject**: `={{ $json.subject }}`
+   - **To**: `{{ $json.to }}`
+   - **Subject**: `{{ $json.subject }}`
    - **Email Type**: `Text`
-   - **Message**: `={{ $json.reply_text }}`
+   - **Message**: `{{ $json.reply_text }}`
    - **Options**:
-     - **Thread ID**: `={{ $('Extract Email Data').item.json.thread_id }}`
+     - **Thread ID**: `{{ $('Extract Email Data').item.json.thread_id }}`
 
 #### Step 10: Handle Failed Quality (False Branch)
 
