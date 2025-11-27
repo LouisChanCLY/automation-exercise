@@ -131,6 +131,8 @@ The Form Trigger creates a web form where users can submit tasks for AI generati
 
 7. Click **Test step** to get the form URL
 
+![Form Trigger Configuration](./images/workflow/02-form-trigger-config.png)
+
 {: .highlight }
 > **Pro Tip**: Copy the form URL - you'll use this to submit test tasks!
 
@@ -180,7 +182,28 @@ The email must:
 
 1. Add **Edit Fields (Set)** node to your canvas
 2. **Connect it**: Drag a connection line from **Form Trigger** to this new node
-3. Rename to: `Initialize Variables`
+3. Rename to: `Set Loop Variable`
+
+### Understanding Loops: The Start Condition
+
+{: .important }
+> **Think of this as a loop in programming**: Every loop has three key parts:
+>
+> 1. **Start condition** (this step): Set up your tracking variables
+> 2. **Check condition** (Step 7): Test if we should continue or exit
+> 3. **End condition** (Step 10): Decide if we loop back or stop
+>
+> This node is the **start condition** - it sets up everything we need to track as we loop through attempts.
+
+### What is a Loop Variable?
+
+In simple terms, **loop variables** are like sticky notes that remember information as the workflow goes round and round. Think of it like a scoreboard that tracks:
+
+- How many attempts we've made
+- What the judge said last time
+- What's the maximum number of tries allowed
+
+Without these sticky notes, the workflow would forget everything each time and never improve!
 
 ### Configure the Variables
 
@@ -189,11 +212,16 @@ Set up tracking for the iteration loop:
    | Field Name | Type | Value | Purpose |
    |------------|------|-------|---------|
    | retry_count | Number | `={{ $json.retry_count \|\| 0 }}` | Current attempt number |
-   | max_retries | Number | `=10` | Maximum allowed attempts |
+   | max_retries | Number | `10` | Maximum allowed attempts |
    | previous_feedback | String | `={{ $json.previous_feedback \|\| null }}` | Feedback from judge |
    | ai_output | String | `={{ $json.ai_output \|\| null }}` | Generated content |
 
-4. Click **Test step**
+{: .warning }
+> **Important**: Make sure "Include Other Input Fields" is **OFF** (unchecked) for this node. We're starting fresh and only want these specific variables.
+
+![Set Loop Variable Configuration](./images/workflow/03-set-loop-variable.png)
+
+Click **Test step**
 
 **Expected Output**: JSON object with initialized variables.
 
@@ -207,7 +235,7 @@ Set up tracking for the iteration loop:
 > **Two-phase generation**: On the first try, the generator creates content from scratch. If the judge rejects it, the generator tries again using the judge's feedback to improve. This creates a self-improving loop.
 
 1. Add **AI Agent** node to your canvas
-2. **Connect it**: Drag a connection line from **Initialize Variables** to this new node
+2. **Connect it**: Drag a connection line from **Set Loop Variable** to this new node
 3. Rename to: `AI Agent - Generator`
 
 ### Configure the Model
@@ -219,6 +247,20 @@ Set up the AI model for content generation:
 - Connect it to the AI Agent
 - Select your Google Gemini credential
 - **Model**: "gemini-2.5-flash"
+
+### Why NO Structured Output Here?
+
+{: .important }
+> **Structured Output: When to use it**:
+>
+> - **YES** when you need specific actions or decisions (like pass/fail)
+> - **NO** when you want free creative expression
+>
+> The Generator should express freely - we want natural language, not rigid formats. Think of it like asking someone to write you an email vs asking them to fill out a form with checkboxes.
+
+**For this node**: Keep "Require Specific Output Format" **OFF** (unchecked). We want the AI to generate freely without constraints.
+
+![AI Generator Configuration](./images/workflow/04-ai-generator.png)
 
 ### Configure the Prompt
 
@@ -264,12 +306,29 @@ Set up the AI model for quality evaluation:
 - Connect it to the LLM Judge
 - Select your Google Gemini credential
 - **Model**: "gemini-2.5-flash"
-- **Enable Output Parser**: Check the box
 
-4. **Add Structured Output Parser**:
-   - Add sub-node: **Structured Output Parser**
-   - **Schema Type**: `Manual`
-   - **Input Schema**:
+### Why YES Structured Output Here?
+
+{: .important }
+> **The Judge needs structured output because**:
+>
+> - We need a clear **yes/no decision** (passed: true or false)
+> - We need **specific feedback** to improve next time
+> - The workflow needs to make an automatic decision based on this
+>
+> Without structured output, the Judge might say "This is pretty good" - how would we know if that's a pass or fail? With structured output, we get `{passed: true}` or `{passed: false}` - crystal clear!
+
+**For this node**: Turn **"Require Specific Output Format" ON** (checked). You'll see a warning to connect an output parser - that's what we'll do next!
+
+![LLM Judge Configuration](./images/workflow/05-llm-judge.png)
+
+### Add Structured Output Parser
+
+**Add Structured Output Parser**:
+
+- Click "Connect an output parser" or add sub-node: **Structured Output Parser**
+- **Schema Type**: `Define using JSON Schema`
+- **Input Schema**:
 
 ```json
 {
@@ -288,9 +347,16 @@ Set up the AI model for quality evaluation:
 }
 ```
 
-- **Auto-Fix**: Enable
+- **Auto-Fix Format**: Enable (checked)
 
-5. **Configure Judge Prompt**:
+![Parse Judge Output Configuration](./images/workflow/06-parse-judge-output.png)
+
+{: .tip }
+> **What does this schema do?** It forces the AI to respond in exactly this format: `{passed: true/false, feedback: "text"}`. This makes it easy for the workflow to decide what to do next automatically.
+
+### Configure Judge Prompt
+
+**Configure Judge Prompt**:
 
 {% raw %}
 
@@ -313,24 +379,41 @@ Generated Output: {{ $json.output }}
 - **Ruthless scrutiny**: Forces careful evaluation
 - **Structured output**: Returns consistent JSON format
 
-6. Click **Test step**
+Click **Test step**
 
 **Expected Output**: Structured JSON with `passed` (boolean) and `feedback` (string).
 
 ---
 
-## Step 6: Add Merge Results Node
+## Step 6: Add Update Loop Variables Node
 
 ### Add and Connect the Node
 
 1. Add **Edit Fields (Set)** node to your canvas
 2. **Connect it**: Drag a connection line from **LLM Judge** to this new node
-3. Rename to: `Merge Results`
+3. Rename to: `Update Loop Variables`
 
 {: .highlight }
 > **Data consolidation**: This node pulls together the judge's verdict, the generated content, and the tracking variables into one object for easy decision-making in the next steps.
 
-### Configure the Merge
+### Understanding "Include All Other Fields"
+
+{: .important }
+> **The Memory Carrying Concept**:
+>
+> Think of data flowing through nodes like passing notes in class:
+>
+> - **"Include All Other Fields" CHECKED**: You're **adding** a new sticky note to the pile (keeping all previous notes)
+> - **"Include All Other Fields" UNCHECKED**: You're **replacing** the entire pile with just your new note (everything else is lost)
+>
+> **When to check it?**
+>
+> - ✅ Check it when you want to **add or update** fields while keeping everything else
+> - ❌ Uncheck it when you want to **start fresh** with only specific fields
+>
+> For this node: We want to **add** the judge's evaluation while **keeping** everything from previous nodes (the task description, instructions, generated output, etc.). So we'll check the box!
+
+### Configure the Update
 
 Combine all the information we need:
 
@@ -339,10 +422,17 @@ Combine all the information we need:
    | evaluation_result | Boolean | `={{ $json.output.passed }}` |
    | feedback | String | `={{ $json.output.feedback }}` |
    | output | String | `={{ $('AI Agent - Generator').item.json.output }}` |
-   | max_retries | Number | `={{ $('Initialize Variables').item.json.max_retries }}` |
-   | retry_count | Number | `={{ $('Initialize Variables').item.json.retry_count }}` |
+   | max_retries | Number | `={{ $('Set Loop Variable').item.json.max_retries }}` |
+   | retry_count | Number | `={{ $('Set Loop Variable').item.json.retry_count }}` |
 
-4. Click **Test step**
+**Enable**: `Include Other Input Fields` ✅ (checked)
+
+![Update Loop Variables Configuration](./images/workflow/07-update-loop-variables.png)
+
+{: .tip }
+> **Why this matters**: By checking "Include Other Input Fields", we carry forward ALL the data from previous steps. This ensures the Final Output node will have access to everything - the task, the output, the feedback, the status - without us having to manually reference each field.
+
+Click **Test step**
 
 **Expected Output**: Combined object with evaluation results and generated content.
 
@@ -353,19 +443,21 @@ Combine all the information we need:
 ### Add and Connect the Node
 
 {: .note }
-> **The decision point**: This is where the workflow splits into two paths - success (content passed) or retry (content needs improvement).
+> **The decision point** (Loop Check Condition): This is where the workflow splits into two paths - success (content passed) or retry (content needs improvement). This is the **first check condition** in our loop - did the content pass quality standards?
 
 1. Add **IF** node to your canvas
-2. **Connect it**: Drag a connection line from **Merge Results** to this new node
+2. **Connect it**: Drag a connection line from **Update Loop Variables** to this new node
 3. Rename to: `Check Pass/Fail`
 
 ### Configure the Condition
 
 Set up the pass/fail logic:
 
-- **Left Value**: `={{ $json.evaluation_result }}`
-- **Operation**: `equals`
-- **Right Value**: `true`
+- **Condition**: `={{ $json.evaluation_result }}`
+- **Operation**: `is equal to`
+- **Value**: `true`
+
+![Check Pass/Fail Configuration](./images/workflow/08-check-pass-fail.png)
 
 **Output Routing**:
 
@@ -380,7 +472,7 @@ Set up the pass/fail logic:
 
 1. Add **Edit Fields (Set)** node to your canvas
 2. **Connect it**: Drag a connection line from **Check Pass/Fail (true)** output to this new node
-3. Rename to: `Mark Success`
+3. Rename to: `Set Status to Success`
 
 ### Configure Success Status
 
@@ -390,7 +482,12 @@ Mark this execution as successful:
 - **Type**: String
 - **Value**: `success`
 
-4. **Enable**: `Include Other Fields` (passes all previous data through)
+**Enable**: `Include Other Input Fields` ✅ (checked)
+
+![Set Status to Success Configuration](./images/workflow/10-set-status-success.png)
+
+{: .tip }
+> **Memory carrying again**: We check "Include Other Input Fields" to keep all the data (task, output, feedback, retry count) flowing forward to the Final Output node. We're just **adding** the status field, not replacing everything!
 
 ---
 
@@ -403,7 +500,7 @@ Mark this execution as successful:
 
 1. Add **Edit Fields (Set)** node to your canvas
 2. **Connect it**: Drag a connection line from **Check Pass/Fail (false)** output to this new node
-3. Rename to: `Increment Retry`
+3. Rename to: `Update Retry Count`
 
 ### Configure Retry Logic
 
@@ -414,7 +511,10 @@ Track attempts and store feedback:
    | retry_count | Number | `={{ ($json.retry_count \|\| 0) + 1 }}` |
    | previous_feedback | String | `={{ $json.feedback }}` |
 
-4. **Enable**: `Include Other Fields`
+**Enable**: `Include Other Input Fields` ✅ (checked)
+
+{: .tip }
+> **Memory carrying**: We're updating the retry_count and previous_feedback, but keeping everything else. This ensures the loop preserves all data as it goes back to try again.
 
 ---
 
@@ -422,31 +522,56 @@ Track attempts and store feedback:
 
 ### Add and Connect the Node
 
-{: .note }
-> **Safety limit**: We set a maximum of 10 retries to prevent infinite loops if the content simply can't meet the criteria. This protects against runaway API costs and endless execution.
+{: .warning }
+> **Danger: Infinite Loops!**
+>
+> Imagine a loop that never stops: the generator keeps creating, the judge keeps rejecting, and the workflow runs forever, racking up massive API costs and never finishing. This is called an **infinite loop** - a loop that never ends.
+>
+> **That's why we need TWO exit conditions**:
+>
+> 1. ✅ **Quality passes** (Check Pass/Fail node) - we got what we wanted!
+> 2. ✅ **Max retries reached** (this node) - we tried enough times, let's stop
+>
+> Without exit condition #2, if the content never passes, the loop would run forever. The max_retries limit (10 attempts) protects us from this disaster!
 
 1. Add **IF** node to your canvas
-2. **Connect it**: Drag a connection line from **Increment Retry** to this new node
+2. **Connect it**: Drag a connection line from **Update Retry Count** to this new node
 3. Rename to: `Max Retries Check`
+
+### Understanding the Loop End Condition
+
+{: .important }
+> **Loop anatomy - the END condition**:
+>
+> - **Start condition** (Step 3): Set up variables
+> - **Check condition** (Step 7): Did quality pass?
+> - **End condition** (THIS STEP): Have we tried too many times?
+>
+> This is the **second end condition** - the safety net that catches us before we loop forever.
 
 ### Configure the Condition
 
 Check if we've exhausted our retries:
 
-- **Left Value**: `={{ $json.retry_count >= $json.max_retries }}`
+- **Condition**: `={{ $json.retry_count === $json.max_retries }}`
 - **Operation**: `is true`
+
+![Max Retries Check Configuration](./images/workflow/09-max-retries-check.png)
 
 **Output Routing**:
 
-- **True** branch: Max retries reached - go to failure path
-- **False** branch: Can retry - loop back to Initialize Variables
+- **True** branch: Max retries reached (tried 10 times) - go to failure path
+- **False** branch: Can still retry (less than 10 times) - loop back to Set Loop Variable
 
 ### Create the Iteration Loop
 
 {: .highlight }
 > **The magic connection**: This loop-back is what makes the workflow self-improving. Failed content goes back through the generator with feedback, creating an iterative refinement process.
 
-Drag a connection from **Max Retries Check (false)** output back to **Initialize Variables** input. This creates the retry loop!
+Drag a connection from **Max Retries Check (false)** output back to **Set Loop Variable** input. This creates the retry loop!
+
+{: .note }
+> **Two ways out**: The loop can exit in two ways: (1) Content passes quality check → Success path, or (2) Max retries reached → Failure path. This ensures the workflow ALWAYS finishes eventually!
 
 ---
 
@@ -456,7 +581,7 @@ Drag a connection from **Max Retries Check (false)** output back to **Initialize
 
 1. Add **Edit Fields (Set)** node to your canvas
 2. **Connect it**: Drag a connection line from **Max Retries Check (true)** output to this new node
-3. Rename to: `Mark Failure`
+3. Rename to: `Set Status to Failed`
 
 ### Configure Failure Status
 
@@ -466,7 +591,12 @@ Mark that we exhausted retries without success:
 - **Type**: String
 - **Value**: `failed`
 
-4. **Enable**: `Include Other Fields`
+**Enable**: `Include Other Input Fields` ✅ (checked)
+
+![Set Status to Failed Configuration](./images/workflow/11-set-status-failed.png)
+
+{: .tip }
+> **Memory carrying**: Same concept - we're adding the status field while keeping all other data (the best attempt's output, feedback, retry count of 10).
 
 ---
 
@@ -478,8 +608,8 @@ Mark that we exhausted retries without success:
 > **Merge point**: Both the success and failure paths converge here. This node formats the final response that gets returned to the user via the form.
 
 1. Add **Edit Fields (Set)** node to your canvas
-2. **Connect it**: Drag connections from BOTH **Mark Success** and **Mark Failure** to this new node
-3. Rename to: `Final Output`
+2. **Connect it**: Drag connections from BOTH **Set Status to Success** and **Set Status to Failed** to this new node
+3. Rename to: `Final Response`
 
 ### Configure Output Format
 
@@ -493,7 +623,14 @@ Structure the final response:
    | output | String | `={{ $json.output }}` |
    | retry_count | Number | `={{ $json.retry_count }}` |
 
-**Expected Output**: Final formatted results showing status, output, feedback, and retry count.
+**Disable**: `Include Other Input Fields` ❌ (unchecked)
+
+![Final Response Configuration](./images/workflow/12-final-response.png)
+
+{: .important }
+> **When NOT to carry memory**: In this final node, we uncheck "Include Other Input Fields" because we want to return ONLY these specific fields to the user. We don't want to flood them with all the internal workflow data (loop variables, intermediate values, etc.). We're being selective about what goes back to the form!
+
+**Expected Output**: Clean, formatted results showing only status, output, feedback, and retry count.
 
 ---
 
