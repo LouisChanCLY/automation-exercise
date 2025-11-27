@@ -194,12 +194,16 @@ Without these sticky notes, the workflow would forget everything each time and n
 
 Set up tracking for the iteration loop:
 
-   | Field Name | Type | Value | Purpose |
-   |------------|------|-------|---------|
-   | retry_count | Number | `={{ $json.retry_count \|\| 0 }}` | Current attempt number |
-   | max_retries | Number | `10` | Maximum allowed attempts |
-   | previous_feedback | String | `={{ $json.previous_feedback \|\| null }}` | Feedback from judge |
-   | ai_output | String | `={{ $json.ai_output \|\| null }}` | Generated content |
+{% raw %}
+
+| Field Name | Type | Value | Purpose |
+|------------|------|-------|---------|
+| retry_count | Number | `={{ $json.retry_count \|\| 0 }}` | Current attempt number |
+| max_retries | Number | `10` | Maximum allowed attempts |
+| previous_feedback | String | `={{ $json.previous_feedback \|\| null }}` | Feedback from judge |
+| ai_output | String | `={{ $json.ai_output \|\| null }}` | Generated content |
+
+{% endraw %}
 
 {: .warning }
 > **Important**: Make sure "Include Other Input Fields" is **OFF** (unchecked) for this node. We're starting fresh and only want these specific variables.
@@ -402,13 +406,17 @@ Click **Test step**
 
 Combine all the information we need:
 
-   | Field Name | Type | Value |
-   |------------|------|-------|
-   | evaluation_result | Boolean | `={{ $json.output.passed }}` |
-   | feedback | String | `={{ $json.output.feedback }}` |
-   | output | String | `={{ $('AI Agent - Generator').item.json.output }}` |
-   | max_retries | Number | `={{ $('Set Loop Variable').item.json.max_retries }}` |
-   | retry_count | Number | `={{ $('Set Loop Variable').item.json.retry_count }}` |
+{% raw %}
+
+| Field Name | Type | Value |
+|------------|------|-------|
+| evaluation_result | Boolean | `={{ $json.output.passed }}` |
+| feedback | String | `={{ $json.output.feedback }}` |
+| output | String | `={{ $('AI Agent - Generator').item.json.output }}` |
+| max_retries | Number | `={{ $('Set Loop Variable').item.json.max_retries }}` |
+| retry_count | Number | `={{ $('Set Loop Variable').item.json.retry_count }}` |
+
+{% endraw %}
 
 **Enable**: `Include Other Input Fields` ✅ (checked)
 
@@ -438,9 +446,13 @@ Click **Test step**
 
 Set up the pass/fail logic:
 
+{% raw %}
+
 - **Condition**: `={{ $json.evaluation_result }}`
 - **Operation**: `is equal to`
 - **Value**: `true`
+
+{% endraw %}
 
 ![Check Pass/Fail Configuration](./images/workflow/08-check-pass-fail.png)
 
@@ -491,10 +503,14 @@ Mark this execution as successful:
 
 Track attempts and store feedback:
 
-   | Field Name | Type | Value |
-   |------------|------|-------|
-   | retry_count | Number | `={{ ($json.retry_count \|\| 0) + 1 }}` |
-   | previous_feedback | String | `={{ $json.feedback }}` |
+{% raw %}
+
+| Field Name | Type | Value |
+|------------|------|-------|
+| retry_count | Number | `={{ ($json.retry_count \|\| 0) + 1 }}` |
+| previous_feedback | String | `={{ $json.feedback }}` |
+
+{% endraw %}
 
 **Enable**: `Include Other Input Fields` ✅ (checked)
 
@@ -538,8 +554,12 @@ Track attempts and store feedback:
 
 Check if we've exhausted our retries:
 
+{% raw %}
+
 - **Condition**: `={{ $json.retry_count === $json.max_retries }}`
 - **Operation**: `is true`
+
+{% endraw %}
 
 ![Max Retries Check Configuration](./images/workflow/09-max-retries-check.png)
 
@@ -600,13 +620,17 @@ Mark that we exhausted retries without success:
 
 Structure the final response:
 
-   | Field Name | Type | Value |
-   |------------|------|-------|
-   | status | String | `={{ $json.status }}` |
-   | evaluation_result | Boolean | `={{ $json.evaluation_result }}` |
-   | feedback | String | `={{ $json.feedback }}` |
-   | output | String | `={{ $json.output }}` |
-   | retry_count | Number | `={{ $json.retry_count }}` |
+{% raw %}
+
+| Field Name | Type | Value |
+|------------|------|-------|
+| status | String | `={{ $json.status }}` |
+| evaluation_result | Boolean | `={{ $json.evaluation_result }}` |
+| feedback | String | `={{ $json.feedback }}` |
+| output | String | `={{ $json.output }}` |
+| retry_count | Number | `={{ $json.retry_count }}` |
+
+{% endraw %}
 
 **Disable**: `Include Other Input Fields` ❌ (unchecked)
 
