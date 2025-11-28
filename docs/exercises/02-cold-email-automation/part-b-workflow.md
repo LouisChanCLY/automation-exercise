@@ -204,7 +204,7 @@ Provide a concise research summary focusing on information useful for email pers
 
 ## Step 4: Email Generation Agent
 
-### 3.1 Add and Connect the Node
+### 4.1 Add and Connect the Node
 
 {: .note }
 > **Why Two Agents?** Separation of concerns - one agent researches, another writes. This makes each agent better at its specific task and easier to debug.
@@ -285,7 +285,7 @@ Use the same Gemini model (it's already configured from the first agent).
 
 ## Step 5: Gmail Integration
 
-### 3.1 Add and Connect the Node
+### 5.1 Add and Connect the Node
 
 1. Add "Gmail" node to your canvas
 2. **Connect it**: Drag a connection line from **AI Agent - Craft Email** to this new node
@@ -330,7 +330,7 @@ Use the same Gemini model (it's already configured from the first agent).
 
 ## Step 6: Metadata Enrichment
 
-### 3.1 Add and Connect the Node
+### 6.1 Add and Connect the Node
 
 1. Add "Set" node (or "Edit Fields" in newer versions) to your canvas
 2. **Connect it**: Drag a connection line from **Send Email via Gmail** to this new node
@@ -373,7 +373,7 @@ sent_status: "sent"
 
 ## Step 7: Analytics Logging
 
-### 3.1 Add and Connect the Node
+### 7.1 Add and Connect the Node
 
 1. Add "Google Sheets" node to your canvas
 2. **Connect it**: Drag a connection line from **Enrich with Metadata** to this new node
