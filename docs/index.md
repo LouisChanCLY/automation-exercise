@@ -12,60 +12,65 @@ permalink: /
 Learn practical AI automation through 30 hands-on exercises.
 {: .fs-6 .fw-300 }
 
-This course teaches you to build AI-powered workflows using n8n and modern AI models. Each exercise provides step-by-step instructions for creating real automation systems.
+This course teaches you to build AI-powered workflows using n8n and modern AI models. You'll learn universal automation patterns that work across any industry or use case.
 
 ## Who This Is For
 
-- Professionals looking to automate repetitive work
-- Developers wanting to learn AI integration
-- Anyone interested in practical AI applications
+- **Non-technical professionals** wanting to automate work without coding
+- **Technical people** transitioning into AI and automation
+- **Students and alumni** improving employability through automation skills
+- Anyone seeking practical AI skills applicable to their job
 
-## Course Approach
+## Course Philosophy
 
-**Hands-On Learning**
-Each exercise includes working examples and clear instructions.
+### Learn Universal Patterns, Not Just Tools
 
-**No Coding Required**
-Build workflows using visual tools and pre-built integrations.
+Instead of memorising specific buttons and features, you'll learn **automation patterns** that apply everywhere:
 
-**Self-Paced**
-Complete exercises at your own speed. Each takes approximately 45-60 minutes.
+- **Dynamic Routing** (Exercise 1): Break complex problems into simple, manageable pieces
+- **AI Agent Chaining** (Exercise 2): Connect specialised AI tasks for powerful results
+- **Quality Control Loops** (Exercise 3): Ensure AI output meets your standards automatically
+
+### Simplicity and Modularity
+
+{: .important }
+> **Why This Matters**: We teach you to build workflows where each component does ONE job well. Need to change how urgent emails are handled? Swap out that one piece. The rest keeps working. This modularity means you can evolve systems without breaking them.
 
 ## Course Structure
 
-### Foundation (Exercises 1-10)
+### Current Exercises
 
-Learn automation fundamentals with n8n, API integrations, and AI models.
+**Exercise 1: Email Classification & Routing (45 min)**
 
-- Email automation and classification
-- Workflow orchestration
-- Data processing pipelines
-- Document analysis
+Learn dynamic routing - automatically handle different situations differently. Uses OpenRouter to explore multiple AI model options.
 
-### AI Integration (Exercises 11-20)
+- Data ingestion, classification, routing, logging
+- Introduction to model aggregators (OpenRouter)
+- Swappable components and modular design
 
-Build intelligent automations using GPT-4, Claude, and specialized AI models.
+**Exercise 2: AI Cold Email Automation (60 min)**
 
-- Content generation workflows
-- Customer service automation
-- Multi-language processing
-- RAG implementation
+Chain multiple AI agents together. Uses Google Gemini for fast, reliable AI responses.
 
-### Advanced Workflows (Exercises 21-30)
+- AI Research Agent + Content Generation Agent
+- Tool usage (web search for AI)
+- Transitioning between model providers
 
-Create complex multi-step automations with multiple AI models.
+**Exercise 3: LLM as a Judge (60 min)**
 
-- Multi-modal AI systems
-- Video generation pipelines
-- Voice processing workflows
-- Enterprise integrations
+Build quality control systems with loops and exit conditions. Continues with Google Gemini for iteration speed.
+
+- Self-improving AI systems
+- Structured vs unstructured outputs
+- Loop anatomy and infinite loop prevention
 
 ## What You'll Learn
 
-- Build 30 working automation workflows
-- Integrate AI models into practical applications
-- Connect multiple services using APIs
-- Design and debug complex workflows
+- **Break problems into smaller pieces** (modularity and simplicity)
+- **Experiment with different AI models** (OpenRouter, Google Gemini)
+- **Chain AI agents** for complex tasks (research + generation + evaluation)
+- **Build quality control** into automation (loops and exit conditions)
+- **Swap components easily** (change one part without breaking others)
 
 ## Getting Started
 
@@ -77,11 +82,11 @@ Create complex multi-step automations with multiple AI models.
 ## Technologies Covered
 
 <div class="tech-grid">
-  <div class="tech-item">n8n</div>
-  <div class="tech-item">OpenAI GPT-4</div>
-  <div class="tech-item">Claude AI</div>
-  <div class="tech-item">Google Workspace</div>
-  <div class="tech-item">GitHub Actions</div>
+  <div class="tech-item">n8n Automation</div>
+  <div class="tech-item">OpenRouter</div>
+  <div class="tech-item">Google Gemini</div>
+  <div class="tech-item">Gmail & Sheets</div>
+  <div class="tech-item">Perplexity AI</div>
 </div>
 
 ## Prerequisites
