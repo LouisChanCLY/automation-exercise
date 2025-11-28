@@ -21,12 +21,22 @@ nav_order: 3
 
 ## Overview
 
-### The Universal Pattern You're Building
+### What You're Really Building: Retrieval Augmented Generation (RAG)
 
 {: .important }
-> **AI Research & Personalization Pattern**: You're creating a system that researches any subject and generates personalized content. While we use cold emails today, this same structure works for proposals, cover letters, social media outreach, or any research-driven content generation.
+> **You're Implementing RAG**: This exercise builds a **Retrieval Augmented Generation** system - the same architectural pattern used by ChatGPT with web search, Claude with tools, and enterprise AI assistants.
+>
+> **The RAG Pattern You're Building**:
+>
+> 1. **Retrieve**: Perplexity searches the web for current information about prospects
+> 2. **Augment**: Research findings enrich the AI's context
+> 3. **Generate**: Gemini creates personalised emails using retrieved data + its training
+>
+> **Why This Matters**: RAG is the foundation of modern production AI systems. Without retrieval, AI can only use training data (outdated, generic). With retrieval, AI accesses current, specific information to generate accurate, personalised content.
 
-The pattern components:
+### The Universal Pattern You're Building
+
+While we use cold emails today, this RAG pattern works for any research-driven content generation:
 
 1. **Data Collection** (Form) → Could be API, database, CSV
 2. **AI Research** (Perplexity) → Could be Google, internal docs, CRM
@@ -40,7 +50,32 @@ The pattern components:
 
 Before diving into the build, let's understand the fundamental concepts that make this workflow powerful:
 
-### 1. What Are AI Tools? (Giving AI Superpowers)
+### 1. Retrieval Augmented Generation (RAG) - The Pattern You're Implementing
+
+{: .important }
+> **This Exercise = RAG in Action**: You're not just building an email tool. You're implementing **Retrieval Augmented Generation**, the most important pattern in modern AI systems.
+>
+> **Your RAG Workflow**:
+>
+> 1. **Retrieve** (Perplexity Agent): Search the web for current prospect information
+> 2. **Augment** (Context Enrichment): Feed research findings into the generation agent
+> 3. **Generate** (Email Agent): Create personalised content using training data + retrieved context
+>
+> **Why RAG Is Critical**:
+>
+> - ❌ **Without RAG**: "Hi [Name], I saw you work at [Company]..." (generic, based on 2023 training data)
+> - ✅ **With RAG**: "Hi John, I saw your recent post about scaling microservices at Acme..." (specific, based on current retrieved data)
+>
+> **RAG in Production**:
+>
+> - **ChatGPT**: Searches web → Augments context → Answers your question
+> - **GitHub Copilot**: Retrieves your codebase → Augments context → Suggests code
+> - **Enterprise AI**: Queries company docs → Augments context → Answers employees
+> - **Your Email System**: Researches prospects → Augments context → Writes personalised outreach
+>
+> **The Perplexity Connection**: Perplexity is your **retrieval tool** - it fetches current, relevant information that would be impossible for the AI to know from training data alone. This is what makes your emails personalised and current!
+
+### 2. What Are AI Tools? (Giving AI Superpowers)
 
 Think of AI Tools like giving a calculator to a student during a maths exam:
 
@@ -57,7 +92,7 @@ Think of AI Tools like giving a calculator to a student during a maths exam:
 > - 🧮 **Perform calculations** (Python, calculators)
 > - 🌐 **Call external services** (Weather APIs, stock prices, CRM systems)
 
-### 2. How AI Agents Use Tools (Autonomous Decision Making)
+### 3. How AI Agents Use Tools (Autonomous Decision Making & MCP)
 
 This is the magic: **The AI decides when and how to use tools**:
 
@@ -71,33 +106,8 @@ This is the magic: **The AI decides when and how to use tools**:
 > - "Now I have enough context" → Writes the personalised email
 >
 > **This is called "function calling" or "tool use"** - the AI autonomously chooses which tools to use and how to use them based on your instructions. Without tools, AI can only guess based on training data (which ends in 2023-2024). With tools, AI accesses real-time, current information!
-
-### 3. What You're Really Building: RAG (Retrieval Augmented Generation)
-
-{: .important }
-> **Congratulations!** This workflow demonstrates one of the most important AI patterns in production systems today: **Retrieval Augmented Generation (RAG)**
 >
-> **The RAG Pattern**:
->
-> 1. **Retrieve**: AI searches for current, relevant information (Perplexity researches the prospect)
-> 2. **Augment**: AI enriches its knowledge with retrieved data (Research findings become context)
-> 3. **Generate**: AI creates content using both its training AND the retrieved information (Personalised email based on real data)
->
-> **Why RAG Matters**:
->
-> - ✅ **Current information**: Not limited to training data cutoff dates
-> - ✅ **Factual accuracy**: Grounded in real retrieved documents, not hallucinated
-> - ✅ **Personalisation at scale**: Each generation uses specific, relevant context
-> - ✅ **Verifiable**: You can trace back to source information
->
-> **RAG in the Real World**:
->
-> - **ChatGPT with web search**: Retrieves current articles before answering
-> - **Claude with tools**: Searches documentation before generating code
-> - **Enterprise AI assistants**: Queries company docs before answering questions
-> - **Customer support bots**: Retrieves ticket history before suggesting solutions
->
-> **You're also touching MCP (Model Context Protocol)**: By letting the AI **decide autonomously** when to use Perplexity (rather than always forcing it), you're experiencing the foundation of MCP - AI that chooses which tools to use and when based on the task at hand. This is how modern AI assistants work!
+> **You're Touching MCP (Model Context Protocol)**: By letting the AI **decide autonomously** when to use Perplexity (rather than always forcing it), you're experiencing the foundation of MCP - AI that chooses which tools to use and when based on the task. This autonomous tool selection is how ChatGPT, Claude, and modern AI assistants work!
 
 ### 4. Why Chain AI Agents (Simplicity & Modularity)
 
@@ -124,25 +134,11 @@ Instead of one massive AI prompt doing everything, we're chaining **two speciali
 >
 > In Exercise 1, you used **OpenRouter** to explore different models. Now we're using **Google Gemini** because:
 >
-> - ⚡ **Faster responses** (critical when chaining multiple AI calls)
+> - ⚡ **Faster responses** (critical when chaining multiple AI calls in RAG workflows)
 > - 💰 **Generous free tier** (15 requests per minute)
-> - 🎯 **Excellent instruction following** (essential for research and structured output)
+> - 🎯 **Excellent instruction following** (essential for research retrieval and structured generation)
 >
-> **The modularity lesson**: Notice how easily we switched from OpenRouter to Google? The workflow pattern stays the same - we just changed which model provider we use. This is the power of modular design!
-
-### 6. The Future: Expanding Tool Capabilities
-
-{: .tip }
-> **What You'll Learn Today**: Connect one tool (Perplexity for web search)
->
-> **What's Possible Tomorrow**:
->
-> - **MCP (Model Context Protocol) Servers**: Connect to hundreds of pre-built tools
-> - **Custom Tools**: Build your own (check CRM, query internal docs, send Slack messages)
-> - **Tool Chains**: AI uses multiple tools in sequence (search web → check database → send email)
-> - **Multi-Tool Selection**: AI chooses different tools based on the situation
->
-> The pattern you learn today applies to ALL future tools!
+> **The modularity lesson**: Notice how easily we switched from OpenRouter to Google? The RAG pattern stays the same - we just changed which model provider we use. This is the power of modular design!
 
 ---
 
