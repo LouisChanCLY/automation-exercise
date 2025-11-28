@@ -36,40 +36,11 @@ The pattern components:
 
 ---
 
-## Key Themes You'll Learn
-
-### Why Simplicity and Modularity Matter
-
-{: .important }
-> **Chain AI Tasks Together**:
->
-> Instead of one massive AI prompt trying to do everything, we're chaining two specialised agents:
->
-> 1. **Research Agent** - Finds information about the prospect
-> 2. **Writer Agent** - Uses that research to write personalised content
->
-> **Why this matters**: Each AI does one job well. If research quality drops, you only fix the research agent. If emails sound too formal, you only tweak the writer agent. The other part keeps working perfectly.
-
-### Why Google Gemini for This Exercise?
-
-{: .important }
-> **Switching to Google**:
->
-> In Exercise 1, you used **OpenRouter** to explore different models. Now we're using **Google Gemini** because:
->
-> - **Faster responses** (important when chaining multiple AI calls)
-> - **Generous free tier** (15 requests per minute)
-> - **Excellent instruction following** (critical for research and generation tasks)
->
-> **The modularity lesson**: Notice how easily we switched from OpenRouter to Google? The workflow pattern stays the same - we just changed which model provider we use. This is the power of modular design!
-
----
-
 ## Key Concepts You'll Learn
 
-Before diving into the build, let's understand the fundamental concepts that make AI agents powerful:
+Before diving into the build, let's understand the fundamental concepts that make this workflow powerful:
 
-### 1. What Are AI Tools? (The Superpower for AI Agents)
+### 1. What Are AI Tools? (Giving AI Superpowers)
 
 Think of AI Tools like giving a calculator to a student during a maths exam:
 
@@ -86,24 +57,7 @@ Think of AI Tools like giving a calculator to a student during a maths exam:
 > - 🧮 **Perform calculations** (Python, calculators)
 > - 🌐 **Call external services** (Weather APIs, stock prices, CRM systems)
 
-### 2. Why Tools Matter: The Research Problem
-
-Without tools, if you ask an AI "What does John Smith at Acme Corp do?", it can only guess based on training data (which ends in 2023-2024). It has no way to find current, real information.
-
-{: .important }
-> **The Tool Solution**:
->
-> With the **Perplexity tool**, the AI can:
->
-> 1. Understand it needs current information
-> 2. **Automatically decide** to search the web
-> 3. **Execute** the search on its own
-> 4. **Read and summarise** the results
-> 5. **Use that information** to write a personalised email
->
-> All without you manually researching anything!
-
-### 3. How AI Agents Use Tools (Autonomous Decision Making)
+### 2. How AI Agents Use Tools (Autonomous Decision Making)
 
 This is the magic: **The AI decides when and how to use tools**:
 
@@ -116,9 +70,40 @@ This is the magic: **The AI decides when and how to use tools**:
 > - "I found 5 articles" → Reads and synthesises them
 > - "Now I have enough context" → Writes the personalised email
 >
-> This is called **function calling** or **tool use** - the AI autonomously chooses which tools to use and how to use them based on your instructions.
+> **This is called "function calling" or "tool use"** - the AI autonomously chooses which tools to use and how to use them based on your instructions. Without tools, AI can only guess based on training data (which ends in 2023-2024). With tools, AI accesses real-time, current information!
 
-### 4. The Future: Expanding Tool Capabilities
+### 3. Why Chain AI Agents (Simplicity & Modularity)
+
+Instead of one massive AI prompt doing everything, we're chaining **two specialised agents**:
+
+{: .important }
+> **Agent 1 (Research)**: Expert at finding and synthesising information using tools
+>
+> **Agent 2 (Writing)**: Expert at crafting compelling, personalised emails
+>
+> **Why separate them? The power of modularity:**
+>
+> - ✅ Each agent is **simpler** - does one job extremely well
+> - ✅ **Easier to debug**: Bad research? Fix Agent 1. Poor writing? Fix Agent 2.
+> - ✅ **Reusable components**: Use research agent for proposals, cover letters, social posts
+> - ✅ **Maintainable**: Swap model providers or change agents without breaking the system
+>
+> This is the same principle behind microservices, Unix tools, and modular code design!
+
+### 4. Why Google Gemini for This Exercise
+
+{: .important }
+> **Technical Choice Explained**:
+>
+> In Exercise 1, you used **OpenRouter** to explore different models. Now we're using **Google Gemini** because:
+>
+> - ⚡ **Faster responses** (critical when chaining multiple AI calls)
+> - 💰 **Generous free tier** (15 requests per minute)
+> - 🎯 **Excellent instruction following** (essential for research and structured output)
+>
+> **The modularity lesson**: Notice how easily we switched from OpenRouter to Google? The workflow pattern stays the same - we just changed which model provider we use. This is the power of modular design!
+
+### 5. The Future: Expanding Tool Capabilities
 
 {: .tip }
 > **What You'll Learn Today**: Connect one tool (Perplexity for web search)
@@ -128,25 +113,9 @@ This is the magic: **The AI decides when and how to use tools**:
 > - **MCP (Model Context Protocol) Servers**: Connect to hundreds of pre-built tools
 > - **Custom Tools**: Build your own (check CRM, query internal docs, send Slack messages)
 > - **Tool Chains**: AI uses multiple tools in sequence (search web → check database → send email)
-> - **Conditional Logic**: AI chooses different tools based on the situation
+> - **Multi-Tool Selection**: AI chooses different tools based on the situation
 >
 > The pattern you learn today applies to ALL future tools!
-
-### 5. Why Chain AI Agents? (Isolation of Concern)
-
-Instead of one AI doing everything, we're using **two specialised agents**:
-
-{: .important }
-> **Agent 1 (Research)**: Expert at finding and synthesising information
->
-> **Agent 2 (Writing)**: Expert at crafting compelling, personalised emails
->
-> **Why separate them?**
->
-> - ✅ Each agent is **simpler** and does one job well
-> - ✅ **Easier to debug**: Bad research? Fix Agent 1. Bad writing? Fix Agent 2.
-> - ✅ **Reusable**: Use the research agent for proposals, cover letters, social posts
-> - ✅ **Maintainable**: Swap out agents without breaking the whole system
 
 ---
 
