@@ -83,30 +83,36 @@ Think of loops like a quality control assembly line that keeps checking products
 >
 > This concept ensures important data doesn't get lost as it flows through the workflow!
 
-### 5. Why Simplicity and Modularity Matter
+### 5. Why Separate Generator and Judge (Modularity)
+
+We're using **two separate AI agents** instead of one massive prompt:
 
 {: .important }
-> **Isolating Generator and Judge**:
+> **Agent 1 (Generator)**: Creates content freely without constraints
 >
-> We're using **two separate AI agents** instead of one:
+> **Agent 2 (Judge)**: Evaluates quality using strict criteria
 >
-> - **Generator Agent** - Creates content
-> - **Judge Agent** - Evaluates quality
+> **Why separate them? The power of modularity:**
 >
-> **Why this matters**: If the generator produces poor content, you tweak its prompt. If the judge is too strict, you adjust its criteria. They don't interfere with each other. This separation makes debugging and improvement much easier.
+> - ✅ **Simpler prompts**: Each AI has one clear job
+> - ✅ **Easier debugging**: Poor content? Fix generator. Too strict? Adjust judge.
+> - ✅ **Independent tuning**: Change evaluation criteria without touching content generation
+> - ✅ **Reusable**: Use same judge for different generators, or same generator with different judges
+>
+> This separation of concerns is the same principle behind microservices and modular code design!
 
-### 6. Why Google Gemini for This Exercise?
+### 6. Why Google Gemini for This Exercise
 
 {: .important }
-> **Continuing with Google**:
+> **Technical Choice Explained**:
 >
 > Like Exercise 2, we're using **Google Gemini** because:
 >
-> - **Fast iteration speed** (critical when looping up to 10 times)
-> - **Reliable structured output** (essential for the judge's pass/fail decisions)
-> - **Cost-effective** (free tier handles lots of iterations)
+> - ⚡ **Fast iteration speed** (critical when looping up to 10 times)
+> - 🎯 **Reliable structured output** (essential for judge's pass/fail decisions)
+> - 💰 **Cost-effective** (free tier handles lots of iterations)
 >
-> **The modularity lesson again**: The loop logic, exit conditions, and memory carrying concepts work with ANY model provider. Google, OpenRouter, Anthropic - the pattern stays the same!
+> **The modularity lesson**: The loop logic, exit conditions, and memory carrying concepts work with ANY model provider. Google, OpenRouter, Anthropic - the pattern stays the same!
 
 ---
 
