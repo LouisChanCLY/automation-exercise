@@ -190,6 +190,115 @@ Reaching out to someone celebrating a win requires different tone than someone f
 
 ---
 
+## Challenge 6: Multi-Tool Research Agent
+
+### Objective
+
+Expand your research agent's capabilities by connecting multiple tools, letting the AI decide which tools to use based on the research needs.
+
+### Requirements
+
+- Add **multiple research tools** to the AI agent:
+  - Perplexity (web search) - already connected ✓
+  - **Code node** (for data processing/calculations)
+  - **HTTP Request** (to query LinkedIn API, company databases, or CRM)
+  - **Google Search** (alternative search engine)
+- Give the AI freedom to choose which tools to use
+- Compare results when AI has access to multiple sources
+- Log which tools were used for each research request
+
+### Why This Matters
+
+{: .important }
+> **This is the future of AI workflows**: Multi-tool agents that autonomously orchestrate research across different sources. Today's simple Perplexity search becomes tomorrow's sophisticated research agent that:
+>
+> - Searches multiple sources
+> - Cross-references information
+> - Validates facts across platforms
+> - Chooses optimal data sources for each query
+>
+> You're learning **agentic workflows** - the foundation of AI automation in 2025+
+
+### What You'll Learn
+
+- **Function calling patterns**: How AI decides which tool to use
+- **Multi-tool orchestration**: Connecting 3+ tools to one agent
+- **Tool selection logic**: Understanding when AI picks different tools
+- **HTTP Request tool**: Querying external APIs (LinkedIn, Clearbit, Hunter.io)
+- **Code tool**: Processing and analysing data returned from tools
+- **Debugging multi-tool agents**: Understanding tool execution logs
+
+### Implementation Guide
+
+#### Step 1: Add HTTP Request Tool (LinkedIn Company Lookup)
+
+1. In your **AI Agent - Research Prospect** node, click **"+"** under Tools
+2. Select **"HTTP Request"**
+3. Configure:
+   - **Method**: GET
+   - **URL**: `https://nubela.co/proxycurl/api/linkedin/company` (or similar LinkedIn API)
+   - **Authentication**: Add your API key
+4. Update your agent prompt to mention this tool is available
+
+#### Step 2: Add Code Tool (For Data Analysis)
+
+1. Click **"+"** under Tools again
+2. Select **"Code"**
+3. This allows the AI to run calculations, parse JSON, or analyse data
+
+#### Step 3: Update Your Research Prompt
+
+```text
+You are an expert researcher with access to multiple tools:
+- Perplexity: Web search for recent news and general information
+- HTTP Request: Query LinkedIn API for professional background
+- Code: Analyse and process data, run calculations
+
+Research the following person/company intelligently:
+Name: {{ $json.Name }}
+Company: {{ $json.Company }}
+
+IMPORTANT: Choose the RIGHT tools for each subtask:
+- For recent news/achievements: Use Perplexity
+- For professional background/company info: Use HTTP Request (LinkedIn)
+- For data processing: Use Code tool
+
+Provide a comprehensive research summary combining insights from all sources.
+```
+
+#### Step 4: Compare Results
+
+Test your workflow with and without multiple tools:
+
+- **Single tool (Perplexity only)**: What quality of research?
+- **Multi-tool**: How does the AI decide which tool to use? Is research richer?
+
+### Success Criteria
+
+- ✅ Successfully connected 2+ additional tools to the research agent
+- ✅ AI autonomously chooses appropriate tool for each subtask
+- ✅ Research quality improves with multi-source data
+- ✅ Can track which tools were invoked in execution logs
+- ✅ Understand when to use each tool type
+
+### Stretch Goals
+
+- **Add 5+ tools**: Web search, LinkedIn, company database, news API, sentiment analysis
+- **Tool chains**: AI uses one tool's output as input to another tool
+- **Conditional tool selection**: Prompt AI to use certain tools only if specific conditions are met
+- **MCP integration**: Research Model Context Protocol servers for enterprise tool connections
+
+### Real-World Applications
+
+The multi-tool pattern you learn here scales to:
+
+- **Customer support bots**: Search docs + Query CRM + Check order status + Generate response
+- **Financial analysis**: Fetch stock data + Run calculations + Generate report + Send alerts
+- **Content research**: Search web + Query database + Analyse sentiment + Draft article
+- **Sales intelligence**: Research company + Check CRM + Find contact info + Generate pitch
+
+---
+
 ## Saving Your Work
 
 After completing any challenge:

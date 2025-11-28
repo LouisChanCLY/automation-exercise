@@ -35,6 +35,52 @@ You'll learn to give AI superpowers by letting it use tools (like web search), t
 
 This pattern applies to any task requiring research + action.
 
+---
+
+## Understanding AI Tools: Your AI's Superpowers
+
+### What Are Tools?
+
+{: .important }
+> Think of AI Tools like apps on your phone. Your phone is smart, but **apps** let it do specific things: check weather, play music, send messages.
+>
+> Similarly, AI models are smart, but **tools** let them:
+>
+> - **Search the web** for current information
+> - **Run calculations** with precise accuracy
+> - **Access databases** to retrieve specific data
+> - **Call APIs** to check stock prices, weather, or CRM records
+> - **Execute code** to process data or generate reports
+
+### The Three Generations of AI Capabilities
+
+1. **First Generation** (2022): AI that only knows what it was trained on
+   - Can write, reason, and chat
+   - Cannot access current information
+   - Cannot take actions in the real world
+
+2. **Second Generation** (2023-2024): **AI with Function Calling** ← You'll learn this today!
+   - AI can **decide** to use tools when needed
+   - Connects to external services autonomously
+   - Takes actions based on real-time information
+
+3. **Third Generation** (2024-2025): **AI with MCP (Model Context Protocol)**
+   - Connect hundreds of tools at once
+   - AI orchestrates complex multi-tool workflows
+   - Enterprise-grade integrations (coming soon!)
+
+### Why This Matters for Your Future
+
+The pattern you learn in this exercise - **giving AI tools and letting it decide how to use them** - is the foundation of:
+
+- **AI Assistants** (like ChatGPT with plugins)
+- **Autonomous Agents** (like Auto-GPT)
+- **Agentic Workflows** (the future of automation)
+
+You're not just building an email tool. You're learning how to **give AI superpowers**.
+
+---
+
 ### What You'll Build
 
 A complete AI research and personalisation workflow featuring:

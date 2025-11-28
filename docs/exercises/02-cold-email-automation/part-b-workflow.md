@@ -65,6 +65,91 @@ The pattern components:
 
 ---
 
+## Key Concepts You'll Learn
+
+Before diving into the build, let's understand the fundamental concepts that make AI agents powerful:
+
+### 1. What Are AI Tools? (The Superpower for AI Agents)
+
+Think of AI Tools like giving a calculator to a student during a maths exam:
+
+{: .important }
+> **AI Without Tools**: Like a brilliant student who can only work with information in their head
+>
+> **AI With Tools**: Like that same student who can now use a calculator, reference books, and the internet
+>
+> Tools are **external capabilities** that AI can use autonomously to:
+>
+> - 🔍 **Search the web** (Perplexity, Google)
+> - 📊 **Query databases** (SQL, APIs)
+> - 📁 **Read/write files** (Documents, spreadsheets)
+> - 🧮 **Perform calculations** (Python, calculators)
+> - 🌐 **Call external services** (Weather APIs, stock prices, CRM systems)
+
+### 2. Why Tools Matter: The Research Problem
+
+Without tools, if you ask an AI "What does John Smith at Acme Corp do?", it can only guess based on training data (which ends in 2023-2024). It has no way to find current, real information.
+
+{: .important }
+> **The Tool Solution**:
+>
+> With the **Perplexity tool**, the AI can:
+>
+> 1. Understand it needs current information
+> 2. **Automatically decide** to search the web
+> 3. **Execute** the search on its own
+> 4. **Read and summarise** the results
+> 5. **Use that information** to write a personalised email
+>
+> All without you manually researching anything!
+
+### 3. How AI Agents Use Tools (Autonomous Decision Making)
+
+This is the magic: **The AI decides when and how to use tools**:
+
+{: .important }
+> **You give instructions**: "Research this person and company"
+>
+> **The AI thinks**:
+>
+> - "I need current information" → Uses Perplexity to search
+> - "I found 5 articles" → Reads and synthesises them
+> - "Now I have enough context" → Writes the personalised email
+>
+> This is called **function calling** or **tool use** - the AI autonomously chooses which tools to use and how to use them based on your instructions.
+
+### 4. The Future: Expanding Tool Capabilities
+
+{: .tip }
+> **What You'll Learn Today**: Connect one tool (Perplexity for web search)
+>
+> **What's Possible Tomorrow**:
+>
+> - **MCP (Model Context Protocol) Servers**: Connect to hundreds of pre-built tools
+> - **Custom Tools**: Build your own (check CRM, query internal docs, send Slack messages)
+> - **Tool Chains**: AI uses multiple tools in sequence (search web → check database → send email)
+> - **Conditional Logic**: AI chooses different tools based on the situation
+>
+> The pattern you learn today applies to ALL future tools!
+
+### 5. Why Chain AI Agents? (Isolation of Concern)
+
+Instead of one AI doing everything, we're using **two specialised agents**:
+
+{: .important }
+> **Agent 1 (Research)**: Expert at finding and synthesising information
+>
+> **Agent 2 (Writing)**: Expert at crafting compelling, personalised emails
+>
+> **Why separate them?**
+>
+> - ✅ Each agent is **simpler** and does one job well
+> - ✅ **Easier to debug**: Bad research? Fix Agent 1. Bad writing? Fix Agent 2.
+> - ✅ **Reusable**: Use the research agent for proposals, cover letters, social posts
+> - ✅ **Maintainable**: Swap out agents without breaking the whole system
+
+---
+
 ## Workflow Components Reference
 
 Here's a quick reference of all the nodes you'll build in this exercise:
@@ -103,8 +188,8 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 1. Add "Form Trigger" node (type "form" in search)
 2. Configure the form:
-   - **Form Title**: "Lead Information"
-   - **Form Description**: "Enter prospect details for personalized outreach"
+   - **Form Title**: "Leads"
+   - **Form Description**: "e.g. We'll get back to you soon"
 
 3. Add form fields by clicking "Add Field":
 
@@ -193,6 +278,38 @@ Provide a concise research summary focusing on information useful for email pers
    - **Search Recency**: "month" (recent information)
 
 ![Perplexity Tool Configuration](./images/04-perplexity-tool-config.png)
+
+{: .important }
+> **What Just Happened? You Gave AI a Superpower!**
+>
+> By adding the Perplexity tool, you've just taught the AI agent how to **search the web autonomously**. Here's what's magical about this:
+>
+> **Without the tool**:
+>
+> - AI: "I can only guess about John Smith based on my training data from 2023..."
+>
+> **With the tool**:
+>
+> - AI: "I need current information about John Smith"
+> - AI: "Let me use Perplexity to search the web" ← **Decides on its own!**
+> - AI: "I found recent news articles and LinkedIn updates"
+> - AI: "Now I can write a truly personalised email based on current facts"
+>
+> **This is called "function calling" or "tool use"** - the AI autonomously decides when and how to use the tool based on your prompt instructions!
+
+{: .tip }
+> **The Future of Tools**:
+>
+> Today: You connect **one tool** (Perplexity for web search)
+>
+> Tomorrow: You could connect:
+>
+> - **Multiple tools**: Web search + CRM lookup + database query
+> - **Custom tools**: Your own company data, internal docs, proprietary APIs
+> - **MCP servers**: Pre-built tool collections (hundreds of integrations)
+> - **Tool chains**: AI uses tools in sequence based on what it learns
+>
+> The pattern stays the same - you just add more tools to the agent!
 
 ### Add Language Model
 
