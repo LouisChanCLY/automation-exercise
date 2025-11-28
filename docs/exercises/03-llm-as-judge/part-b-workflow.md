@@ -83,6 +83,31 @@ Think of loops like a quality control assembly line that keeps checking products
 >
 > This concept ensures important data doesn't get lost as it flows through the workflow!
 
+### 5. Why Simplicity and Modularity Matter
+
+{: .important }
+> **Isolating Generator and Judge**:
+>
+> We're using **two separate AI agents** instead of one:
+>
+> - **Generator Agent** - Creates content
+> - **Judge Agent** - Evaluates quality
+>
+> **Why this matters**: If the generator produces poor content, you tweak its prompt. If the judge is too strict, you adjust its criteria. They don't interfere with each other. This separation makes debugging and improvement much easier.
+
+### 6. Why Google Gemini for This Exercise?
+
+{: .important }
+> **Continuing with Google**:
+>
+> Like Exercise 2, we're using **Google Gemini** because:
+>
+> - **Fast iteration speed** (critical when looping up to 10 times)
+> - **Reliable structured output** (essential for the judge's pass/fail decisions)
+> - **Cost-effective** (free tier handles lots of iterations)
+>
+> **The modularity lesson again**: The loop logic, exit conditions, and memory carrying concepts work with ANY model provider. Google, OpenRouter, Anthropic - the pattern stays the same!
+
 ---
 
 ## Workflow Architecture
