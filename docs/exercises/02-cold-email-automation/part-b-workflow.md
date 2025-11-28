@@ -72,7 +72,34 @@ This is the magic: **The AI decides when and how to use tools**:
 >
 > **This is called "function calling" or "tool use"** - the AI autonomously chooses which tools to use and how to use them based on your instructions. Without tools, AI can only guess based on training data (which ends in 2023-2024). With tools, AI accesses real-time, current information!
 
-### 3. Why Chain AI Agents (Simplicity & Modularity)
+### 3. What You're Really Building: RAG (Retrieval Augmented Generation)
+
+{: .important }
+> **Congratulations!** This workflow demonstrates one of the most important AI patterns in production systems today: **Retrieval Augmented Generation (RAG)**
+>
+> **The RAG Pattern**:
+>
+> 1. **Retrieve**: AI searches for current, relevant information (Perplexity researches the prospect)
+> 2. **Augment**: AI enriches its knowledge with retrieved data (Research findings become context)
+> 3. **Generate**: AI creates content using both its training AND the retrieved information (Personalised email based on real data)
+>
+> **Why RAG Matters**:
+>
+> - ✅ **Current information**: Not limited to training data cutoff dates
+> - ✅ **Factual accuracy**: Grounded in real retrieved documents, not hallucinated
+> - ✅ **Personalisation at scale**: Each generation uses specific, relevant context
+> - ✅ **Verifiable**: You can trace back to source information
+>
+> **RAG in the Real World**:
+>
+> - **ChatGPT with web search**: Retrieves current articles before answering
+> - **Claude with tools**: Searches documentation before generating code
+> - **Enterprise AI assistants**: Queries company docs before answering questions
+> - **Customer support bots**: Retrieves ticket history before suggesting solutions
+>
+> **You're also touching MCP (Model Context Protocol)**: By letting the AI **decide autonomously** when to use Perplexity (rather than always forcing it), you're experiencing the foundation of MCP - AI that chooses which tools to use and when based on the task at hand. This is how modern AI assistants work!
+
+### 4. Why Chain AI Agents (Simplicity & Modularity)
 
 Instead of one massive AI prompt doing everything, we're chaining **two specialised agents**:
 
@@ -90,7 +117,7 @@ Instead of one massive AI prompt doing everything, we're chaining **two speciali
 >
 > This is the same principle behind microservices, Unix tools, and modular code design!
 
-### 4. Why Google Gemini for This Exercise
+### 5. Why Google Gemini for This Exercise
 
 {: .important }
 > **Technical Choice Explained**:
@@ -103,7 +130,7 @@ Instead of one massive AI prompt doing everything, we're chaining **two speciali
 >
 > **The modularity lesson**: Notice how easily we switched from OpenRouter to Google? The workflow pattern stays the same - we just changed which model provider we use. This is the power of modular design!
 
-### 5. The Future: Expanding Tool Capabilities
+### 6. The Future: Expanding Tool Capabilities
 
 {: .tip }
 > **What You'll Learn Today**: Connect one tool (Perplexity for web search)

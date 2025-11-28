@@ -109,11 +109,15 @@ graph LR
 
 By completing this exercise, you will have demonstrated:
 
+- **RAG Pattern Implementation**: Building a Retrieval Augmented Generation system (research → personalisation)
 - **AI Agent Configuration**: Setting up autonomous agents that use tools independently
 - **Tool Integration**: Connecting Perplexity for real-time web research
 - **Structured Output Design**: Using JSON schemas to enforce consistent AI responses
 - **Multi-Step Workflows**: Chaining AI operations where one agent's output feeds another
 - **Prompt Engineering**: Crafting prompts that produce reliable, high-quality results
+
+{: .highlight }
+> **What You're Really Learning**: This exercise demonstrates **Retrieval Augmented Generation (RAG)** - one of the most important AI patterns in production systems. By building a research → personalisation workflow, you're implementing the same pattern used by ChatGPT with web search, Claude with tools, and enterprise AI assistants.
 
 ### The Pattern You'll Master
 
