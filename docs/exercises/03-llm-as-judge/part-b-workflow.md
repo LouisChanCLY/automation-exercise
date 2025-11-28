@@ -172,11 +172,11 @@ Quick reference of all the nodes you'll build in this exercise:
 
 ## Step 2: Add Form Trigger
 
-### Purpose
+### 2.1 Purpose
 
 The Form Trigger creates a web form where users can submit tasks for AI generation with quality control.
 
-### Configuration
+### 2.2 Configuration
 
 1. Click **+ Add node** or press `Tab`
 2. Search for **Form Trigger**
@@ -243,7 +243,7 @@ The email must:
 
 ## Step 3: Add Initialize Variables Node
 
-### Add and Connect the Node
+### 3.1 Add and Connect the Node
 
 {: .note }
 > **Why initialize variables?** The workflow loops back when content needs improvement. We need to track the retry count, store feedback, and set a maximum retry limit to prevent infinite loops.
@@ -252,7 +252,7 @@ The email must:
 2. **Connect it**: Drag a connection line from **Form Trigger** to this new node
 3. Rename to: `Set Loop Variable`
 
-### Understanding Loops: The Start Condition
+### 3.2 Understanding Loops: The Start Condition
 
 {: .important }
 > **Think of this as a loop in programming**: Every loop has three key parts:
@@ -263,7 +263,7 @@ The email must:
 >
 > This node is the **start condition** - it sets up everything we need to track as we loop through attempts.
 
-### What is a Loop Variable?
+### 3.3 What is a Loop Variable?
 
 In simple terms, **loop variables** are like sticky notes that remember information as the workflow goes round and round. Think of it like a scoreboard that tracks:
 
@@ -273,7 +273,7 @@ In simple terms, **loop variables** are like sticky notes that remember informat
 
 Without these sticky notes, the workflow would forget everything each time and never improve!
 
-### Configure the Variables
+### 3.4 Configure the Variables
 
 Set up tracking for the iteration loop:
 
@@ -301,7 +301,7 @@ Click **Test step**
 
 ## Step 4: Add AI Generator Agent
 
-### Add and Connect the Node
+### 4.1 Add and Connect the Node
 
 {: .note }
 > **Two-phase generation**: On the first try, the generator creates content from scratch. If the judge rejects it, the generator tries again using the judge's feedback to improve. This creates a self-improving loop.
@@ -310,7 +310,7 @@ Click **Test step**
 2. **Connect it**: Drag a connection line from **Set Loop Variable** to this new node
 3. Rename to: `AI Agent - Generator`
 
-### Configure the Model
+### 4.2 Configure the Model
 
 Set up the AI model for content generation:
 
@@ -320,7 +320,7 @@ Set up the AI model for content generation:
 - Select your Google Gemini credential
 - **Model**: "gemini-2.5-flash"
 
-### Why NO Structured Output Here?
+### 4.3 Why NO Structured Output Here?
 
 {: .important }
 > **Structured Output: When to use it**:
@@ -334,7 +334,7 @@ Set up the AI model for content generation:
 
 ![AI Generator Configuration](./images/workflow/04-ai-generator.png)
 
-### Configure the Prompt
+### 4.4 Configure the Prompt
 
 The prompt dynamically adapts based on whether this is the first attempt or a retry:
 
@@ -361,7 +361,7 @@ Click **Test step** to verify. **Expected output**: Generated content text in th
 
 ## Step 5: Add LLM Judge Agent
 
-### Add and Connect the Node
+### 5.1 Add and Connect the Node
 
 {: .note }
 > **Extremely strict evaluation**: The judge uses "ZERO tolerance for mediocrity" to ensure high-quality outputs. It either approves content that truly meets all criteria, or provides specific, actionable feedback for improvement.
@@ -370,7 +370,7 @@ Click **Test step** to verify. **Expected output**: Generated content text in th
 2. **Connect it**: Drag a connection line from **AI Agent - Generator** to this new node
 3. Rename to: `LLM Judge`
 
-### Configure the Model
+### 5.2 Configure the Model
 
 Set up the AI model for quality evaluation:
 
@@ -379,7 +379,7 @@ Set up the AI model for quality evaluation:
 - Select your Google Gemini credential
 - **Model**: "gemini-2.5-flash"
 
-### Why YES Structured Output Here?
+### 5.3 Why YES Structured Output Here?
 
 {: .important }
 > **The Judge needs structured output because**:
@@ -394,7 +394,7 @@ Set up the AI model for quality evaluation:
 
 ![LLM Judge Configuration](./images/workflow/05-llm-judge.png)
 
-### Add Structured Output Parser
+### 5.4 Add Structured Output Parser
 
 **Add Structured Output Parser**:
 
@@ -426,7 +426,7 @@ Set up the AI model for quality evaluation:
 {: .tip }
 > **What does this schema do?** It forces the AI to respond in exactly this format: `{passed: true/false, feedback: "text"}`. This makes it easy for the workflow to decide what to do next automatically.
 
-### Configure Judge Prompt
+### 5.5 Configure Judge Prompt
 
 **Configure Judge Prompt**:
 
@@ -459,7 +459,7 @@ Click **Test step**
 
 ## Step 6: Add Update Loop Variables Node
 
-### Add and Connect the Node
+### 6.1 Add and Connect the Node
 
 1. Add **Edit Fields (Set)** node to your canvas
 2. **Connect it**: Drag a connection line from **LLM Judge** to this new node
@@ -468,7 +468,7 @@ Click **Test step**
 {: .highlight }
 > **Data consolidation**: This node pulls together the judge's verdict, the generated content, and the tracking variables into one object for easy decision-making in the next steps.
 
-### Understanding "Include All Other Fields"
+### 6.2 Understanding "Include All Other Fields"
 
 {: .important }
 > **The Memory Carrying Concept**:
@@ -485,7 +485,7 @@ Click **Test step**
 >
 > For this node: We want to **add** the judge's evaluation while **keeping** everything from previous nodes (the task description, instructions, generated output, etc.). So we'll check the box!
 
-### Configure the Update
+### 6.3 Configure the Update
 
 Combine all the information we need:
 
@@ -516,7 +516,7 @@ Click **Test step**
 
 ## Step 7: Add Check Pass/Fail Node
 
-### Add and Connect the Node
+### 7.1 Add and Connect the Node
 
 {: .note }
 > **The decision point** (Loop Check Condition): This is where the workflow splits into two paths - success (content passed) or retry (content needs improvement). This is the **first check condition** in our loop - did the content pass quality standards?
@@ -525,7 +525,7 @@ Click **Test step**
 2. **Connect it**: Drag a connection line from **Update Loop Variables** to this new node
 3. Rename to: `Check Pass/Fail`
 
-### Configure the Condition
+### 7.2 Configure the Condition
 
 Set up the pass/fail logic:
 
@@ -548,13 +548,13 @@ Set up the pass/fail logic:
 
 ## Step 8: Add Mark Success Node
 
-### Add and Connect the Node
+### 8.1 Add and Connect the Node
 
 1. Add **Edit Fields (Set)** node to your canvas
 2. **Connect it**: Drag a connection line from **Check Pass/Fail (true)** output to this new node
 3. Rename to: `Set Status to Success`
 
-### Configure Success Status
+### 8.2 Configure Success Status
 
 Mark this execution as successful:
 
@@ -573,7 +573,7 @@ Mark this execution as successful:
 
 ## Step 9: Add Increment Retry Node
 
-### Add and Connect the Node
+### 9.1 Add and Connect the Node
 
 {: .note }
 > **Preparing for retry**: When content doesn't pass, we increment the counter and save the judge's feedback so the generator can improve on the next attempt.
@@ -582,7 +582,7 @@ Mark this execution as successful:
 2. **Connect it**: Drag a connection line from **Check Pass/Fail (false)** output to this new node
 3. Rename to: `Update Retry Count`
 
-### Configure Retry Logic
+### 9.2 Configure Retry Logic
 
 Track attempts and store feedback:
 
@@ -604,7 +604,7 @@ Track attempts and store feedback:
 
 ## Step 10: Add Max Retries Check Node
 
-### Add and Connect the Node
+### 10.1 Add and Connect the Node
 
 {: .warning }
 > **Danger: Infinite Loops!**
@@ -622,7 +622,7 @@ Track attempts and store feedback:
 2. **Connect it**: Drag a connection line from **Update Retry Count** to this new node
 3. Rename to: `Max Retries Check`
 
-### Understanding the Loop End Condition
+### 10.2 Understanding the Loop End Condition
 
 {: .important }
 > **Loop anatomy - the END condition**:
@@ -633,7 +633,7 @@ Track attempts and store feedback:
 >
 > This is the **second end condition** - the safety net that catches us before we loop forever.
 
-### Configure the Condition
+### 10.3 Configure the Condition
 
 Check if we've exhausted our retries:
 
@@ -651,7 +651,7 @@ Check if we've exhausted our retries:
 - **True** branch: Max retries reached (tried 10 times) - go to failure path
 - **False** branch: Can still retry (less than 10 times) - loop back to Set Loop Variable
 
-### Create the Iteration Loop
+### 10.4 Create the Iteration Loop
 
 {: .highlight }
 > **The magic connection**: This loop-back is what makes the workflow self-improving. Failed content goes back through the generator with feedback, creating an iterative refinement process.
@@ -665,13 +665,13 @@ Drag a connection from **Max Retries Check (false)** output back to **Set Loop V
 
 ## Step 11: Add Mark Failure Node
 
-### Add and Connect the Node
+### 11.1 Add and Connect the Node
 
 1. Add **Edit Fields (Set)** node to your canvas
 2. **Connect it**: Drag a connection line from **Max Retries Check (true)** output to this new node
 3. Rename to: `Set Status to Failed`
 
-### Configure Failure Status
+### 11.2 Configure Failure Status
 
 Mark that we exhausted retries without success:
 
@@ -690,7 +690,7 @@ Mark that we exhausted retries without success:
 
 ## Step 12: Add Final Output Node
 
-### Add and Connect the Node
+### 12.1 Add and Connect the Node
 
 {: .note }
 > **Merge point**: Both the success and failure paths converge here. This node formats the final response that gets returned to the user via the form.
@@ -699,7 +699,7 @@ Mark that we exhausted retries without success:
 2. **Connect it**: Drag connections from BOTH **Set Status to Success** and **Set Status to Failed** to this new node
 3. Rename to: `Final Response`
 
-### Configure Output Format
+### 12.2 Configure Output Format
 
 Structure the final response:
 
@@ -728,12 +728,12 @@ Structure the final response:
 
 ## Step 13: Test the Complete Workflow
 
-### Activate the Workflow
+### 13.1 Activate the Workflow
 
 1. Click **Activate** toggle in the top-right corner
 2. Copy the **Form URL** from the Form Trigger node
 
-### First Test Run
+### 13.2 First Test Run
 
 1. **Open the form URL** in a new browser tab
 2. **Fill in the form** with the example task (see Step 2)
@@ -752,7 +752,7 @@ Structure the final response:
    - Read the generated content
    - Review feedback and retry count
 
-### Expected Behavior
+### 13.3 Expected Behavior
 
 **Scenario 1: Success in 2-3 iterations**
 
@@ -818,14 +818,14 @@ Form → Initialize → Generator → Judge → Merge → Check (FAIL)
 
 ## Step 14: Optimize and Tune
 
-### Adjust Retry Limit
+### 14.1 Adjust Retry Limit
 
 If too many runs are failing:
 
 - Increase `max_retries` from 10 to 15 or 20
 - Or make success criteria less strict
 
-### Improve Judge Prompts
+### 14.2 Improve Judge Prompts
 
 Make evaluation criteria more specific:
 
@@ -834,7 +834,7 @@ Make evaluation criteria more specific:
 - Provide scoring rubrics
 - Use comparative language ("must have X AND Y")
 
-### Test Different Scenarios
+### 14.3 Test Different Scenarios
 
 Try various task types:
 
@@ -932,7 +932,7 @@ Want to check your work or troubleshoot issues? Download our model answer:
 
 Now that you've built your workflow, it's important to save it to your GitHub repository. This creates a backup and allows you to track changes over time.
 
-#### Step 1: Export Your Workflow from n8n
+#### Export Your Workflow from n8n
 
 1. In your n8n workflow canvas, click the **three-dot menu** (⋮) in the top-right corner
 2. Select **"Download"** or **"Export workflow"**
@@ -942,7 +942,7 @@ Now that you've built your workflow, it's important to save it to your GitHub re
 {: .note }
 > **Tip**: The exported file contains your entire workflow structure, but credentials are not included for security reasons.
 
-#### Step 2: Upload to GitHub via UI
+#### Upload to GitHub via UI
 
 1. **Navigate to your GitHub repository** in your web browser
 2. **Go to the workflows folder** (or create one if it doesn't exist):

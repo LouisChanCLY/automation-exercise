@@ -82,7 +82,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ## Step 1: Create Your Workflow Canvas
 
-### Initialize the Workspace
+### 1.1 Initialize the Workspace
 
 1. Log into your n8n instance
 2. Click "Add Workflow"
@@ -96,7 +96,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ## Step 2: Form Trigger Setup
 
-### Create Lead Capture Form
+### 2.1 Create Lead Capture Form
 
 {: .note }
 > **What's a Form Trigger?** It creates a web form that anyone can fill out to trigger your workflow. Perfect for collecting data without requiring API knowledge.
@@ -138,7 +138,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ## Step 3: AI Research Agent
 
-### Add and Connect the Node
+### 3.1 Add and Connect the Node
 
 {: .note }
 > **Understanding AI Agents**: Unlike basic LLM nodes, agents can use tools autonomously. They decide when and how to search based on your instructions.
@@ -150,7 +150,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 {: .highlight }
 > **Why connect first?** Once connected, you can see the form data available in expressions like `{{ $json.Name }}`.
 
-### Configure the Agent
+### 3.2 Configure the Agent
 
 Now set up the agent's behaviour:
 
@@ -179,7 +179,7 @@ Provide a concise research summary focusing on information useful for email pers
 
 {% endraw %}
 
-### Add Perplexity Tool
+### 3.3 Add Perplexity Tool
 
 1. Click the "+" under Tools
 2. Select "Perplexity" from the list
@@ -204,7 +204,7 @@ Provide a concise research summary focusing on information useful for email pers
 
 ## Step 4: Email Generation Agent
 
-### Add and Connect the Node
+### 3.1 Add and Connect the Node
 
 {: .note }
 > **Why Two Agents?** Separation of concerns - one agent researches, another writes. This makes each agent better at its specific task and easier to debug.
@@ -216,7 +216,7 @@ Provide a concise research summary focusing on information useful for email pers
 {: .highlight }
 > **Research data flows in**: This agent now receives the research findings from the previous node.
 
-### Configure the Prompt
+### 4.2 Configure the Prompt
 
 Set up the agent to craft personalised emails:
 
@@ -243,7 +243,7 @@ Format the output with clear sections for subject, hook, body, and CTA.
 
 {% endraw %}
 
-### Add Output Parser for Structure
+### 4.3 Add Output Parser for Structure
 
 {: .important }
 > **Structured Output**: We need consistent email components for reliable automation. The output parser ensures the AI returns data in the exact format we need.
@@ -285,7 +285,7 @@ Use the same Gemini model (it's already configured from the first agent).
 
 ## Step 5: Gmail Integration
 
-### Add and Connect the Node
+### 3.1 Add and Connect the Node
 
 1. Add "Gmail" node to your canvas
 2. **Connect it**: Drag a connection line from **AI Agent - Craft Email** to this new node
@@ -294,7 +294,7 @@ Use the same Gemini model (it's already configured from the first agent).
 {: .highlight }
 > **Email components ready**: This node receives the structured email output (subject, hook, body, cta).
 
-### Configure Email Sending
+### 5.2 Configure Email Sending
 
 {: .note }
 > **Email Composition**: We'll combine the AI-generated components into a professional email.
@@ -330,7 +330,7 @@ Use the same Gemini model (it's already configured from the first agent).
 
 ## Step 6: Metadata Enrichment
 
-### Add and Connect the Node
+### 3.1 Add and Connect the Node
 
 1. Add "Set" node (or "Edit Fields" in newer versions) to your canvas
 2. **Connect it**: Drag a connection line from **Send Email via Gmail** to this new node
@@ -339,7 +339,7 @@ Use the same Gemini model (it's already configured from the first agent).
 {: .highlight }
 > **Data consolidation**: This node pulls data from all previous nodes to create a complete record.
 
-### Configure Field Assignments
+### 6.2 Configure Field Assignments
 
 {: .note }
 > **Why Enrich?** We need to combine data from multiple nodes into a single record for our analytics spreadsheet.
@@ -373,7 +373,7 @@ sent_status: "sent"
 
 ## Step 7: Analytics Logging
 
-### Add and Connect the Node
+### 3.1 Add and Connect the Node
 
 1. Add "Google Sheets" node to your canvas
 2. **Connect it**: Drag a connection line from **Enrich with Metadata** to this new node
@@ -382,7 +382,7 @@ sent_status: "sent"
 {: .highlight }
 > **Final node**: Every email sent will now be logged to your tracking spreadsheet.
 
-### Configure Sheets Logging
+### 7.2 Configure Sheets Logging
 
 1. **Operation**: "Append"
 2. **Credential**: Your Sheets credential
@@ -400,7 +400,7 @@ sent_status: "sent"
 
 ## Step 8: Test & Activate
 
-### Test Your Workflow
+### 8.1 Test Your Workflow
 
 1. Click "Test Workflow"
 2. Open your form URL
@@ -416,7 +416,7 @@ sent_status: "sent"
    - Email should arrive in your inbox
    - Data should appear in Google Sheets
 
-### Troubleshooting
+### 8.2 Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
@@ -425,7 +425,7 @@ sent_status: "sent"
 | Gmail fails | Check credentials, verify email address format |
 | Sheets not updating | Verify column names match exactly |
 
-### Go Live
+### 8.3 Go Live
 
 Once tested successfully:
 
@@ -467,7 +467,7 @@ The **AI Research & Personalization** pattern you've mastered can be applied to:
 
 Now that you've built your workflow, it's important to save it to your GitHub repository. This creates a backup and allows you to track changes over time.
 
-#### Step 1: Export Your Workflow from n8n
+#### 8.3.1 Export Your Workflow from n8n
 
 1. In your n8n workflow canvas, click the **three-dot menu** (⋮) in the top-right corner
 2. Select **"Download"** or **"Export workflow"**
@@ -477,7 +477,7 @@ Now that you've built your workflow, it's important to save it to your GitHub re
 {: .note }
 > **Tip**: The exported file contains your entire workflow structure, but credentials are not included for security reasons.
 
-#### Step 2: Upload to GitHub via UI
+#### 8.3.2 Upload to GitHub via UI
 
 1. **Navigate to your GitHub repository** in your web browser
 2. **Go to the workflows folder** (or create one if it doesn't exist):
@@ -499,7 +499,7 @@ Now that you've built your workflow, it's important to save it to your GitHub re
 
 ## Download Complete Workflow
 
-### Import Pre-Built Template
+### 8.4 Import Pre-Built Template
 
 Save time with our complete workflow:
 

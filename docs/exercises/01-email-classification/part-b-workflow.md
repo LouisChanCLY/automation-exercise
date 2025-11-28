@@ -122,7 +122,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ## Step 1: Create a New Workflow
 
-### Set Up Your Canvas
+### 1.1 Set Up Your Canvas
 
 1. Click "Add workflow" in your workspace
 2. Name it: "Email Classification & Routing"
@@ -137,7 +137,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ## Step 2: Gmail Trigger Setup
 
-### Configure Email Detection
+### 2.1 Configure Email Detection
 
 {: .note }
 > **What's a Trigger?** Triggers are special nodes that start workflows automatically when something happens (like receiving an email). They're different from regular nodes because they "listen" for events rather than processing data.
@@ -175,7 +175,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ## Step 3: Email Data Preparation
 
-### Extract and Clean Email Content
+### 3.1 Extract and Clean Email Content
 
 {: .note }
 > **Why Use a Code Node?** While n8n has built-in nodes for many tasks, the Code node gives you flexibility to transform data exactly how you need it. It's perfect for cleaning text, extracting specific fields, and preparing data for AI processing.
@@ -222,7 +222,7 @@ return {
 
 ## Step 4: AI Classification Node
 
-### Configure the AI Model
+### 4.1 Configure the AI Model
 
 {: .note }
 > **Understanding LLM Chains**: The Basic LLM Chain combines three components: an output parser (to structure the response), a prompt (your instructions), and a language model (the AI). We configure them in this order because defining the output structure first helps write better prompts, and the model selection comes last as it's often interchangeable.
@@ -236,7 +236,7 @@ return {
 
 3. Now we'll configure the three components in logical order: Output Parser → Prompt → Model
 
-### Step 1: Define Output Structure (Parser)
+### 4.2 Define Output Structure (Parser)
 
 {: .important }
 > **Why Output Parser First?** Structured output is crucial for automation. JSON schemas ensure AI responses are predictable, parseable, and can integrate with databases, APIs, and downstream processes. Without structured output, you'd need complex text parsing that breaks easily.
@@ -277,7 +277,7 @@ return {
 {: .note }
 > **Schema Benefits**: This structure guarantees the AI returns data your Switch node can read. The schema acts as a contract between the AI and your workflow, preventing errors from unexpected response formats.
 
-### Step 2: Write the Prompt
+### 4.3 Write the Prompt
 
 Now that we've defined what output we expect, we can write a prompt that produces it.
 
@@ -307,7 +307,7 @@ Classify as:
 {: .tip }
 > **Save API Tokens During Development**: After testing the Basic LLM Chain node once, click the pin icon 📌 in the output panel to save the result. This prevents repeated API calls (and token consumption) while you build the rest of your workflow. Remember to unpin before going live!
 
-### Step 3: Select the AI Model
+### 4.4 Select the AI Model
 
 Finally, we choose which AI model will process our prompt.
 
@@ -329,7 +329,7 @@ Finally, we choose which AI model will process our prompt.
 
 ## Step 5: First Edit Fields Node
 
-### Extract AI Classification Results
+### 5.1 Extract AI Classification Results
 
 {: .note }
 > **Edit Fields Node**: This node extracts and prepares data for routing. We'll create a clean dataset with just the fields we need.
@@ -353,7 +353,7 @@ Finally, we choose which AI model will process our prompt.
 
 ## Step 6: Routing with Switch Node
 
-### Create Priority-Based Routing
+### 6.1 Create Priority-Based Routing
 
 {: .note }
 > **Simplified Routing**: We're focusing on the most important emails - urgent and high priority. Everything else goes to standard processing.
@@ -390,7 +390,7 @@ Finally, we choose which AI model will process our prompt.
 
 ## Step 7: Gmail Label Application
 
-### Apply Priority Labels
+### 7.1 Apply Priority Labels
 
 {: .note }
 > **Label Strategy**: We'll apply labels to urgent and high-priority emails. Standard emails can use a "No Operation" node to skip labelling.
@@ -438,7 +438,7 @@ Finally, we choose which AI model will process our prompt.
 
 ## Step 8: Second Edit Fields Node
 
-### Consolidate All Data for Logging
+### 8.1 Consolidate All Data for Logging
 
 {: .note }
 > **Data Consolidation**: This second Edit Fields node combines all email metadata with AI classification results before sending to Google Sheets.
@@ -473,7 +473,7 @@ Finally, we choose which AI model will process our prompt.
 
 ## Step 9: Logging to Google Sheets
 
-### Create Analytics Dashboard
+### 9.1 Create Analytics Dashboard
 
 {: .note }
 > **Google Sheets as a Database**: For simple automation projects, Google Sheets acts as a free, visual database. It's perfect for logging, analytics, and sharing data with non-technical stakeholders who are comfortable with spreadsheets.
@@ -518,7 +518,7 @@ Finally, we choose which AI model will process our prompt.
 
 ## Step 10: Test & Activate Your Workflow
 
-### Test Your Workflow
+### 10.1 Test Your Workflow
 
 1. Click "Test Workflow" button in n8n
 2. Send yourself a test email with a clear subject like "URGENT: Test message"
@@ -527,7 +527,7 @@ Finally, we choose which AI model will process our prompt.
    - The email received the correct Gmail label
    - Data appeared in your Google Sheets log
 
-### Go Live
+### 10.2 Go Live
 
 Once your test succeeds:
 
@@ -552,7 +552,7 @@ Workflow complete! You've successfully:
 - ✅ Tested with real emails
 - ✅ Activated automatic processing
 
-### What You've Really Learned
+### 10.3 What You've Really Learned
 
 More importantly, you've mastered the **Intelligent Triage & Routing** pattern. You now know how to:
 
@@ -568,11 +568,11 @@ More importantly, you've mastered the **Intelligent Triage & Routing** pattern. 
 
 ## Push Your Workflow to GitHub
 
-### Export and Save Your Work
+### 10.4 Export and Save Your Work
 
 Now that you've built your workflow, it's important to save it to your GitHub repository. This creates a backup and allows you to track changes over time.
 
-#### Step 1: Export Your Workflow from n8n
+#### 10.4.1 Export Your Workflow from n8n
 
 1. In your n8n workflow canvas, click the **three-dot menu** (⋮) in the top-right corner
 2. Select **"Download"** or **"Export workflow"**
@@ -582,7 +582,7 @@ Now that you've built your workflow, it's important to save it to your GitHub re
 {: .note }
 > **Tip**: The exported file contains your entire workflow structure, but credentials are not included for security reasons.
 
-#### Step 2: Upload to GitHub via UI
+#### 10.4.2 Upload to GitHub via UI
 
 1. **Navigate to your GitHub repository** in your web browser
 2. **Go to the workflows folder** (or create one if it doesn't exist):
@@ -604,7 +604,7 @@ Now that you've built your workflow, it's important to save it to your GitHub re
 
 ## Download Complete Workflow
 
-### Import Pre-Built Template
+### 10.5 Import Pre-Built Template
 
 Save time by importing our complete workflow:
 

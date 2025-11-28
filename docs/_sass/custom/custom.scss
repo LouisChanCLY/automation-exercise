@@ -120,3 +120,35 @@ h2#workflow-architecture,
 h3#what-were-building {
   margin-top: 2rem;
 }
+
+// Remove auto-generated list prefixes from in-page TOC
+#markdown-toc {
+  list-style: none;
+  padding-left: 0;
+
+  li {
+    list-style: none;
+    padding-left: 0;
+
+    // Remove numbering from all nested lists
+    > ol,
+    > ul {
+      list-style: none;
+      padding-left: 1.5rem;
+
+      li {
+        list-style: none;
+      }
+    }
+  }
+
+  // Ensure all nested levels have no list markers
+  ol,
+  ul {
+    list-style: none;
+
+    li {
+      list-style: none;
+    }
+  }
+}
