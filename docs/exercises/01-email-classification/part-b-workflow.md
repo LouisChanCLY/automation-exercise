@@ -66,6 +66,42 @@ Now we'll build this pattern step-by-step, and you'll see how easily each compon
 
 ---
 
+## Key Themes You'll Learn
+
+### Why Simplicity and Modularity Matter
+
+{: .important }
+> **Breaking Problems Into Smaller Pieces**:
+>
+> Instead of building one massive workflow that does everything, we're breaking the problem down into distinct stages:
+>
+> 1. **Data Ingestion** - Get the email
+> 2. **Classification** - Decide what it is
+> 3. **Routing** - Send it to the right place
+> 4. **Logging** - Track what happened
+>
+> **Why this matters**: If you want to change how you handle urgent emails, you only need to modify the action nodes. The rest of the pipeline keeps working. This modularity means you can evolve your system without breaking it.
+
+### Exploring Model Providers: Why OpenRouter?
+
+{: .important }
+> **Beyond the Big Three**:
+>
+> You've probably heard of **Google (Gemini)**, **Anthropic (Claude)**, and **OpenAI (GPT)**. But there's a whole ecosystem of AI models beyond these major providers!
+>
+> **Model Aggregators** like **OpenRouter** give you access to:
+>
+> - **Open source models** (Llama, Mistral, Qwen)
+> - **Smaller specialised models** (fast and cheap)
+> - **Latest premium models** (all in one place)
+> - **Competitive pricing** (often cheaper than direct access)
+>
+> **For this exercise**: We're using OpenRouter so you can experiment with different models easily. Find one that works well for your use case before committing to a specific provider.
+>
+> **In later exercises**: We'll switch to Google Gemini for faster responses. But the pattern stays the same - that's the power of modularity! Swapping model providers is just changing one node.
+
+---
+
 ## Workflow Components Reference
 
 Here's a quick reference of all the nodes you'll build in this exercise:
@@ -84,7 +120,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ---
 
-## Step 5: Create a New Workflow
+## Step 1: Create a New Workflow
 
 ### Set Up Your Canvas
 
@@ -99,7 +135,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ---
 
-## Step 6: Gmail Trigger Setup
+## Step 2: Gmail Trigger Setup
 
 ### Configure Email Detection
 
@@ -137,7 +173,7 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 ---
 
-## Step 7: Email Data Preparation
+## Step 3: Email Data Preparation
 
 ### Extract and Clean Email Content
 
@@ -184,7 +220,7 @@ return {
 
 ---
 
-## Step 8: AI Classification Node
+## Step 4: AI Classification Node
 
 ### Configure the AI Model
 
@@ -291,7 +327,7 @@ Finally, we choose which AI model will process our prompt.
 
 ---
 
-## Step 9: First Edit Fields Node
+## Step 5: First Edit Fields Node
 
 ### Extract AI Classification Results
 
@@ -315,7 +351,7 @@ Finally, we choose which AI model will process our prompt.
 
 ---
 
-## Step 10: Routing with Switch Node
+## Step 6: Routing with Switch Node
 
 ### Create Priority-Based Routing
 
@@ -352,7 +388,7 @@ Finally, we choose which AI model will process our prompt.
 
 ---
 
-## Step 11: Gmail Label Application
+## Step 7: Gmail Label Application
 
 ### Apply Priority Labels
 
@@ -400,7 +436,7 @@ Finally, we choose which AI model will process our prompt.
 
 ---
 
-## Step 12: Second Edit Fields Node
+## Step 8: Second Edit Fields Node
 
 ### Consolidate All Data for Logging
 
@@ -435,7 +471,7 @@ Finally, we choose which AI model will process our prompt.
 
 ---
 
-## Step 13: Logging to Google Sheets
+## Step 9: Logging to Google Sheets
 
 ### Create Analytics Dashboard
 
@@ -480,7 +516,7 @@ Finally, we choose which AI model will process our prompt.
 
 ---
 
-## Step 14: Test & Activate Your Workflow
+## Step 10: Test & Activate Your Workflow
 
 ### Test Your Workflow
 
