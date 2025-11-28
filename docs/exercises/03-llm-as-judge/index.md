@@ -89,7 +89,7 @@ The **AI Quality Control & Iteration** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>⚙️ Part A: Setup</h4>
-      <p>Environment & prerequisites (15 min)</p>
+      <p>Google Gemini API + tracking spreadsheet</p>
       <a href="./part-a-setup">Start here →</a>
     </div>
   </div>
@@ -97,7 +97,7 @@ The **AI Quality Control & Iteration** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>🔧 Part B: Build & Test</h4>
-      <p>Create, test, and activate (40 min)</p>
+      <p>Generator, judge, loop with exit conditions</p>
       <a href="./part-b-workflow">Build →</a>
     </div>
   </div>
@@ -105,7 +105,7 @@ The **AI Quality Control & Iteration** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>🏆 Challenges</h4>
-      <p>Advanced extensions (optional)</p>
+      <p>Multi-criteria, A/B testing, optimisation</p>
       <a href="./challenge-tasks">Level up →</a>
     </div>
   </div>
@@ -115,11 +115,11 @@ The **AI Quality Control & Iteration** pattern you'll learn applies to:
 
 ## Quick Navigation
 
-| Section | Description | Duration |
-|---------|-------------|----------|
-| [Part A: Setup](./part-a-setup) | Prerequisites check, Google Sheets setup | 15 min |
-| [Part B: Build & Test](./part-b-workflow) | Build generator, judge, loop logic, and test | 40 min |
-| [Challenges](./challenge-tasks) | Multi-criteria evaluation, A/B testing, prompt optimisation | Optional |
+| Section | What You'll Do | Duration |
+|---------|----------------|----------|
+| [Part A: Setup](./part-a-setup) | Configure credentials, create results tracking sheet | 15 min |
+| [Part B: Build & Test](./part-b-workflow) | Build complete workflow with iterative quality control | 40 min |
+| [Challenges](./challenge-tasks) | Extend with advanced evaluation and testing patterns | Optional |
 
 ---
 

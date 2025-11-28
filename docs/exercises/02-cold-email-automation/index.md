@@ -132,7 +132,7 @@ The **AI Research & Personalisation** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>⚙️ Part A: Setup</h4>
-      <p>API keys & environment (20 min)</p>
+      <p>Perplexity, Gmail, Gemini + tracking</p>
       <a href="./part-a-setup">Start here →</a>
     </div>
   </div>
@@ -140,7 +140,7 @@ The **AI Research & Personalisation** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>🔧 Part B: Build & Test</h4>
-      <p>Create, test, and activate (35 min)</p>
+      <p>Form, research agent, writer, send, log</p>
       <a href="./part-b-workflow">Build →</a>
     </div>
   </div>
@@ -148,7 +148,7 @@ The **AI Research & Personalisation** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>🏆 Challenges</h4>
-      <p>Advanced personalisation (optional)</p>
+      <p>Multi-channel, A/B testing, follow-ups</p>
       <a href="./challenge-tasks">Level up →</a>
     </div>
   </div>
@@ -158,11 +158,11 @@ The **AI Research & Personalisation** pattern you'll learn applies to:
 
 ## Quick Navigation
 
-| Section | Description | Duration |
-|---------|-------------|----------|
-| [Part A: Setup](./part-a-setup) | Perplexity API, Gmail, Google Sheets setup | 20 min |
-| [Part B: Build & Test](./part-b-workflow) | Agent configuration, prompt engineering, testing | 35 min |
-| [Challenges](./challenge-tasks) | Multi-channel outreach, A/B testing, follow-ups | Optional |
+| Section | What You'll Do | Duration |
+|---------|----------------|----------|
+| [Part A: Setup](./part-a-setup) | Configure AI tools, connect services, create tracking sheet | 20 min |
+| [Part B: Build & Test](./part-b-workflow) | Build autonomous research and personalisation workflow | 35 min |
+| [Challenges](./challenge-tasks) | Extend with advanced outreach and optimisation patterns | Optional |
 
 ---
 

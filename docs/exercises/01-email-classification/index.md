@@ -81,7 +81,7 @@ The **Intelligent Triage & Routing** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>⚙️ Part A: Setup</h4>
-      <p>Environment & prerequisites (15 min)</p>
+      <p>Gmail, OpenRouter, Sheets integration</p>
       <a href="./part-a-setup">Start here →</a>
     </div>
   </div>
@@ -89,7 +89,7 @@ The **Intelligent Triage & Routing** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>🔧 Part B: Build & Test</h4>
-      <p>Create, test, and activate (25 min)</p>
+      <p>Trigger, classify, route, label, log</p>
       <a href="./part-b-workflow">Build →</a>
     </div>
   </div>
@@ -97,7 +97,7 @@ The **Intelligent Triage & Routing** pattern you'll learn applies to:
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>🏆 Challenges</h4>
-      <p>Advanced extensions (optional)</p>
+      <p>Multi-language, auto-reply, analytics</p>
       <a href="./challenge-tasks">Level up →</a>
     </div>
   </div>
@@ -107,11 +107,11 @@ The **Intelligent Triage & Routing** pattern you'll learn applies to:
 
 ## Quick Navigation
 
-| Section | Description | Duration |
-|---------|-------------|----------|
-| [Part A: Setup](./part-a-setup) | Account creation, API configuration, prerequisites | 15 min |
-| [Part B: Build & Test](./part-b-workflow) | Node creation, AI integration, testing, activation | 25 min |
-| [Challenges](./challenge-tasks) | Multi-language, auto-reply, analytics | Optional |
+| Section | What You'll Do | Duration |
+|---------|----------------|----------|
+| [Part A: Setup](./part-a-setup) | Create accounts, configure API keys, connect services | 15 min |
+| [Part B: Build & Test](./part-b-workflow) | Build complete classification and routing workflow | 25 min |
+| [Challenges](./challenge-tasks) | Extend with advanced features and integrations | Optional |
 
 ---
 
