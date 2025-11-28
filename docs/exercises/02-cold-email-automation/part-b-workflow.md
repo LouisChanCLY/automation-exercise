@@ -131,6 +131,8 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 4. Click "Save" and copy the form URL from "Production URL"
 
+![Form Trigger Configuration](./images/01-form-trigger-config.png)
+
 {: .highlight }
 > **Test Your Form**: Open the URL in a browser. You should see your custom form!
 
@@ -179,6 +181,8 @@ Provide a concise research summary focusing on information useful for email pers
 
 {% endraw %}
 
+![Research Agent Prompt Configuration](./images/02-research-agent-prompt.png)
+
 ### 3.3 Add Perplexity Tool
 
 1. Click the "+" under Tools
@@ -188,6 +192,8 @@ Provide a concise research summary focusing on information useful for email pers
    - **Model**: "sonar" (fast and efficient)
    - **Search Recency**: "month" (recent information)
 
+![Perplexity Tool Configuration](./images/04-perplexity-tool-config.png)
+
 ### Add Language Model
 
 1. Click the "+" under Chat Model
@@ -196,6 +202,8 @@ Provide a concise research summary focusing on information useful for email pers
    - **Credential**: Your Gemini credential
    - **Model**: "gemini-2.5-flash"
    - **Temperature**: 0.7 (balanced creativity)
+
+![Google Gemini Model Configuration](./images/03-gemini-model-config.png)
 
 {: .tip }
 > **Pin Output During Development**: After testing once, pin the agent output to save API calls while building the rest of your workflow.
@@ -243,6 +251,8 @@ Format the output with clear sections for subject, hook, body, and CTA.
 
 {% endraw %}
 
+![Email Generation Agent Prompt](./images/05-email-agent-prompt.png)
+
 ### 4.3 Add Output Parser for Structure
 
 {: .important }
@@ -276,6 +286,8 @@ Format the output with clear sections for subject, hook, body, and CTA.
   "required": ["subject", "hook", "body", "cta"]
 }
 ```
+
+![Structured Output Parser Configuration](./images/06-structured-output-parser.png)
 
 ### Add Language Model
 
@@ -323,6 +335,8 @@ Use the same Gemini model (it's already configured from the first agent).
 
 {% endraw %}
 
+![Gmail Send Configuration](./images/07-gmail-send-config.png)
+
 {: .warning }
 > **Sender Reputation**: Start with a few test emails. Sudden high volume can trigger spam filters.
 
@@ -369,6 +383,8 @@ sent_status: "sent"
 
 {% endraw %}
 
+![Metadata Enrichment Configuration](./images/08-enrich-metadata-config.png)
+
 ---
 
 ## Step 7: Analytics Logging
@@ -389,6 +405,8 @@ sent_status: "sent"
 3. **Document**: Select your "Cold Email Tracking" spreadsheet
 4. **Sheet**: "Sheet1"
 5. **Mapping Mode**: "Auto-map Input Data"
+
+![Google Sheets Logging Configuration](./images/09-sheets-logging-config.png)
 
 {: .note }
 > **Auto-mapping**: Since we named our fields to match the spreadsheet columns, they'll map automatically.
