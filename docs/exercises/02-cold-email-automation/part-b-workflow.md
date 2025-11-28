@@ -36,6 +36,35 @@ The pattern components:
 
 ---
 
+## Key Themes You'll Learn
+
+### Why Simplicity and Modularity Matter
+
+{: .important }
+> **Chain AI Tasks Together**:
+>
+> Instead of one massive AI prompt trying to do everything, we're chaining two specialised agents:
+>
+> 1. **Research Agent** - Finds information about the prospect
+> 2. **Writer Agent** - Uses that research to write personalised content
+>
+> **Why this matters**: Each AI does one job well. If research quality drops, you only fix the research agent. If emails sound too formal, you only tweak the writer agent. The other part keeps working perfectly.
+
+### Why Google Gemini for This Exercise?
+
+{: .important }
+> **Switching to Google**:
+>
+> In Exercise 1, you used **OpenRouter** to explore different models. Now we're using **Google Gemini** because:
+>
+> - **Faster responses** (important when chaining multiple AI calls)
+> - **Generous free tier** (15 requests per minute)
+> - **Excellent instruction following** (critical for research and generation tasks)
+>
+> **The modularity lesson**: Notice how easily we switched from OpenRouter to Google? The workflow pattern stays the same - we just changed which model provider we use. This is the power of modular design!
+
+---
+
 ## Workflow Components Reference
 
 Here's a quick reference of all the nodes you'll build in this exercise:
