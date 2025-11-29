@@ -24,7 +24,10 @@ Connect Gmail and Google Sheets to n8n using OAuth2 authentication. n8n handles 
 
 **Time Required**: 5 minutes
 
-**What You're Connecting**: Gmail (for sending/reading emails) and Google Sheets (for data logging)
+**What You're Connecting**:
+
+- Gmail (for sending/reading emails)
+- Google Sheets (for data logging)
 
 ---
 
@@ -69,14 +72,10 @@ Connect Gmail and Google Sheets to n8n using OAuth2 authentication. n8n handles 
 2. Choose your Google account (same as Gmail)
 3. Review permissions:
    - See, edit, create, and delete spreadsheets
-   - Access Google Drive files
 4. Click **"Allow"**
 
 {: .highlight }
 > **Success**: You'll see "Connected" status in n8n
-
-{: .note }
-> **Why Drive permissions?** Google Sheets needs Drive API access to create and manage spreadsheet files.
 
 ---
 
