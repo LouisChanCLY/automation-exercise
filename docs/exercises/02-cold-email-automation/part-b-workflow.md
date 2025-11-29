@@ -268,7 +268,9 @@ Now set up the agent's behaviour:
 
 3. Scroll down to **Options** section and expand it
 
-4. In the **System Message** field, enter:
+4. Set **Maximum Iterations**: 3
+
+5. In the **System Message** field, enter:
 
    ```
    You are an expert researcher specializing in finding relevant information about prospects for cold outreach. Use the Perplexity tool to search for recent, relevant information that can help personalize the email. Focus on finding genuine connection points and value opportunities.
