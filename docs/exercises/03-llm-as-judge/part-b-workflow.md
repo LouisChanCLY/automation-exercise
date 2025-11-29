@@ -245,6 +245,10 @@ The email must:
 {: .highlight }
 > **Pro Tip**: Use success criteria to enforce **brand guidelines**, **tone of voice requirements**, and **company standards**. The judge will consistently apply these criteria to every piece of content, reducing bias and increasing reliability. Examples: "Must match our friendly, approachable brand voice", "Use our standard email signature format", "Follow AP style guide rules".
 
+**Your workflow so far:**
+
+![Workflow Progress: Form Trigger](./images/workflow-step1-form.png)
+
 ---
 
 ## Step 3: Add Initialize Variables Node
@@ -302,6 +306,10 @@ Set up tracking for the iteration loop:
 Click **Test step**
 
 **Expected Output**: JSON object with initialized variables.
+
+**Your workflow so far:**
+
+![Workflow Progress: Set Loop Variable](./images/workflow-step2-set-loop-variable.png)
 
 ---
 
@@ -362,6 +370,10 @@ Please generate the output according to the task description and instructions. E
 > **Conditional feedback injection**: The expression only includes feedback on retries. First attempts start fresh without any previous context.
 
 Click **Test step** to verify. **Expected output**: Generated content text in the `output` field.
+
+**Your workflow so far:**
+
+![Workflow Progress: Generator Added](./images/workflow-step3-generator.png)
 
 ---
 
@@ -461,6 +473,10 @@ Click **Test step**
 
 **Expected Output**: Structured JSON with `passed` (boolean) and `feedback` (string).
 
+**Your workflow so far:**
+
+![Workflow Progress: Judge Added](./images/workflow-step4-judge.png)
+
 ---
 
 ## Step 6: Add Update Loop Variables Node
@@ -518,6 +534,10 @@ Click **Test step**
 
 **Expected Output**: Combined object with evaluation results and generated content.
 
+**Your workflow so far:**
+
+![Workflow Progress: Update Variables Added](./images/workflow-step5-update-variables.png)
+
 ---
 
 ## Step 7: Add Check Pass/Fail Node
@@ -549,6 +569,10 @@ Set up the pass/fail logic:
 
 - **True** branch: Content passed - go to success path
 - **False** branch: Content failed - go to retry path
+
+**Your workflow so far:**
+
+![Workflow Progress: Check Pass/Fail Added](./images/workflow-step6-check-pass-fail.png)
 
 ---
 
@@ -606,6 +630,10 @@ Track attempts and store feedback:
 {: .tip }
 > **Memory carrying**: We're updating the retry_count and previous_feedback, but keeping everything else. This ensures the loop preserves all data as it goes back to try again.
 
+**Your workflow so far:**
+
+![Workflow Progress: Success and Retry Branches](./images/workflow-step7-success-retry-branches.png)
+
 ---
 
 ## Step 10: Add Max Retries Check Node
@@ -657,6 +685,10 @@ Check if we've exhausted our retries:
 - **True** branch: Max retries reached (tried 10 times) - go to failure path
 - **False** branch: Can still retry (less than 10 times) - loop back to Set Loop Variable
 
+**Your workflow so far:**
+
+![Workflow Progress: Max Retries Check Added](./images/workflow-step8-max-retries.png)
+
 ### 10.4 Create the Iteration Loop
 
 {: .highlight }
@@ -666,6 +698,13 @@ Drag a connection from **Max Retries Check (false)** output back to **Set Loop V
 
 {: .note }
 > **Two ways out**: The loop can exit in two ways: (1) Content passes quality check → Success path, or (2) Max retries reached → Failure path. This ensures the workflow ALWAYS finishes eventually!
+
+**Your workflow with the loop-back connection:**
+
+![Workflow Progress: Loop-Back Connection Created](./images/workflow-step9-loop-back.png)
+
+{: .important }
+> **This is the key!** The highlighted connection from Max Retries Check (false) back to Set Loop Variable creates the iterative improvement loop. Content that fails quality check gets sent back through the generator with feedback, creating a self-improving system.
 
 ---
 
@@ -691,6 +730,10 @@ Mark that we exhausted retries without success:
 
 {: .tip }
 > **Memory carrying**: Same concept - we're adding the status field while keeping all other data (the best attempt's output, feedback, retry count of 10).
+
+**Your workflow so far:**
+
+![Workflow Progress: Failed Status Added](./images/workflow-step10-failed-status.png)
 
 ---
 
@@ -729,6 +772,13 @@ Structure the final response:
 > **When NOT to carry memory**: In this final node, we uncheck "Include Other Input Fields" because we want to return ONLY these specific fields to the user. We don't want to flood them with all the internal workflow data (loop variables, intermediate values, etc.). We're being selective about what goes back to the form!
 
 **Expected Output**: Clean, formatted results showing only status, output, feedback, and retry count.
+
+**Your complete workflow:**
+
+![Workflow Complete: All Nodes Connected](./images/workflow-step11-complete.png)
+
+{: .highlight }
+> **Workflow Complete!** All nodes are connected and the iterative quality improvement loop is fully functional. The workflow can now generate content, evaluate it, and iteratively improve it up to 10 times until it meets quality standards.
 
 ---
 
