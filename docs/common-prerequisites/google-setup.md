@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Google & OAuth Setup
+title: Google Services Setup
 parent: Common Prerequisites
 nav_order: 1
 ---
 
-# Google Cloud & OAuth Setup
+# Google Services Setup via n8n
 
 {: .no_toc }
 
@@ -20,144 +20,98 @@ nav_order: 1
 
 ## Overview
 
-Set up Google Cloud Console for OAuth authentication with Gmail, Sheets, and Drive APIs. This single setup works across all exercises.
+Connect Gmail and Google Sheets to n8n using OAuth2 authentication. n8n handles the credential management - you just need to authenticate your Google account.
 
-**Time Required**: 10 minutes
+**Time Required**: 5 minutes
+
+**What You're Connecting**: Gmail (for sending/reading emails) and Google Sheets (for data logging)
 
 ---
 
-## Step 1: Create Google Cloud Project
+## Step 1: Connect Gmail in n8n
 
-### New Project Setup
+### Add Gmail Credential
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Click "Select a project" dropdown → "New Project"
-3. Project details:
-   - **Name**: `n8n-automation`
-   - **Organisation**: Leave as is
-   - **Location**: Leave as is
-4. Click "Create"
-5. Wait for project creation (takes ~30 seconds)
+1. In your n8n workflow, add a **Gmail** node
+2. Click on **Credential to connect with**
+3. Click **"Create New Credential"**
+4. Select **"Gmail OAuth2 API"**
+
+### Authenticate with Google
+
+1. Click **"Sign in with Google"** or **"Connect my account"**
+2. Choose your Google account
+3. Review permissions:
+   - Read, compose, and send emails
+   - Manage labels
+4. Click **"Allow"**
 
 {: .highlight }
-> **Success**: You'll see a notification when the project is ready.
-
----
-
-## Step 2: Enable Required APIs
-
-### Activate Google Services
-
-In your project, navigate to **APIs & Services** → **Library**
-
-#### Gmail API
-
-1. Search for "Gmail API"
-2. Click on it
-3. Click "Enable"
-4. Wait for activation
-
-#### Google Sheets API
-
-1. Return to Library
-2. Search for "Google Sheets API"
-3. Click "Enable"
-
-#### Google Drive API
-
-1. Return to Library
-2. Search for "Google Drive API"
-3. Click "Enable"
+> **Success**: You'll see "Connected" status in n8n
 
 {: .note }
-> **Why Three APIs?** Gmail for email, Sheets for data, Drive for Sheets file access permissions.
+> **First-time setup**: Google may show a warning that the app isn't verified. Click "Advanced" → "Go to n8n (unsafe)" → "Allow". This is normal for OAuth apps in development mode.
 
 ---
 
-## Step 3: Configure OAuth Consent Screen
+## Step 2: Connect Google Sheets in n8n
 
-### Set Up App Information
+### Add Sheets Credential
 
-1. Go to **APIs & Services** → **OAuth consent screen**
-2. Choose "External" (unless you have Google Workspace)
-3. Click "Create"
+1. In your n8n workflow, add a **Google Sheets** node
+2. Click on **Credential to connect with**
+3. Click **"Create New Credential"**
+4. Select **"Google Sheets OAuth2 API"**
 
-### App Configuration
+### Authenticate with Google
 
-Fill in required fields:
+1. Click **"Sign in with Google"** or **"Connect my account"**
+2. Choose your Google account (same as Gmail)
+3. Review permissions:
+   - See, edit, create, and delete spreadsheets
+   - Access Google Drive files
+4. Click **"Allow"**
 
-- **App name**: `n8n Automation`
-- **User support email**: Your email
-- **Developer contact**: Your email
-- Skip logo and other optional fields
+{: .highlight }
+> **Success**: You'll see "Connected" status in n8n
 
-Click "Save and Continue"
+{: .note }
+> **Why Drive permissions?** Google Sheets needs Drive API access to create and manage spreadsheet files.
 
-### Add Scopes
+---
 
-1. Click "Add or Remove Scopes"
-2. Search and select these permissions:
-   - `https://www.googleapis.com/auth/gmail.modify`
-   - `https://www.googleapis.com/auth/gmail.labels`
-   - `https://www.googleapis.com/auth/spreadsheets`
-   - `https://www.googleapis.com/auth/drive.file`
-3. Click "Update"
-4. Click "Save and Continue"
+## Troubleshooting
 
-### Add Test Users
+### "This app isn't verified" Warning
 
-1. Click "Add Users"
-2. Add your Gmail address
-3. Add any team members' emails
-4. Click "Save and Continue"
+When connecting for the first time, Google may show a security warning:
+
+1. Click **"Advanced"** at the bottom left
+2. Click **"Go to n8n (unsafe)"**
+3. Review permissions and click **"Allow"**
 
 {: .important }
-> **Test Users**: Only emails added here can use the app while in testing mode.
+> **This is expected**: Apps in development mode show this warning. Your credentials are safe - n8n uses industry-standard OAuth2.
 
----
+### "Access blocked" Error
 
-## Step 4: Create OAuth Credentials
+If you see "Access blocked: n8n has not completed the Google verification process":
 
-### Generate Client ID & Secret
+**Solution**: Use a different Google account that isn't managed by a Workspace admin, or contact your workspace administrator to allow n8n.
 
-1. Go to **APIs & Services** → **Credentials**
-2. Click **"+ Create Credentials"** → **"OAuth client ID"**
-3. Configure:
-   - **Application type**: Web application
-   - **Name**: `n8n OAuth Client`
+### Connection Expires
 
-### Add Redirect URIs
+OAuth tokens may expire. If you see authentication errors:
 
-Add these authorised redirect URIs:
-
-```
-http://localhost:5678/rest/oauth2-credential/callback
-https://app.n8n.cloud/rest/oauth2-credential/callback
-```
-
-If using self-hosted n8n, also add:
-
-```
-https://[your-domain]/rest/oauth2-credential/callback
-```
-
-Click "Create"
-
-### Save Your Credentials
-
-{: .warning }
-> **Important**: Save these immediately - you'll need them in n8n setup.
-
-- Copy **Client ID**
-- Copy **Client Secret**
-- Store securely (password manager recommended)
+1. Go to **Credentials** in n8n
+2. Find your Gmail/Sheets credential
+3. Click **"Reconnect"**
+4. Re-authenticate with Google
 
 ---
 
 ## What You've Accomplished
 
-✅ Created Google Cloud Project
-✅ Enabled Gmail, Sheets, and Drive APIs
-✅ Configured OAuth consent screen
-✅ Generated OAuth credentials
-✅ Added test users
+✅ Connected Gmail to n8n via OAuth2
+✅ Connected Google Sheets to n8n via OAuth2
+✅ Ready to use Gmail and Sheets nodes in any workflow

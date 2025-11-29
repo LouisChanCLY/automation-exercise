@@ -26,8 +26,7 @@ Before starting this exercise, ensure you've completed these from the [Common Pr
 ### Required Setup
 
 - **n8n Platform** - [Setup guide](../../common-prerequisites/n8n-setup)
-- **Google Cloud Project** - [Setup guide](../../common-prerequisites/google-setup)
-- **Gmail API (OAuth2)** - [Setup guide](../../common-prerequisites/credentials#google-oauth2-gmail--sheets)
+- **Gmail & Google Sheets** - [Connect via n8n](../../common-prerequisites/google-setup)
 - **OpenRouter API** - [Setup guide](../../common-prerequisites/ai-services#openrouter-multiple-ai-models)
 
 {: .important }

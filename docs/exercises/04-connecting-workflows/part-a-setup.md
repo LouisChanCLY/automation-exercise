@@ -27,8 +27,7 @@ This exercise builds on previous exercises. Before starting, ensure you've compl
 ### Required Setup
 
 - **n8n Platform** - [Setup guide](../../common-prerequisites/n8n-setup)
-- **Google Cloud Project** - [Setup guide](../../common-prerequisites/google-setup)
-- **Gmail API (OAuth2)** - [Setup guide](../../common-prerequisites/credentials#google-oauth2-gmail--sheets)
+- **Gmail & Google Sheets** - [Connect via n8n](../../common-prerequisites/google-setup)
 - **Google Gemini API** - [Setup guide](../../common-prerequisites/ai-services#google-gemini-free-tier)
 - **Gmail labels** - Created in Exercise 1 (or [create them now](../01-email-classification/part-a-setup#create-gmail-labels))
 
