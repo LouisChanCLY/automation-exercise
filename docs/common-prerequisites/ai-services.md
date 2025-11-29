@@ -273,15 +273,75 @@ Real-time web search capabilities for your AI agents. Essential for research tas
 - Must verify student status through student email or documentation
 - UK students and international students can verify with university email or ID
 
-### Get Your API Key
+### Part 1: Get Your Perplexity API Key
 
-1. Go to [Perplexity AI](https://www.perplexity.ai/)
-2. Navigate to [API Settings](https://www.perplexity.ai/settings/api)
-3. Sign up for API access (use your student account if eligible)
-4. Generate API key:
-   - Click "Generate New Key"
-   - Name: `n8n-research`
-   - Copy and save
+#### 1.1 Navigate to API Keys
+
+1. Go to [Perplexity API Keys](https://www.perplexity.ai/account/api/keys)
+1. Sign in with your Perplexity account (use your student account if eligible)
+
+![Perplexity API Keys Page](./images/29-perplexity-api-keys-page.png)
+
+#### 1.2 Accept Terms and Generate Key
+
+1. Click **"Accept Terms and Generate API Key"** button (first time only)
+1. For subsequent keys, click **"+ Accept Terms and Generate API Key"**
+
+#### 1.3 Create API Key
+
+1. In the "Create API Key" modal, enter a descriptive name:
+   - **Key name**: `n8n-research` (or any descriptive name)
+
+![Create Perplexity Key Modal](./images/30-create-perplexity-key-modal.png)
+
+1. Click **"Create Key"**
+
+#### 1.4 Copy Your API Key
+
+1. Your new API key will appear in the list (starts with `pplx-...`)
+1. Click the **copy icon** to copy the key
+
+![Copy Perplexity Key](./images/31-copy-perplexity-key.png)
+
+1. Save the key securely in your password manager
+
+{: .warning }
+> **Important**: Store your API key immediately. You can copy it again later from the list.
+
+### Part 2: Add Perplexity Credential to n8n
+
+#### 2.1 Access Credentials Menu
+
+1. In n8n, click the **+ button** in the top-right corner
+1. Select **Credential** from the dropdown
+
+![n8n Credential Menu](./images/26-n8n-credential-menu-perplexity.png)
+
+#### 2.2 Search for Perplexity
+
+1. In the "Add new credential" modal, search for **"Perple"**
+1. Select **"Perplexity API"** from the results
+
+![Perplexity Search](./images/27-perplexity-search.png)
+
+#### 2.3 Enter API Key
+
+1. Paste your API key into the **API Key** field
+1. Click **"Save"**
+
+![Perplexity API Key Field](./images/28-perplexity-api-key-field.png)
+
+#### 2.4 Verify Connection
+
+1. n8n will automatically test the connection
+1. You should see **"Connection tested successfully"** in green
+
+![Perplexity Connection Tested](./images/32-perplexity-connection-tested.png)
+
+{: .highlight }
+> **Success**: Your Perplexity credential is now ready to use for web research!
+
+### Free Credits
 
 {: .highlight }
 > **Monthly Credits**: $5 free monthly (~1000 searches) - resets each month! Students get this automatically with Pro access.
