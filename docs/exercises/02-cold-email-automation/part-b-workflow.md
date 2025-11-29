@@ -213,6 +213,10 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 {: .highlight }
 > **Test Your Form**: Open the URL in a browser. You should see your custom form!
 
+**Your workflow so far:**
+
+![Workflow Progress: Form Trigger](./images/workflow-step1-form.png)
+
 ---
 
 ## Step 3: AI Research Agent
@@ -229,33 +233,46 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 {: .highlight }
 > **Why connect first?** Once connected, you can see the form data available in expressions like `{{ $json.Name }}`.
 
+**Your workflow so far:**
+
+![Workflow Progress: Research Agent Added](./images/workflow-step2-research-agent.png)
+
 ### 3.2 Configure the Agent
 
 Now set up the agent's behaviour:
 
 1. **Source for Prompt (User Message)**: "Define below"
+
 2. In the **Prompt (User Message)** field, enter:
 
-{% raw %}
+   {% raw %}
 
-```
-Research the following person/company and find relevant information for a personalized cold email:
+   ```
+   Research the following person/company and find relevant information for a personalized cold email:
 
-Name: {{ $json.Name }}
-Company: {{ $json.Company }}
-Email: {{ $json.Email }}
-Context: {{ $json['Key Points / Context'] }}
+   Name: {{ $json.Name }}
+   Company: {{ $json.Company }}
+   Email: {{ $json.Email }}
+   Context: {{ $json['Key Points / Context'] }}
 
-Use the Perplexity tool to find:
-1. Recent news or achievements about them or their company
-2. Their business challenges or interests
-3. Common connections or shared interests
-4. Any relevant context for personalization
+   Use the Perplexity tool to find:
+   1. Recent news or achievements about them or their company
+   2. Their business challenges or interests
+   3. Common connections or shared interests
+   4. Any relevant context for personalization
 
-Provide a concise research summary focusing on information useful for email personalization.
-```
+   Provide a concise research summary focusing on information useful for email personalization.
+   ```
 
-{% endraw %}
+   {% endraw %}
+
+3. Scroll down to **Options** section and expand it
+
+4. In the **System Message** field, enter:
+
+   ```
+   You are an expert researcher specializing in finding relevant information about prospects for cold outreach. Use the Perplexity tool to search for recent, relevant information that can help personalize the email. Focus on finding genuine connection points and value opportunities.
+   ```
 
 ![Research Agent Prompt Configuration](./images/02-research-agent-prompt.png)
 
@@ -308,11 +325,17 @@ Provide a concise research summary focusing on information useful for email pers
 3. Configure:
    - **Credential to connect with**: Select your Gemini credential
    - **Model**: "models/gemini-2.5-flash"
+4. Under **Options**, set:
+   - **Maximum Number of Tokens**: 32000
 
 ![Google Gemini Model Configuration](./images/03-gemini-model-config.png)
 
 {: .tip }
 > **Pin Output During Development**: After testing once, pin the agent output to save API calls while building the rest of your workflow.
+
+**Your workflow so far:**
+
+![Workflow Progress: Research Agent Complete](./images/workflow-step3-research-complete.png)
 
 ---
 
@@ -330,32 +353,48 @@ Provide a concise research summary focusing on information useful for email pers
 {: .highlight }
 > **Research data flows in**: This agent now receives the research findings from the previous node.
 
+**Your workflow so far:**
+
+![Workflow Progress: Email Agent Added](./images/workflow-step4-email-agent.png)
+
 ### 4.2 Configure the Prompt
 
 Set up the agent to craft personalised emails:
 
-{% raw %}
+1. **Source for Prompt (User Message)**: "Define below"
 
-```
-Based on the research about {{ $('On form submission').item.json.Name }}, create a personalized cold email.
+2. In the **Prompt (User Message)** field, enter:
 
-Research findings:
-{{ $('AI Agent - Research Prospect').item.json.output }}
+   {% raw %}
 
-Original context: {{ $('On form submission').item.json['Key Points / Context'] }}
+   ```
+   Based on the research about {{ $('On form submission').item.json.Name }}, create a personalized cold email.
 
-Create a cold email that:
-1. Opens with a personalized hook based on the research
-2. Shows understanding of their situation or interests
-3. Presents a clear value proposition
-4. Has a specific, low-commitment call-to-action
-5. Stays under 150 words
-6. Feels genuine and conversational, not templated
+   Research findings:
+   {{ $('AI Agent - Research Prospect').item.json.output }}
 
-Format the output with clear sections for subject, hook, body, and CTA.
-```
+   Original context: {{ $('On form submission').item.json['Key Points / Context'] }}
 
-{% endraw %}
+   Create a cold email that:
+   1. Opens with a personalized hook based on the research
+   2. Shows understanding of their situation or interests
+   3. Presents a clear value proposition
+   4. Has a specific, low-commitment call-to-action
+   5. Stays under 150 words
+   6. Feels genuine and conversational, not templated
+
+   Format the output with clear sections for subject, hook, body, and CTA.
+   ```
+
+   {% endraw %}
+
+3. Scroll down to **Options** section and expand it
+
+4. In the **System Message** field, enter:
+
+   ```
+   You are an expert email copywriter specializing in personalized cold outreach. Write genuine, conversational emails that build trust and provide value. Use the research to create authentic connections, not generic pitches.
+   ```
 
 ![Email Generation Agent Prompt](./images/05-email-agent-prompt.png)
 
@@ -365,35 +404,43 @@ Format the output with clear sections for subject, hook, body, and CTA.
 > **Structured Output**: We need consistent email components for reliable automation. The output parser ensures the AI returns data in the exact format we need.
 
 1. Click "+" under Output Parser
+
 2. Select "Structured Output Parser"
+
 3. Add this JSON schema:
 
-```json
-{
-  "type": "object",
-  "properties": {
-    "subject": {
-      "type": "string",
-      "description": "Compelling subject line under 60 characters"
-    },
-    "hook": {
-      "type": "string",
-      "description": "Personalized opening line based on research"
-    },
-    "body": {
-      "type": "string",
-      "description": "Main value proposition and context"
-    },
-    "cta": {
-      "type": "string",
-      "description": "Specific call-to-action"
-    }
-  },
-  "required": ["subject", "hook", "body", "cta"]
-}
-```
+   ```json
+   {
+     "type": "object",
+     "properties": {
+       "subject": {
+         "type": "string",
+         "description": "Compelling subject line under 60 characters"
+       },
+       "hook": {
+         "type": "string",
+         "description": "Personalized opening line based on research"
+       },
+       "body": {
+         "type": "string",
+         "description": "Main value proposition and context"
+       },
+       "cta": {
+         "type": "string",
+         "description": "Specific call-to-action"
+       }
+     },
+     "required": ["subject", "hook", "body", "cta"]
+   }
+   ```
+
+4. Under **Options**, enable **"Auto fix format"** (toggle it on)
 
 ![Structured Output Parser Configuration](./images/06-structured-output-parser.png)
+
+**Your workflow so far:**
+
+![Workflow Progress: Output Parser Added](./images/workflow-step5-output-parser.png)
 
 ### Add Language Model
 
@@ -446,6 +493,10 @@ Use the same Gemini model (it's already configured from the first agent).
 {: .warning }
 > **Sender Reputation**: Start with a few test emails. Sudden high volume can trigger spam filters.
 
+**Your workflow so far:**
+
+![Workflow Progress: Gmail Added](./images/workflow-step6-gmail.png)
+
 ---
 
 ## Step 6: Metadata Enrichment
@@ -484,6 +535,10 @@ Use the same Gemini model (it's already configured from the first agent).
 {: .tip }
 > **What's Happening?** The AI agent returns a structured JSON object with separate fields. We're splitting these out so Gmail can access each part individually.
 
+**Your workflow so far:**
+
+![Workflow Progress: Metadata Added](./images/workflow-step7-metadata.png)
+
 ---
 
 ## Step 7: Analytics Logging
@@ -499,9 +554,13 @@ Use the same Gemini model (it's already configured from the first agent).
 
 ### 7.2 Configure Sheets Logging
 
-1. **Operation**: "Append"
+{: .note }
+> **Create Your Tracking Sheet**: Before configuring, create a new Google Sheet to track your emails. Go to [Google Sheets](https://sheets.google.com), create a new blank spreadsheet, and name it "Cold Email Tracking".
+
+1. **Operation**: "Append Row"
 2. **Credential**: Your Sheets credential
-3. **Document**: Select your "Cold Email Tracking" spreadsheet
+3. **Document ID**: Paste the URL of your "Cold Email Tracking" spreadsheet
+   - Example: `https://docs.google.com/spreadsheets/d/1ABC123xyz/edit`
 4. **Sheet**: "Sheet1"
 5. **Mapping Mode**: "Auto-map Input Data"
 
@@ -512,6 +571,10 @@ Use the same Gemini model (it's already configured from the first agent).
 
 {: .highlight }
 > **Workflow Complete**: All nodes connected! Form → Research → Email → Gmail → Enrich → Sheets.
+
+**Your complete workflow:**
+
+![Workflow Complete: All Nodes Connected](./images/workflow-step8-complete.png)
 
 ---
 
