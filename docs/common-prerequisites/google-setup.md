@@ -33,49 +33,108 @@ Connect Gmail and Google Sheets to n8n using OAuth2 authentication. n8n handles 
 
 ## Step 1: Connect Gmail in n8n
 
-### Add Gmail Credential
+### 1.1 Access Credentials Menu
 
-1. In your n8n workflow, add a **Gmail** node
-2. Click on **Credential to connect with**
-3. Click **"Create New Credential"**
-4. Select **"Gmail OAuth2 API"**
+1. In n8n, click the **+ button** in the top-right corner
 
-### Authenticate with Google
+![n8n Add Button](./images/01-n8n-add-button.png)
 
-1. Click **"Sign in with Google"** or **"Connect my account"**
-2. Choose your Google account
-3. Review permissions:
-   - Read, compose, and send emails
-   - Manage labels
-4. Click **"Allow"**
+1. Select **Credential** from the dropdown menu
 
-{: .highlight }
-> **Success**: You'll see "Connected" status in n8n
+![Create Credential Menu](./images/02-create-credential-menu.png)
+
+### 1.2 Search for Gmail Credential
+
+1. In the "Add new credential" modal, type **"Gmail"** in the search box
+1. Select **"Gmail OAuth2 API"** from the results
+
+![Gmail OAuth2 Search](./images/03-gmail-search-oauth2.png)
+
+### 1.3 Initiate OAuth Connection
+
+1. In the Gmail account credential screen, click **"Sign in with Google"**
+
+![Gmail Sign In Button](./images/04-gmail-sign-in-button.png)
+
+### 1.4 Grant Permissions
+
+1. A Google consent screen will appear. Review the permissions:
+   - Read, compose, send and permanently delete all your email from Gmail
+   - Manage drafts and send emails when you interact with the add-on
+   - View your email messages when you interact with the add-on
+   - See and edit your email labels
+   - Manage drafts and send emails
+   - Read, compose and send emails from your Gmail account
+
+![Gmail Permissions Consent](./images/05-gmail-permissions-consent.png)
+
+1. Scroll down and click **"Continue"**
+
+![Gmail Permissions Continue](./images/06-gmail-permissions-continue.png)
 
 {: .note }
 > **First-time setup**: Google may show a warning that the app isn't verified. Click "Advanced" → "Go to n8n (unsafe)" → "Allow". This is normal for OAuth apps in development mode.
+
+### 1.5 Verify Connection
+
+1. You should see **"Account connected"** in green, indicating successful authentication
+
+![Gmail Account Connected](./images/07-gmail-account-connected.png)
+
+1. Click **"Save"** to store the credential
+
+{: .highlight }
+> **Success**: Your Gmail credential is now ready to use in any workflow!
 
 ---
 
 ## Step 2: Connect Google Sheets in n8n
 
-### Add Sheets Credential
+### 2.1 Access Credentials Menu
 
-1. In your n8n workflow, add a **Google Sheets** node
-2. Click on **Credential to connect with**
-3. Click **"Create New Credential"**
-4. Select **"Google Sheets OAuth2 API"**
+1. In n8n, click the **+ button** in the top-right corner
 
-### Authenticate with Google
+![n8n Add Button](./images/01-n8n-add-button.png)
 
-1. Click **"Sign in with Google"** or **"Connect my account"**
-2. Choose your Google account (same as Gmail)
-3. Review permissions:
-   - See, edit, create, and delete spreadsheets
-4. Click **"Allow"**
+1. Select **Credential** from the dropdown menu
+
+![Create Credential Menu](./images/02-create-credential-menu.png)
+
+### 2.2 Search for Google Sheets Credential
+
+1. In the "Add new credential" modal, type **"Google Sheets"** in the search box
+1. Select **"Google Sheets OAuth2 API"** from the results
+
+### 2.3 Initiate OAuth Connection
+
+1. In the Google Sheets account credential screen, click **"Sign in with Google"**
+
+![Sheets Sign In Button](./images/08-sheets-sign-in-button.png)
+
+### 2.4 Grant Permissions
+
+1. A Google consent screen will appear. Review the permissions:
+   - View and manage metadata of files in your Google Drive
+   - See, edit, create and delete only the specific Google Drive files that you use with this app
+   - See, edit, create and delete all your Google Sheets spreadsheets
+
+![Sheets Permissions Consent](./images/09-sheets-permissions-consent.png)
+
+1. Scroll down and click **"Continue"**
+
+{: .note }
+> **Drive permissions**: Google Sheets requires Drive API access to create and manage spreadsheet files.
+
+### 2.5 Verify Connection
+
+1. You should see **"Account connected"** in green, indicating successful authentication
+
+![Sheets Account Connected](./images/10-sheets-account-connected.png)
+
+1. Click **"Save"** to store the credential
 
 {: .highlight }
-> **Success**: You'll see "Connected" status in n8n
+> **Success**: Your Google Sheets credential is now ready to use in any workflow!
 
 ---
 
