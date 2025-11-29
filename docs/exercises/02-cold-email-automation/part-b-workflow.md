@@ -264,9 +264,8 @@ Provide a concise research summary focusing on information useful for email pers
 1. Click the "+" under Tools
 2. Select "Perplexity" from the list
 3. Configure:
-   - **Credential**: Select your Perplexity credential
-   - **Model**: "sonar" (fast and efficient)
-   - **Search Recency**: "month" (recent information)
+   - **Credential to connect with**: Select your Perplexity credential
+   - **Model**: "Sonar"
 
 ![Perplexity Tool Configuration](./images/04-perplexity-tool-config.png)
 
@@ -307,9 +306,8 @@ Provide a concise research summary focusing on information useful for email pers
 1. Click the "+" under Chat Model
 2. Select "Google Gemini Chat Model"
 3. Configure:
-   - **Credential**: Your Gemini credential
-   - **Model**: "gemini-2.5-flash"
-   - **Temperature**: 0.7 (balanced creativity)
+   - **Credential to connect with**: Select your Gemini credential
+   - **Model**: "models/gemini-2.5-flash"
 
 ![Google Gemini Model Configuration](./images/03-gemini-model-config.png)
 
