@@ -111,14 +111,21 @@ Access multiple AI models with one API key. Perfect for comparing different mode
 {: .highlight }
 > **Free Trial**: OpenRouter provides $1 free credit. Exercises use minimal credits (~$0.001 per operation).
 
-### Recommended Models
+### Recommended Free Models
+
+All models below are completely free to use on OpenRouter. [Browse all free models](https://openrouter.ai/models?q=free)
 
 | Model | Cost | Best For | Speed |
 |-------|------|----------|-------|
-| **google/gemma-2-9b-it:free** | Free | Classification, simple tasks | Fast |
-| **meta-llama/llama-3.2-3b-instruct:free** | Free | Quick responses | Very Fast |
-| **google/gemini-flash-1.5** | $0.075/$0.30 per 1M tokens (input/output) | Complex reasoning | Fast |
-| **anthropic/claude-3-haiku** | $0.25/$1.25 per 1M tokens (input/output) | Quality + Speed | Fast |
+| **meta-llama/llama-3.3-70b-instruct:free** | Free | Complex reasoning, high quality | Medium |
+| **google/gemma-3-27b-it:free** | Free | Classification, general tasks | Fast |
+| **google/gemma-3-12b-it:free** | Free | Quick responses, simple tasks | Very Fast |
+| **mistralai/mistral-7b-instruct:free** | Free | Balanced performance | Fast |
+| **x-ai/grok-4.1-fast:free** | Free | Fast inference | Very Fast |
+| **kwaipilot/kat-coder-pro:free** | Free | Code generation | Fast |
+
+{: .note }
+> **Free Models Availability**: Free tier models are community-supported and perfect for learning and prototyping. For production use, consider paid models for better reliability and rate limits.
 
 ---
 
