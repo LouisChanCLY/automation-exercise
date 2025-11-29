@@ -12,7 +12,7 @@ has_children: true
 One-time setup guide for all services used across automation exercises.
 {: .fs-6 .fw-300 }
 
-[Start Setup](./google-setup){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }
+[Start Setup](./n8n-setup){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
@@ -24,10 +24,9 @@ Complete these prerequisites once, and you're ready for all 30+ exercises. This 
 
 | Service | Purpose | Time |
 |---------|---------|------|
-| **[Google Cloud & OAuth](./google-setup)** | Access Gmail, Sheets, Drive | 10 min |
-| **[AI Services](./ai-services)** | Get AI API keys | 10 min |
 | **[n8n Platform](./n8n-setup)** | Workflow automation platform | 5 min |
-| **[Credentials](./credentials)** | Connect everything in n8n | 10 min |
+| **[Google Services](./google-setup)** | Connect Gmail & Sheets via n8n | 5 min |
+| **[AI Services](./ai-services)** | Connect OpenRouter, Gemini, Perplexity | 10 min |
 | **[GitHub Setup](./github-setup)** | Save workflows online | 10 min |
 
 {: .important }
@@ -41,16 +40,14 @@ Follow this recommended order:
 
 ```mermaid
 graph LR
-    A[Google Cloud<br/>Setup] --> B[AI Services<br/>Setup]
-    B --> C[n8n Platform<br/>Setup]
-    C --> D[Add Credentials<br/>to n8n]
-    D --> E[Start Building<br/>Workflows]
+    A[n8n Platform<br/>Setup] --> B[Google Services<br/>Gmail & Sheets]
+    B --> C[AI Services<br/>OpenRouter, Gemini, Perplexity]
+    C --> D[Start Building<br/>Workflows]
 
-    style A fill:#e1f5fe
-    style B fill:#fff3e0
-    style C fill:#f3e5f5
-    style D fill:#e8f5e9
-    style E fill:#c8e6c9
+    style A fill:#f3e5f5
+    style B fill:#e1f5fe
+    style C fill:#fff3e0
+    style D fill:#c8e6c9
 ```
 
 ---
@@ -58,22 +55,6 @@ graph LR
 ## Quick Navigation
 
 <div class="grid">
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
-      <h4>🔐 Google & OAuth</h4>
-      <p>Gmail, Sheets, Drive authentication</p>
-      <a href="./google-setup">Configure →</a>
-    </div>
-  </div>
-
-  <div class="col-4 col-md-4 col-lg-4">
-    <div class="card">
-      <h4>🤖 AI Services</h4>
-      <p>LLM APIs and research tools</p>
-      <a href="./ai-services">Get API Keys →</a>
-    </div>
-  </div>
-
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
       <h4>⚙️ n8n Platform</h4>
@@ -84,9 +65,17 @@ graph LR
 
   <div class="col-4 col-md-4 col-lg-4">
     <div class="card">
-      <h4>🔗 Connect Everything</h4>
-      <p>Add credentials to n8n</p>
-      <a href="./credentials">Connect →</a>
+      <h4>🔐 Google Services</h4>
+      <p>Gmail & Sheets via n8n OAuth</p>
+      <a href="./google-setup">Connect →</a>
+    </div>
+  </div>
+
+  <div class="col-4 col-md-4 col-lg-4">
+    <div class="card">
+      <h4>🤖 AI Services</h4>
+      <p>OpenRouter, Gemini, Perplexity</p>
+      <a href="./ai-services">Setup →</a>
     </div>
   </div>
 
@@ -94,7 +83,7 @@ graph LR
     <div class="card">
       <h4>📦 GitHub Setup</h4>
       <p>Save your workflows online</p>
-      <a href="./github-setup">Set Up →</a>
+      <a href="./github-setup">Configure →</a>
     </div>
   </div>
 </div>
@@ -120,9 +109,9 @@ graph LR
 
 ## Ready to Begin?
 
-Start with Google Cloud setup - it's the foundation for everything else.
+Start with n8n platform setup - it's the foundation for everything else.
 
-[Begin with Google Setup →](./google-setup){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }
+[Begin with n8n Setup →](./n8n-setup){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
