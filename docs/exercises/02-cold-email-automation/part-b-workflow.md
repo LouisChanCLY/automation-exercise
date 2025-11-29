@@ -233,9 +233,8 @@ Here's a quick reference of all the nodes you'll build in this exercise:
 
 Now set up the agent's behaviour:
 
-1. **Type**: "Tools Agent"
-2. **Prompt Type**: "Define Below"
-3. In the **Prompt** field, enter:
+1. **Source for Prompt (User Message)**: "Define below"
+2. In the **Prompt (User Message)** field, enter:
 
 {% raw %}
 
