@@ -61,36 +61,84 @@ Access multiple AI models with one API key. Perfect for comparing different mode
 
 Google's Gemini offers generous free quotas perfect for AI agents, complex reasoning tasks, and iterative workflows.
 
-### Generate API Key
+### Part 1: Get Your Gemini API Key from Google AI Studio
 
-1. **Go to Google AI Studio**
-   - Visit [ai.google.dev](https://ai.google.dev/)
-   - Click **Get API key** in the top-right corner
+#### 1.1 Visit Google AI Studio
 
-2. **Sign In**
-   - Use your Google account
-   - If prompted, accept terms of service
+1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
+1. Sign in with your Google account
 
-3. **Create API Key**
-   - Click **Create API key**
-   - Option 1: Select existing Google Cloud project (recommended if you completed Google setup)
-   - Option 2: Click **Create API key in new project** (simpler, but creates separate project)
+![Google AI Studio API Keys Page](./images/13-google-ai-studio-empty.png)
 
-4. **Copy and Save**
-   - Your API key will start with `AIza...`
-   - Copy the key immediately (you won't be able to view it again)
-   - Store securely in your password manager
+#### 1.2 Accept Terms of Service
 
-5. **Optional: Test Your Key**
+1. On your first visit, you'll see a "Welcome to AI Studio" screen
+1. Read the Gemini API Additional Terms of Service
+1. Check the agreement checkbox
+1. Optionally, check the second box to receive updates
+1. Click **"Continue"**
 
-   ```bash
-   curl -H 'Content-Type: application/json' \
-        -d '{"contents":[{"parts":[{"text":"Hello!"}]}]}' \
-        -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY'
+![AI Studio Terms](./images/14-ai-studio-terms.png)
+
+#### 1.3 Create API Key
+
+1. Click **"Create API key"** in the top-right corner
+1. You'll see a "Create a new key" modal
+1. Choose **"Default Gemini Project"** (or create a new project)
+
+![Create New Key Modal](./images/17-create-new-key-modal.png)
+
+#### 1.4 Copy Your API Key
+
+1. Your API key will appear in the list (starts with `AIza...`)
+1. Click the **three-dot menu** (⋮) next to your key
+1. Select **"Copy API key"**
+
+![API Key Created](./images/15-api-key-created.png)
+
+![Copy API Key](./images/16-copy-api-key.png)
+
+1. Save the key securely in your password manager
+
+{: .warning }
+> **Important**: Store your API key immediately. While you can copy it again later, keeping it secure is critical.
+
+### Part 2: Add Gemini Credential to n8n
+
+#### 2.1 Search for Gemini Credential
+
+1. In n8n, click the **+ button** and select **Credential**
+1. Search for **"Gemini"**
+1. Select **"Google Gemini(PaLM) Api"**
+
+![Gemini Search in n8n](./images/11-gemini-search-credential.png)
+
+#### 2.2 Configure Credential
+
+1. The **Host** field should already be filled with:
+
+   ```
+   https://generativelanguage.googleapis.com
    ```
 
+1. Paste your API key into the **API Key** field
+1. Click **"Save"**
+
+![Gemini API Key Field](./images/12-gemini-api-key-field.png)
+
 {: .highlight }
-> **Free Limits**: 60 requests/minute, 1 million tokens/month, 1,500 requests/day - plenty for all exercises!
+> **Success**: Your Gemini credential is now ready to use in any workflow!
+
+### Free Tier Limits
+
+{: .highlight }
+> **Generous Free Quota**:
+>
+> - 60 requests/minute
+> - 1 million tokens/month
+> - 1,500 requests/day
+>
+> More than enough for all exercises!
 
 ### When to Use Gemini
 
