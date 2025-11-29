@@ -32,17 +32,84 @@ Get API keys for AI models and research tools. All services offer free tiers per
 
 Access multiple AI models with one API key. Perfect for comparing different models.
 
-### Get Your API Key
+### Part 1: Get Your OpenRouter API Key
+
+#### 1.1 Sign Up for OpenRouter
 
 1. Visit [OpenRouter](https://openrouter.ai/)
-2. Click "Sign Up" → Use Google/GitHub
-3. Navigate to [API Keys](https://openrouter.ai/keys)
-4. Click "Create Key"
-5. Name it: `n8n-exercises`
-6. Copy and save securely
+1. Click "Sign Up" and authenticate with Google or GitHub
+1. Complete the sign-up process
+
+#### 1.2 Navigate to API Keys
+
+1. Go to [OpenRouter API Keys](https://openrouter.ai/settings/keys)
+
+![OpenRouter API Keys Page](./images/21-openrouter-api-keys-page.png)
+
+#### 1.3 Create New API Key
+
+1. Click **"Create API Key"** button
+1. In the modal, configure your key:
+   - **Name**: `n8n-exercises` (or any descriptive name)
+   - **Credit limit (optional)**: Leave blank for unlimited
+   - **Reset limit every...**: N/A
+   - **Expiration**: No expiration
+
+![Create API Key Modal](./images/22-create-api-key-modal.png)
+
+1. Click **"Create"**
+
+#### 1.4 Copy Your API Key
+
+1. Your new API key will be displayed (starts with `sk-or-v1-...`)
+1. **Important**: Copy it immediately - you won't be able to see it again!
+
+![API Key Generated](./images/23-api-key-generated.png)
+
+1. Save the key securely in your password manager
+
+{: .warning }
+> **Critical**: This is your only chance to copy the API key. Store it immediately!
+
+### Part 2: Add OpenRouter Credential to n8n
+
+#### 2.1 Access Credentials Menu
+
+1. In n8n, click the **+ button** in the top-right corner
+1. Select **Credential** from the dropdown
+
+![n8n Credential Menu](./images/18-n8n-credential-menu.png)
+
+#### 2.2 Search for OpenRouter
+
+1. In the "Add new credential" modal, search for **"OpenRouter"**
+1. Select **"OpenRouter"** from the results
+
+![OpenRouter Search](./images/19-openrouter-search.png)
+
+#### 2.3 Enter API Key
+
+1. Paste your API key into the **API Key** field
+1. Click **"Save"**
+
+![OpenRouter API Key Field](./images/20-openrouter-api-key-field.png)
+
+![OpenRouter Key Entered](./images/24-openrouter-key-entered.png)
+
+#### 2.4 Verify Connection
+
+1. n8n will automatically test the connection
+1. You should see **"Connection tested successfully"** in green
+
+![Connection Tested Successfully](./images/25-connection-tested.png)
 
 {: .highlight }
-> **Free Credits**: OpenRouter provides $1 free credit. Exercises use minimal credits (~$0.001 per operation).
+> **Success**: Your OpenRouter credential is now ready to use!
+
+### Free Credits
+
+{: .highlight }
+> **Free Trial**: OpenRouter provides $1 free credit. Exercises use minimal credits (~$0.001 per operation).
 
 ### Recommended Models
 
@@ -65,7 +132,7 @@ Google's Gemini offers generous free quotas perfect for AI agents, complex reaso
 
 #### 1.1 Visit Google AI Studio
 
-1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
+1. Go to [Google AI Studio API Keys](https://aistudio.google.com/api-keys)
 1. Sign in with your Google account
 
 ![Google AI Studio API Keys Page](./images/13-google-ai-studio-empty.png)
