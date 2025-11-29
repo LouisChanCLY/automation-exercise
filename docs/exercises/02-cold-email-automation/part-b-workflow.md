@@ -462,34 +462,27 @@ Use the same Gemini model (it's already configured from the first agent).
 ### 6.2 Configure Field Assignments
 
 {: .note }
-> **Why Enrich?** We need to combine data from multiple nodes into a single record for our analytics spreadsheet.
+> **Why Enrich?** We're extracting the structured email components (subject, hook, body, cta) from the AI agent's output to use in Gmail.
 
-Add these field assignments:
+1. **Mode**: "Manual Mapping"
+2. Add these field assignments in **Fields to Set**:
 
 {% raw %}
 
-```javascript
-// Prospect Information
-timestamp: {{ new Date().toISOString() }}
-prospect_name: {{ $('On form submission').item.json.Name }}
-prospect_email: {{ $('On form submission').item.json.Email }}
-company: {{ $('On form submission').item.json.Company }}
-
-// Research & Email Content
-research_summary: {{ $('AI Agent - Research Prospect').item.json.output }}
-email_subject: {{ $('AI Agent - Craft Email').item.json.output.subject }}
-email_hook: {{ $('AI Agent - Craft Email').item.json.output.hook }}
-email_body: {{ $('AI Agent - Craft Email').item.json.output.body }}
-email_cta: {{ $('AI Agent - Craft Email').item.json.output.cta }}
-
-// Workflow Metadata
-workflow_id: {{ $execution.id }}
-sent_status: "sent"
-```
+| Field Name | Value |
+|------------|-------|
+| **id** | `{{ $json.id }}` |
+| **subject** | `{{ $('AI Agent - Craft Email').item.json.output.subject }}` |
+| **hook** | `{{ $('AI Agent - Craft Email').item.json.output.hook }}` |
+| **body** | `{{ $('AI Agent - Craft Email').item.json.output.body }}` |
+| **cta** | `{{ $('AI Agent - Craft Email').item.json.output.cta }}` |
 
 {% endraw %}
 
 ![Metadata Enrichment Configuration](./images/08-enrich-metadata-config.png)
+
+{: .tip }
+> **What's Happening?** The AI agent returns a structured JSON object with separate fields. We're splitting these out so Gmail can access each part individually.
 
 ---
 
