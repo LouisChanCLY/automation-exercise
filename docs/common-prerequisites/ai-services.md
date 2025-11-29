@@ -115,10 +115,10 @@ Access multiple AI models with one API key. Perfect for comparing different mode
 
 | Model | Cost | Best For | Speed |
 |-------|------|----------|-------|
-| **google/gemma-3-27b-it:free** | Free | Classification, simple tasks | Fast |
+| **google/gemma-2-9b-it:free** | Free | Classification, simple tasks | Fast |
 | **meta-llama/llama-3.2-3b-instruct:free** | Free | Quick responses | Very Fast |
-| **google/gemini-flash-1.5** | $0.075/1M tokens | Complex reasoning | Fast |
-| **anthropic/claude-3-haiku** | $0.25/1M tokens | Quality + Speed | Fast |
+| **google/gemini-flash-1.5** | $0.075/$0.30 per 1M tokens (input/output) | Complex reasoning | Fast |
+| **anthropic/claude-3-haiku** | $0.25/$1.25 per 1M tokens (input/output) | Quality + Speed | Fast |
 
 ---
 
@@ -172,15 +172,24 @@ Google's Gemini offers generous free quotas perfect for AI agents, complex reaso
 
 ### Part 2: Add Gemini Credential to n8n
 
-#### 2.1 Search for Gemini Credential
+#### 2.1 Access Credentials Menu
 
-1. In n8n, click the **+ button** and select **Credential**
+1. In n8n, click the **+ button** in the top-right corner
+
+![n8n Add Button](./images/01-n8n-add-button.png)
+
+1. Select **Credential** from the dropdown
+
+![Create Credential Menu](./images/02-create-credential-menu.png)
+
+#### 2.2 Search for Gemini Credential
+
 1. Search for **"Gemini"**
 1. Select **"Google Gemini(PaLM) Api"**
 
 ![Gemini Search in n8n](./images/11-gemini-search-credential.png)
 
-#### 2.2 Configure Credential
+#### 2.3 Configure Credential
 
 1. The **Host** field should already be filled with:
 
